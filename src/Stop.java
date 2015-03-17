@@ -30,7 +30,7 @@ public class Stop {
 		}
 	}
 	
-	public void deleteDriver(int stopNum) {
+	public void deleteStop(int stopNum) {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeQuery("DELETE FROM stop WHERE stopNum = " + stopNum);
@@ -46,7 +46,7 @@ public class Stop {
 		}
 	}
 	
-	public void displayDrivers() {
+	public void displayStops() {
 		int stopNum;
 		String stopName;
 		String location;
