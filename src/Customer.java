@@ -63,4 +63,23 @@ public class Customer {
 			//TODO
 		}
 	}
+	
+	
+	// adds to current balance
+	public void updateBalance(int cid, int add) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("UPDATE customer SET balance = balance + " + add + "WHERE cid = " + cid);
+			con.commit();
+			con.close();
+		}
+		catch (SQLException ex) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				//TODO
+			}
+		}
+	}
 }
