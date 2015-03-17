@@ -70,7 +70,7 @@ public class Customer {
 		
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE customer SET balance = balance + " + add + "WHERE cid = " + cid);
+			stmt.executeUpdate("UPDATE owns_pass SET balance = balance + " + add + "WHERE cid = " + cid);
 			con.commit();
 			con.close();
 		}
