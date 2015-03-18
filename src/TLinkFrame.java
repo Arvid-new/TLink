@@ -14,11 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
-
-import net.miginfocom.swing.MigLayout;
 
 
 @SuppressWarnings("serial")
@@ -34,6 +33,8 @@ public class TLinkFrame extends JFrame {
 	private JButton searchBtn;
 	private JButton updateBtn;
 	private JButton clearBtn;
+	
+	private JTextField routeField;
 
 	public static void main(String[] args) {
 		try {
@@ -80,12 +81,14 @@ public class TLinkFrame extends JFrame {
 		searchBtn = new JButton("Search");
 		updateBtn = new JButton("Update");
 		clearBtn = new JButton("Clear");
+		routeField = new JTextField("Route");
 		
 		menuPanel = new JPanel();
 		menuPanel.setLayout(new GridLayout(5, 1));
 		menuPanel.add(searchBtn);
 		menuPanel.add(updateBtn);
 		menuPanel.add(clearBtn);
+		menuPanel.add(routeField);
 		
 		customerPanel = new JPanel();
 		customerPanel.setLayout(new BorderLayout());
