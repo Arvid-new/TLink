@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,6 +29,9 @@ public class TLinkFrame extends JFrame {
 	private JPanel operatorPanel;
 	private JPanel menuPanel;
 	private JTabbedPane tabPane;
+	
+	private JTable customerTable;
+	private JScrollPane customerScrollPane;
 	
 	private JButton searchBtn;
 	private JButton updateBtn;
@@ -95,6 +98,17 @@ public class TLinkFrame extends JFrame {
 		customerPanel.setBackground(Color.WHITE);
 		customerPanel.add(menuPanel, BorderLayout.LINE_START);
 
+		Object[][] data = {
+				{"Kathy", "Smith", "111-111-1111"},
+				{"Bob", "Doe", "555-555-5555"}
+		};
+		
+		String[] colNames = {"First Name", "Last Name", "Phone Number"};
+
+		customerTable = new JTable(data, colNames);		
+		customerScrollPane = new JScrollPane(customerTable);
+		customerPanel.add(customerScrollPane, BorderLayout.CENTER);
+		
 		driverPanel = new JPanel();
 		driverPanel.setBackground(Color.WHITE);
 		operatorPanel = new JPanel();
