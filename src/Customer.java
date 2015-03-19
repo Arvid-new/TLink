@@ -45,22 +45,17 @@ public class Customer {
 		}
 	}
 	
-	public void displayCustomers() {
-		int cid;
-		String name;
+	public ResultSet displayCustomers() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
-			
-			while (rs.next()) {
-				cid = rs.getInt("cid");
-				name = rs.getString("name");
-			}
 			stmt.close();
+			return rs;
 		}
 		catch (SQLException ex) {
 			//TODO
+			return null;
 		}
 	}
 	

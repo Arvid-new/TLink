@@ -11,13 +11,13 @@ public class Route {
 	
 	public Route() {}
 	
-	public void insertRoute(int routeNum, String rname, Date start, Date end) {
+	public void insertRoute(int routeNum, String rname, Date stop, Date start) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO route VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, routeNum);
 			stmt.setString(2, rname);
-			stmt.setDate(3, start);
-			stmt.setDate(4, end);
+			stmt.setDate(3, stop);
+			stmt.setDate(4, start);
 			stmt.executeUpdate();
 			con.commit();
 			stmt.close();
@@ -34,7 +34,7 @@ public class Route {
 	public void deleteRoute(int routeNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM route WHERE routeNum = " + routeNum);
+			stmt.executeQuery("DELETE FROM route WHERE routeNumber = " + routeNum);
 			con.commit();
 			stmt.close();
 		}
