@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class Customer {
 
 	Connection con = OracleConnection.getInstance().getConnection();
-	
+
 	public Customer () {}
 	
 	public void insertCustomer(int cid, String name) {
@@ -53,14 +53,16 @@ public class Customer {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
 			
-			while (rs.next()) {
+			while(rs.next()) {
 				cid = rs.getInt("cid");
 				name = rs.getString("name");
 			}
+
 			stmt.close();
 		}
 		catch (SQLException ex) {
 			//TODO
+			System.out.println("EXCEPTION");
 		}
 	}
 	
