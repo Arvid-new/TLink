@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class Customer {
 
 	Connection con = OracleConnection.getInstance().getConnection();
-	
+
 	public Customer () {}
 	
 	public void insertCustomer(int cid, String name) {
@@ -50,6 +50,7 @@ public class Customer {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
+
 			stmt.close();
 			return rs;
 		}
