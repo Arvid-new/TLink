@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 
 public class Route {
-	Connection con = OracleConnection.getInstance().getConnection();
+	Connection con = MySQLConnection.getInstance().getConnection();
 	
 	public Route() {}
 	
@@ -47,12 +47,13 @@ public class Route {
 		}
 	}
 	
-	public ResultSet displayRoutes() {
+	public ResultTableModel displayRoutes() {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM route");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO
@@ -60,12 +61,13 @@ public class Route {
 		}
 	}
 	
-	public ResultSet getAllStops(int routeNum) {
+	public ResultTableModel getAllStops(int routeNum) {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT s.stopNumber, stopName, location FROM has h, stop s WHERE h.routeNumber = " + routeNum);
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			// TODO
@@ -73,12 +75,13 @@ public class Route {
 		}
 	}
 	
-	public ResultSet searchRoutes(String routeName) {
+	public ResultTableModel searchRoutes(String routeName) {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM route WHERE routeName LIKE '%" + routeName + "%'");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			// TODO

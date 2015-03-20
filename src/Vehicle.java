@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class Vehicle {
 	
-	Connection con = OracleConnection.getInstance().getConnection();
+	Connection con = MySQLConnection.getInstance().getConnection();
 	
 	public Vehicle() {}
 	
@@ -47,13 +47,14 @@ public class Vehicle {
 		}
 	}
 	
-	public ResultSet displayVehicles() {
+	public ResultTableModel displayVehicles() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO

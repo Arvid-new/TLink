@@ -1,13 +1,13 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,11 +33,13 @@ public class TLinkFrame extends JFrame {
 	private JTabbedPane tabPane;
 	
 	private JTable customerTable;
+	private JTable routeTable;
 	private JScrollPane customerScrollPane;
 	
 	private JButton updateBtn;
 	private JButton clearBtn;
 	
+	private JLabel title;
 	private JTextField routeField;
 
 	public static void main(String[] args) {
@@ -77,18 +79,25 @@ public class TLinkFrame extends JFrame {
 	public void init() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.setBackground(Color.WHITE);
 		
-		JLabel title = new JLabel("TLink Database App");
-		title.setFont(new Font("Dialog", Font.PLAIN, 18));		
+		title = new JLabel("TLink Database App");	
 		
 		updateBtn = new JButton("Update");
 		clearBtn = new JButton("Clear");
 		routeField = new JTextField("Route");
 		
-		
-		// Route Tab
+		// Route Tab		
+		routeTable = new JTable();
 		JButton routeSearchBtn = new JButton("Search");
+		routeSearchBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Route route = new Route();
+				routeTable.setModel(route.displayRoutes());
+			}
+		});
+		
 		JButton stopsBtn = new JButton("Stops");
 		
 		JPanel routeMenu = new JPanel();
@@ -98,9 +107,7 @@ public class TLinkFrame extends JFrame {
 		
 		routePanel = new JPanel();
 		routePanel.setLayout(new BorderLayout());
-		routePanel.setBackground(Color.WHITE);
 		routePanel.add(routeMenu, BorderLayout.NORTH);
-	
 		
 		// Stop Tab
 		JButton stopSearchBtn = new JButton("Search");
@@ -113,36 +120,24 @@ public class TLinkFrame extends JFrame {
 		
 		stopPanel = new JPanel();
 		stopPanel.setLayout(new BorderLayout());
-		stopPanel.setBackground(Color.WHITE);
 		stopPanel.add(stopMenu, BorderLayout.NORTH);
-
 		
 		// Customer Tab
 		customerPanel = new JPanel();
 		customerPanel.setLayout(new BorderLayout());
-		customerPanel.setBackground(Color.WHITE);
 
-		Object[][] data = {
-				{"Kathy", "Smith", "111-111-1111"},
-				{"Bob", "Doe", "555-555-5555"}
-		};
-		
-		String[] colNames = {"First Name", "Last Name", "Phone Number"};
-
-		customerTable = new JTable(data, colNames);		
+		Vehicle vehicle = new Vehicle();  
+		// Uncomment below to display from database
+		//customerTable = new JTable(vehicle.displayVehicles());	
+		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
 		customerPanel.add(customerScrollPane, BorderLayout.CENTER);
 		
-		
 		// Driver Tab
 		driverPanel = new JPanel();
-		driverPanel.setBackground(Color.WHITE);
-		
 		
 		// Operator Tab
 		operatorPanel = new JPanel();
-		operatorPanel.setBackground(Color.WHITE);
-		
 		
 		// Tabs pane
 		tabPane = new JTabbedPane();
@@ -151,7 +146,6 @@ public class TLinkFrame extends JFrame {
 		tabPane.addTab("Customer", customerPanel);
 		tabPane.addTab("Driver", driverPanel);
 		tabPane.addTab("Operator", operatorPanel);
-		tabPane.setBackground(Color.WHITE);
 		tabPane.setFocusable(false);
 		
 		mainPanel.add(title, BorderLayout.PAGE_START);
@@ -159,4 +153,5 @@ public class TLinkFrame extends JFrame {
 
 		setContentPane(mainPanel);		
 	}
+	
 }

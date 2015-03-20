@@ -11,6 +11,7 @@ import javax.swing.table.AbstractTableModel;
 public class ResultTableModel extends AbstractTableModel {
 
 	private int numCols;
+	private String[] columnNames;
 	private ResultSetMetaData metadata;
 	private ArrayList<Object[]> table;
 
@@ -19,6 +20,14 @@ public class ResultTableModel extends AbstractTableModel {
 		try {
 			this.metadata = rs.getMetaData();
 			this.numCols = metadata.getColumnCount(); 
+			this.columnNames = new String[numCols];
+			
+			if(rs.isBeforeFirst()) {
+				for(int i = 0; i < numCols; i++) {
+					columnNames[i] = metadata.getColumnName(i + 1);
+				}
+			}
+			
 			formTable(rs);
 
 		} catch (SQLException e) {
@@ -29,7 +38,7 @@ public class ResultTableModel extends AbstractTableModel {
 	private void formTable(ResultSet rs) throws SQLException {
 		
 		table = new ArrayList<Object[]>();
-
+		
 		while(rs.next() || rs.isBeforeFirst()) {
 			
 			Object[] row = new Object[numCols];
@@ -38,7 +47,7 @@ public class ResultTableModel extends AbstractTableModel {
 			for(int i = 0; i < numCols; i++) {
 				
 				int columnType = metadata.getColumnType(i + 1);
-
+				
 				switch(columnType) {
 
 				case Types.CHAR:
@@ -76,6 +85,11 @@ public class ResultTableModel extends AbstractTableModel {
 		return numCols;
 	}
 
+	@Override
+	public String getColumnName(int col) {
+		return columnNames[col];
+	}
+	
 	@Override
 	public int getRowCount() {
 		return table.size();
