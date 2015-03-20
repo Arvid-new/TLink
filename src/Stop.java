@@ -59,4 +59,32 @@ public class Stop {
 			return null;
 		}
 	}
+	
+	public ResultSet searchStops(String stopName) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM stop WHERE stopName LIKE '%" + stopName + "%'");
+			stmt.close();
+			return rs;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
+	
+	public ResultSet findAllRoutes(int stopNum) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT r.routeNumber, routeName FROM has h, route r WHERE h.stopNumber = " + stopNum);
+			stmt.close();
+			return rs;
+		}
+		catch (SQLException ex) {
+			// TODO 
+			return null;
+		}
+	}
 }
