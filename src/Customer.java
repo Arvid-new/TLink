@@ -45,14 +45,14 @@ public class Customer {
 		}
 	}
 	
-	public ResultSet displayCustomers() {
+	public ResultTableModel displayCustomers() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
-
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO

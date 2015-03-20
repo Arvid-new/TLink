@@ -48,12 +48,13 @@ public class Driver {
 		}
 	}
 	
-	public ResultSet displayDrivers() {
+	public ResultTableModel displayDrivers() {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM driver");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO
@@ -94,14 +95,17 @@ public class Driver {
 	}
 	
 	// date parameter is in YYYY-MM-DD format
-	public void viewShifts(int empId, String date) {
+	public ResultTableModel viewShifts(int empId, String date) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("SELECT * FROM driven_by WHERE empId = " + empId + "to_char(from, 'YYYY-MM-DD') =" + date);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + "to_char(from, 'YYYY-MM-DD') =" + date);
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
+			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
-		}
+			// TODO
+			return null;
+		}		
 	}
 }
