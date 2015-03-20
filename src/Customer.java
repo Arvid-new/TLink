@@ -78,4 +78,32 @@ public class Customer {
 			}
 		}
 	}
+	
+	public int displayBalance(int cid) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
+			stmt.close();
+			return rs.getInt("balance");
+		}
+		catch (SQLException ex) {
+			//TODO
+			return 0;
+		}
+	}
+	
+	public int displayPassId(int cid) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT pid FROM owns_pass WHERE cid =" + cid);
+			stmt.close();
+			return rs.getInt("pid");
+		}
+		catch (SQLException ex) {
+			//TODO
+			return 0;
+		}
+	}
 }
