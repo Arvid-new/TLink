@@ -9,7 +9,7 @@ driveable x<br>
 driven_by<br>
 driver<br>
 driverless<br>
-duration<br>
+duration x<br>
 follows<br>
 has<br>
 owns_pass<br>
