@@ -20,6 +20,7 @@ public class ResultTableModel extends AbstractTableModel {
 			this.metadata = rs.getMetaData();
 			this.numCols = metadata.getColumnCount(); 
 			formTable(rs);
+
 		} catch (SQLException e) {
 			// TODO
 		}
@@ -27,14 +28,19 @@ public class ResultTableModel extends AbstractTableModel {
 	
 	private void formTable(ResultSet rs) throws SQLException {
 		
-		Object val = new Object();		
-		Object[] row = new Object[numCols];
+		table = new ArrayList<Object[]>();
 
-		while(rs.next()) {
+		while(rs.next() || rs.isBeforeFirst()) {
+			
+			Object[] row = new Object[numCols];
+			Object val = new Object();
+			
 			for(int i = 0; i < numCols; i++) {
-				int columnType = metadata.getColumnType(i);
 				
+				int columnType = metadata.getColumnType(i + 1);
+
 				switch(columnType) {
+
 				case Types.CHAR:
 					val = rs.getString(i + 1);
 					break;
@@ -46,6 +52,9 @@ public class ResultTableModel extends AbstractTableModel {
 					break;
 				case Types.DOUBLE:
 					val = rs.getDouble(i + 1);
+					break;					
+				case Types.NUMERIC:
+					val = rs.getInt(i + 1);
 					break;
 				case Types.DATE:
 					val = rs.getDate(i + 1);
@@ -57,7 +66,7 @@ public class ResultTableModel extends AbstractTableModel {
 
 				row[i] = val;
 			}
-			
+
 			table.add(row);
 		}
 	}
