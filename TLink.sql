@@ -30,8 +30,8 @@ CREATE TABLE `access` (
   `pid` int(11) NOT NULL,
   PRIMARY KEY (`vehicleNumber`,`cid`,`pid`),
   KEY `accessCid_idx` (`cid`,`pid`),
-  CONSTRAINT `accessCid` FOREIGN KEY (`cid`, `pid`) REFERENCES `Owns_Pass` (`cid`, `pid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `accessVehicleNumber` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `accessCid` FOREIGN KEY (`cid`, `pid`) REFERENCES `owns_pass` (`cid`, `pid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `accessVehicleNumber` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -107,9 +107,9 @@ CREATE TABLE `driven_by` (
   PRIMARY KEY (`vehicleNumber`,`from`,`to`,`empId`),
   KEY `drivenDuration_idx` (`from`,`to`),
   KEY `drivenEmp_idx` (`empId`),
-  CONSTRAINT `drivenDuration` FOREIGN KEY (`from`, `to`) REFERENCES `Duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `drivenEmp` FOREIGN KEY (`empId`) REFERENCES `Driver` (`empId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `drivenVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `drivenDuration` FOREIGN KEY (`from`, `to`) REFERENCES `duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `drivenEmp` FOREIGN KEY (`empId`) REFERENCES `driver` (`empId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `drivenVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -157,7 +157,7 @@ DROP TABLE IF EXISTS `driverless`;
 CREATE TABLE `driverless` (
   `vehicleNumber` int(11) NOT NULL,
   PRIMARY KEY (`vehicleNumber`),
-  CONSTRAINT `driverless` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `driverless` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -208,9 +208,9 @@ CREATE TABLE `follows` (
   PRIMARY KEY (`vehicleNumber`,`routeNumber`,`from`,`to`),
   KEY `followsRoute_idx` (`routeNumber`),
   KEY `followsDuration_idx` (`from`,`to`),
-  CONSTRAINT `followsDuration` FOREIGN KEY (`from`, `to`) REFERENCES `Duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `followsRoute` FOREIGN KEY (`routeNumber`) REFERENCES `Route` (`routeNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `followsVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `followsDuration` FOREIGN KEY (`from`, `to`) REFERENCES `duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `followsRoute` FOREIGN KEY (`routeNumber`) REFERENCES `route` (`routeNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `followsVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -235,8 +235,8 @@ CREATE TABLE `has` (
   `stopNumber` int(11) NOT NULL,
   PRIMARY KEY (`routeNumber`,`stopNumber`),
   KEY `hasStop_idx` (`stopNumber`),
-  CONSTRAINT `hasRoute` FOREIGN KEY (`routeNumber`) REFERENCES `Route` (`routeNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `hasStop` FOREIGN KEY (`stopNumber`) REFERENCES `Stop` (`stopNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `hasRoute` FOREIGN KEY (`routeNumber`) REFERENCES `route` (`routeNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `hasStop` FOREIGN KEY (`stopNumber`) REFERENCES `stop` (`stopNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,7 +262,7 @@ CREATE TABLE `owns_pass` (
   `cid` int(11) NOT NULL,
   PRIMARY KEY (`pid`,`cid`),
   KEY `ownspass_idx` (`cid`),
-  CONSTRAINT `ownspass` FOREIGN KEY (`cid`) REFERENCES `Customer` (`cid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `ownspass` FOREIGN KEY (`cid`) REFERENCES `customer` (`cid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
