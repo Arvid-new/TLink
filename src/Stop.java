@@ -46,13 +46,14 @@ public class Stop {
 		}
 	}
 	
-	public ResultSet displayStops() {
+	public ResultTableModel displayStops() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM stop");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO
@@ -60,13 +61,14 @@ public class Stop {
 		}
 	}
 	
-	public ResultSet searchStops(String stopName) {
+	public ResultTableModel searchStops(String stopName) {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM stop WHERE stopName LIKE '%" + stopName + "%'");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			// TODO
@@ -74,13 +76,14 @@ public class Stop {
 		}
 	}
 	
-	public ResultSet findAllRoutes(int stopNum) {
+	public ResultTableModel findAllRoutes(int stopNum) {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT r.routeNumber, routeName FROM has h, route r WHERE h.stopNumber = " + stopNum);
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			// TODO 
