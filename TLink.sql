@@ -18,40 +18,40 @@ USE `tlink`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Access`
+-- Table structure for table `access`
 --
 
-DROP TABLE IF EXISTS `Access`;
+DROP TABLE IF EXISTS `access`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Access` (
+CREATE TABLE `access` (
   `vehicleNumber` int(11) NOT NULL,
   `cid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
   PRIMARY KEY (`vehicleNumber`,`cid`,`pid`),
   KEY `accessCid_idx` (`cid`,`pid`),
-  CONSTRAINT `accessVehicleNumber` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `accessCid` FOREIGN KEY (`cid`, `pid`) REFERENCES `Owns_Pass` (`cid`, `pid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `accessCid` FOREIGN KEY (`cid`, `pid`) REFERENCES `Owns_Pass` (`cid`, `pid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `accessVehicleNumber` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Access`
+-- Dumping data for table `access`
 --
 
-LOCK TABLES `Access` WRITE;
-/*!40000 ALTER TABLE `Access` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Access` ENABLE KEYS */;
+LOCK TABLES `access` WRITE;
+/*!40000 ALTER TABLE `access` DISABLE KEYS */;
+/*!40000 ALTER TABLE `access` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Customer`
+-- Table structure for table `customer`
 --
 
-DROP TABLE IF EXISTS `Customer`;
+DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Customer` (
+CREATE TABLE `customer` (
   `cid` int(11) NOT NULL,
   `name` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`cid`)
@@ -59,22 +59,22 @@ CREATE TABLE `Customer` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Customer`
+-- Dumping data for table `customer`
 --
 
-LOCK TABLES `Customer` WRITE;
-/*!40000 ALTER TABLE `Customer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Customer` ENABLE KEYS */;
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Driveable`
+-- Table structure for table `driveable`
 --
 
-DROP TABLE IF EXISTS `Driveable`;
+DROP TABLE IF EXISTS `driveable`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Driveable` (
+CREATE TABLE `driveable` (
   `vehicleNumber` int(11) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`vehicleNumber`),
@@ -83,22 +83,22 @@ CREATE TABLE `Driveable` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Driveable`
+-- Dumping data for table `driveable`
 --
 
-LOCK TABLES `Driveable` WRITE;
-/*!40000 ALTER TABLE `Driveable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Driveable` ENABLE KEYS */;
+LOCK TABLES `driveable` WRITE;
+/*!40000 ALTER TABLE `driveable` DISABLE KEYS */;
+/*!40000 ALTER TABLE `driveable` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Driven_By`
+-- Table structure for table `driven_by`
 --
 
-DROP TABLE IF EXISTS `Driven_By`;
+DROP TABLE IF EXISTS `driven_by`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Driven_By` (
+CREATE TABLE `driven_by` (
   `vehicleNumber` int(11) NOT NULL,
   `from` datetime NOT NULL,
   `to` datetime NOT NULL,
@@ -106,29 +106,29 @@ CREATE TABLE `Driven_By` (
   PRIMARY KEY (`vehicleNumber`,`from`,`to`,`empId`),
   KEY `drivenDuration_idx` (`from`,`to`),
   KEY `drivenEmp_idx` (`empId`),
-  CONSTRAINT `drivenVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `drivenDuration` FOREIGN KEY (`from`, `to`) REFERENCES `Duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `drivenEmp` FOREIGN KEY (`empId`) REFERENCES `Driver` (`empId`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `drivenEmp` FOREIGN KEY (`empId`) REFERENCES `Driver` (`empId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `drivenVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Driven_By`
+-- Dumping data for table `driven_by`
 --
 
-LOCK TABLES `Driven_By` WRITE;
-/*!40000 ALTER TABLE `Driven_By` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Driven_By` ENABLE KEYS */;
+LOCK TABLES `driven_by` WRITE;
+/*!40000 ALTER TABLE `driven_by` DISABLE KEYS */;
+/*!40000 ALTER TABLE `driven_by` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Driver`
+-- Table structure for table `driver`
 --
 
-DROP TABLE IF EXISTS `Driver`;
+DROP TABLE IF EXISTS `driver`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Driver` (
+CREATE TABLE `driver` (
   `empId` int(11) NOT NULL,
   `name` varchar(40) DEFAULT NULL,
   `address` varchar(60) DEFAULT NULL,
@@ -138,22 +138,22 @@ CREATE TABLE `Driver` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Driver`
+-- Dumping data for table `driver`
 --
 
-LOCK TABLES `Driver` WRITE;
-/*!40000 ALTER TABLE `Driver` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Driver` ENABLE KEYS */;
+LOCK TABLES `driver` WRITE;
+/*!40000 ALTER TABLE `driver` DISABLE KEYS */;
+/*!40000 ALTER TABLE `driver` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Driverless`
+-- Table structure for table `driverless`
 --
 
-DROP TABLE IF EXISTS `Driverless`;
+DROP TABLE IF EXISTS `driverless`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Driverless` (
+CREATE TABLE `driverless` (
   `vehicleNumber` int(11) NOT NULL,
   PRIMARY KEY (`vehicleNumber`),
   CONSTRAINT `driverless` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -161,22 +161,22 @@ CREATE TABLE `Driverless` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Driverless`
+-- Dumping data for table `driverless`
 --
 
-LOCK TABLES `Driverless` WRITE;
-/*!40000 ALTER TABLE `Driverless` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Driverless` ENABLE KEYS */;
+LOCK TABLES `driverless` WRITE;
+/*!40000 ALTER TABLE `driverless` DISABLE KEYS */;
+/*!40000 ALTER TABLE `driverless` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Duration`
+-- Table structure for table `duration`
 --
 
-DROP TABLE IF EXISTS `Duration`;
+DROP TABLE IF EXISTS `duration`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Duration` (
+CREATE TABLE `duration` (
   `from` datetime NOT NULL,
   `to` datetime NOT NULL,
   PRIMARY KEY (`from`,`to`)
@@ -184,22 +184,22 @@ CREATE TABLE `Duration` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Duration`
+-- Dumping data for table `duration`
 --
 
-LOCK TABLES `Duration` WRITE;
-/*!40000 ALTER TABLE `Duration` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Duration` ENABLE KEYS */;
+LOCK TABLES `duration` WRITE;
+/*!40000 ALTER TABLE `duration` DISABLE KEYS */;
+/*!40000 ALTER TABLE `duration` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Follows`
+-- Table structure for table `follows`
 --
 
-DROP TABLE IF EXISTS `Follows`;
+DROP TABLE IF EXISTS `follows`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Follows` (
+CREATE TABLE `follows` (
   `vehicleNumber` int(11) NOT NULL,
   `routeNumber` int(11) NOT NULL,
   `from` datetime NOT NULL,
@@ -207,29 +207,29 @@ CREATE TABLE `Follows` (
   PRIMARY KEY (`vehicleNumber`,`routeNumber`,`from`,`to`),
   KEY `followsRoute_idx` (`routeNumber`),
   KEY `followsDuration_idx` (`from`,`to`),
-  CONSTRAINT `followsVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `followsDuration` FOREIGN KEY (`from`, `to`) REFERENCES `Duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `followsRoute` FOREIGN KEY (`routeNumber`) REFERENCES `Route` (`routeNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `followsDuration` FOREIGN KEY (`from`, `to`) REFERENCES `Duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `followsVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Follows`
+-- Dumping data for table `follows`
 --
 
-LOCK TABLES `Follows` WRITE;
-/*!40000 ALTER TABLE `Follows` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Follows` ENABLE KEYS */;
+LOCK TABLES `follows` WRITE;
+/*!40000 ALTER TABLE `follows` DISABLE KEYS */;
+/*!40000 ALTER TABLE `follows` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Has`
+-- Table structure for table `has`
 --
 
-DROP TABLE IF EXISTS `Has`;
+DROP TABLE IF EXISTS `has`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Has` (
+CREATE TABLE `has` (
   `routeNumber` int(11) NOT NULL,
   `stopNumber` int(11) NOT NULL,
   PRIMARY KEY (`routeNumber`,`stopNumber`),
@@ -240,22 +240,22 @@ CREATE TABLE `Has` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Has`
+-- Dumping data for table `has`
 --
 
-LOCK TABLES `Has` WRITE;
-/*!40000 ALTER TABLE `Has` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Has` ENABLE KEYS */;
+LOCK TABLES `has` WRITE;
+/*!40000 ALTER TABLE `has` DISABLE KEYS */;
+/*!40000 ALTER TABLE `has` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Owns_Pass`
+-- Table structure for table `owns_pass`
 --
 
-DROP TABLE IF EXISTS `Owns_Pass`;
+DROP TABLE IF EXISTS `owns_pass`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Owns_Pass` (
+CREATE TABLE `owns_pass` (
   `pid` int(11) NOT NULL,
   `balance` int(11) DEFAULT NULL,
   `cid` int(11) NOT NULL,
@@ -266,22 +266,22 @@ CREATE TABLE `Owns_Pass` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Owns_Pass`
+-- Dumping data for table `owns_pass`
 --
 
-LOCK TABLES `Owns_Pass` WRITE;
-/*!40000 ALTER TABLE `Owns_Pass` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Owns_Pass` ENABLE KEYS */;
+LOCK TABLES `owns_pass` WRITE;
+/*!40000 ALTER TABLE `owns_pass` DISABLE KEYS */;
+/*!40000 ALTER TABLE `owns_pass` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Route`
+-- Table structure for table `route`
 --
 
-DROP TABLE IF EXISTS `Route`;
+DROP TABLE IF EXISTS `route`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Route` (
+CREATE TABLE `route` (
   `routeNumber` int(11) NOT NULL,
   `routeName` varchar(45) DEFAULT NULL,
   `stopTime` time DEFAULT NULL,
@@ -291,22 +291,22 @@ CREATE TABLE `Route` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Route`
+-- Dumping data for table `route`
 --
 
-LOCK TABLES `Route` WRITE;
-/*!40000 ALTER TABLE `Route` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Route` ENABLE KEYS */;
+LOCK TABLES `route` WRITE;
+/*!40000 ALTER TABLE `route` DISABLE KEYS */;
+/*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Stop`
+-- Table structure for table `stop`
 --
 
-DROP TABLE IF EXISTS `Stop`;
+DROP TABLE IF EXISTS `stop`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Stop` (
+CREATE TABLE `stop` (
   `stopNumber` int(11) NOT NULL,
   `stopName` varchar(40) DEFAULT NULL,
   `location` varchar(40) DEFAULT NULL,
@@ -315,22 +315,22 @@ CREATE TABLE `Stop` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Stop`
+-- Dumping data for table `stop`
 --
 
-LOCK TABLES `Stop` WRITE;
-/*!40000 ALTER TABLE `Stop` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Stop` ENABLE KEYS */;
+LOCK TABLES `stop` WRITE;
+/*!40000 ALTER TABLE `stop` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stop` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Vehicle`
+-- Table structure for table `vehicle`
 --
 
-DROP TABLE IF EXISTS `Vehicle`;
+DROP TABLE IF EXISTS `vehicle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Vehicle` (
+CREATE TABLE `vehicle` (
   `vehicleNumber` int(11) NOT NULL,
   `age` int(11) NOT NULL,
   `capacity` int(11) DEFAULT NULL,
@@ -339,12 +339,12 @@ CREATE TABLE `Vehicle` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Vehicle`
+-- Dumping data for table `vehicle`
 --
 
-LOCK TABLES `Vehicle` WRITE;
-/*!40000 ALTER TABLE `Vehicle` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Vehicle` ENABLE KEYS */;
+LOCK TABLES `vehicle` WRITE;
+/*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -356,4 +356,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-19 15:35:19
+-- Dump completed on 2015-03-19 21:11:28
