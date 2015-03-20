@@ -297,6 +297,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
+INSERT INTO `route` VALUES (22,'Downtown Express','23:59:00','06:00:00'),(55,'Burnaby Express','23:59:00','06:30:00'),(66,'North Van Shuttle','23:00:00','07:00:00'),(88,'Richmond Express','23:00:00','06:00:00'),(99,'UBC Express','23:59:00','06:00:00');
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -358,4 +359,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-19 21:36:26
+-- Dump completed on 2015-03-20 14:01:43
