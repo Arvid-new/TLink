@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,10 +12,10 @@ public class Vehicle {
 	
 	public Vehicle() {}
 	
-	public void insertVehicle(int vehicleNum, int age, int capacity) {
+	public void insertVehicle(int vehicleNumber, int age, int capacity) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO vehicle VALUES (?, ?, ?)");
-			stmt.setInt(1, vehicleNum);
+			stmt.setInt(1, vehicleNumber);
 			stmt.setInt(2, age);
 			stmt.setInt(3, capacity);
 			stmt.executeUpdate();
@@ -30,10 +31,10 @@ public class Vehicle {
 		}
 	}
 	
-	public void deleteVehicle(int vehicleNum) {
+	public void deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM vehicle WHERE vehicleNum = " + vehicleNum);
+			stmt.executeQuery("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
 			con.commit();
 			stmt.close();
 		}
@@ -46,24 +47,34 @@ public class Vehicle {
 		}
 	}
 	
-	public void displayVehicles() {
-		int vehicleNum;
-		int age;
-		int capacity;
+	public ResultSet displayVehicles() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle");
-			
-			while (rs.next()) {
-				vehicleNum = rs.getInt("vehicleNum");
-				age = rs.getInt("age");
-				capacity = rs.getInt("capacity");
-			}
 			stmt.close();
+			return rs;
 		}
 		catch (SQLException ex) {
 			//TODO
+			return null;
 		}
 	}
+	
+	public ResultSet generateVehicleReport() {
+		
+		try	{
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT vehicleNumber, COUNT(vehicleNumber) "
+					+ "FROM driven_by WHERE MONTH(from) = MONTH(CURRENT_DATE)");
+			stmt.close();
+			return rs;
+		}
+		catch (SQLException ex) {
+			//TODO 
+			return null;
+		}
+	}
+	
+	
 }

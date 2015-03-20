@@ -33,7 +33,7 @@ public class Stop {
 	public void deleteStop(int stopNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM stop WHERE stopNum = " + stopNum);
+			stmt.executeQuery("DELETE FROM stop WHERE stopNumber = " + stopNum);
 			con.commit();
 			stmt.close();
 		}
@@ -46,24 +46,45 @@ public class Stop {
 		}
 	}
 	
-	public void displayStops() {
-		int stopNum;
-		String stopName;
-		String location;
+	public ResultSet displayStops() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM stop");
-			
-			while (rs.next()) {
-				stopNum = rs.getInt("empId");
-				stopName = rs.getString("name");
-				location = rs.getString("address");
-			}
 			stmt.close();
+			return rs;
 		}
 		catch (SQLException ex) {
 			//TODO
+			return null;
+		}
+	}
+	
+	public ResultSet searchStops(String stopName) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM stop WHERE stopName LIKE '%" + stopName + "%'");
+			stmt.close();
+			return rs;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
+	
+	public ResultSet findAllRoutes(int stopNum) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT r.routeNumber, routeName FROM has h, route r WHERE h.stopNumber = " + stopNum);
+			stmt.close();
+			return rs;
+		}
+		catch (SQLException ex) {
+			// TODO 
+			return null;
 		}
 	}
 }

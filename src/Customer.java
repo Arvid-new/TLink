@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class Customer {
 
 	Connection con = OracleConnection.getInstance().getConnection();
-	
+
 	public Customer () {}
 	
 	public void insertCustomer(int cid, String name) {
@@ -45,22 +45,18 @@ public class Customer {
 		}
 	}
 	
-	public void displayCustomers() {
-		int cid;
-		String name;
+	public ResultSet displayCustomers() {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
-			
-			while (rs.next()) {
-				cid = rs.getInt("cid");
-				name = rs.getString("name");
-			}
+
 			stmt.close();
+			return rs;
 		}
 		catch (SQLException ex) {
 			//TODO
+			return null;
 		}
 	}
 	
@@ -80,6 +76,34 @@ public class Customer {
 			} catch (SQLException e) {
 				//TODO
 			}
+		}
+	}
+	
+	public int displayBalance(int cid) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
+			stmt.close();
+			return rs.getInt("balance");
+		}
+		catch (SQLException ex) {
+			//TODO
+			return 0;
+		}
+	}
+	
+	public int displayPassId(int cid) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT pid FROM owns_pass WHERE cid =" + cid);
+			stmt.close();
+			return rs.getInt("pid");
+		}
+		catch (SQLException ex) {
+			//TODO
+			return 0;
 		}
 	}
 }

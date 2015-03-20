@@ -48,26 +48,16 @@ public class Driver {
 		}
 	}
 	
-	public void displayDrivers() {
-		int empId;
-		String name;
-		String address;
-		String phoneNum;
-		
+	public ResultSet displayDrivers() {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM driver");
-			
-			while (rs.next()) {
-				empId = rs.getInt("empId");
-				name = rs.getString("name");
-				address = rs.getString("address");
-				phoneNum = rs.getString("phoneNum");
-			}
 			stmt.close();
+			return rs;
 		}
 		catch (SQLException ex) {
 			//TODO
+			return null;
 		}
 	}
 	
@@ -90,7 +80,7 @@ public class Driver {
 	public void updatePhoneNum(int empId, String phoneNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE driver SET phoneNum = '" + phoneNum + "' WHERE empId = " + empId);
+			stmt.executeUpdate("UPDATE driver SET phoneNumber = '" + phoneNum + "' WHERE empId = " + empId);
 			con.commit();
 			stmt.close();
 		}
