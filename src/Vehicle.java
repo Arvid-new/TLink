@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ public class Vehicle {
 	public void deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM vehicle WHERE vehicleNum = " + vehicleNumber);
+			stmt.executeQuery("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
 			con.commit();
 			stmt.close();
 		}
@@ -59,4 +60,21 @@ public class Vehicle {
 			return null;
 		}
 	}
+	
+	public ResultSet generateVehicleReport() {
+		
+		try	{
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT vehicleNumber, COUNT(vehicleNumber) "
+					+ "FROM driven_by WHERE MONTH(from) = MONTH(CURRENT_DATE)");
+			stmt.close();
+			return rs;
+		}
+		catch (SQLException ex) {
+			//TODO 
+			return null;
+		}
+	}
+	
+	
 }
