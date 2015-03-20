@@ -10,6 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -117,8 +118,9 @@ public class TLinkFrame extends JFrame {
 
 	private JPanel createRoutePanel() {		
 		routeTable = new JTable();
+		JScrollPane routeScrollPanel = new JScrollPane(routeTable);
 		Route route = new Route();
-		routeTable.setModel(route.displayRoutes());
+		/*routeTable.setModel(route.displayRoutes());*/
 
 		// Search button TODO
 		JButton routeSearchBtn = new JButton("Search");
@@ -126,28 +128,43 @@ public class TLinkFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				String routeName = JOptionPane.showInputDialog(null, "Enter route name");
 				Route route = new Route();
-				routeTable.setModel(route.displayRoutes());
+				// TODO check if search is empty then return no search results, otherwise remove all and show results
+				routeTable.removeAll();
+				routeTable.setModel(route.searchRoutes(routeName));
 			}
 		});
 
 		JButton stopsBtn = new JButton("Stops");
+		stopsBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int rid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter route ID"));
+				Route route = new Route();
+				// TODO check if search is empty then return no search results, otherwise remove all and show results
+				routeTable.removeAll();
+				routeTable.setModel(route.getAllStops(rid));
+			}
+		});
 
 		JPanel routeMenu = new JPanel();
 		routeMenu.setLayout(new GridLayout(1, 2));
 		routeMenu.add(routeSearchBtn);
 		routeMenu.add(stopsBtn);
-
+		
 		routePanel = new JPanel();
 		routePanel.setLayout(new BorderLayout());
+		routePanel.add(routeScrollPanel);
 		routePanel.add(routeMenu, BorderLayout.NORTH);
 		return routePanel;
 	}
 
 	private JPanel createStopPanel() {
 		stopTable = new JTable();
+		JScrollPane stopScrollPanel = new JScrollPane(stopTable);
 		Stop stop = new Stop();
-		stopTable.setModel(stop.displayStops());
+		/*stopTable.setModel(stop.displayStops());*/
 
 		// Search button TODO
 		JButton stopSearchBtn = new JButton("Search");
@@ -155,12 +172,25 @@ public class TLinkFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				String stopName = JOptionPane.showInputDialog(null, "Enter stop name");
 				Stop stop = new Stop();
-				stopTable.setModel(stop.displayStops());
+				// TODO check if search is empty then return no search results, otherwise remove all and show results
+				routeTable.removeAll();
+				routeTable.setModel(stop.searchStops(stopName));
 			}
 		});
 
 		JButton routesBtn = new JButton("Route(s)");
+		routesBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int sid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter stop ID"));
+				Stop stop = new Stop();
+				// TODO check if search is empty then return no search results, otherwise remove all and show results
+				routeTable.removeAll();
+				routeTable.setModel(stop.findAllRoutes(sid));
+			}
+		});
 
 		JPanel stopMenu = new JPanel();
 		stopMenu.setLayout(new GridLayout(1, 2));
@@ -169,6 +199,7 @@ public class TLinkFrame extends JFrame {
 
 		stopPanel = new JPanel();
 		stopPanel.setLayout(new BorderLayout());
+		stopPanel.add(stopScrollPanel);
 		stopPanel.add(stopMenu, BorderLayout.NORTH);
 		return stopPanel;
 	}
