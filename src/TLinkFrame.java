@@ -82,62 +82,22 @@ public class TLinkFrame extends JFrame {
 		
 		title = new JLabel("TLink Database App");	
 		
-		updateBtn = new JButton("Update");
+		/*updateBtn = new JButton("Update");
 		clearBtn = new JButton("Clear");
-		routeField = new JTextField("Route");
+		routeField = new JTextField("Route");*/
 		
-		// Route Tab		
-		routeTable = new JTable();
-		JButton routeSearchBtn = new JButton("Search");
-		routeSearchBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				Route route = new Route();
-				routeTable.setModel(route.displayRoutes());
-			}
-		});
+		routePanel = createRoutePanel();
+		stopPanel = createStopPanel();
+		customerPanel = createCustomerPanel();
+		driverPanel = createDriverPanel();
+		operatorPanel = createOperatorPanel();
 		
-		JButton stopsBtn = new JButton("Stops");
-		
-		JPanel routeMenu = new JPanel();
-		routeMenu.setLayout(new GridLayout(1, 2));
-		routeMenu.add(routeSearchBtn);
-		routeMenu.add(stopsBtn);
-		
-		routePanel = new JPanel();
-		routePanel.setLayout(new BorderLayout());
-		routePanel.add(routeMenu, BorderLayout.NORTH);
-		
-		// Stop Tab
-		JButton stopSearchBtn = new JButton("Search");
-		JButton routesBtn = new JButton("Route(s)");
-		
-		JPanel stopMenu = new JPanel();
-		stopMenu.setLayout(new GridLayout(1, 2));
-		stopMenu.add(stopSearchBtn);
-		stopMenu.add(routesBtn);
-		
-		stopPanel = new JPanel();
-		stopPanel.setLayout(new BorderLayout());
-		stopPanel.add(stopMenu, BorderLayout.NORTH);
-		
-		// Customer Tab
-		customerPanel = new JPanel();
-		customerPanel.setLayout(new BorderLayout());
-
 		Vehicle vehicle = new Vehicle();  
 		// Uncomment below to display from database
 		//customerTable = new JTable(vehicle.displayVehicles());	
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
 		customerPanel.add(customerScrollPane, BorderLayout.CENTER);
-		
-		// Driver Tab
-		driverPanel = new JPanel();
-		
-		// Operator Tab
-		operatorPanel = new JPanel();
 		
 		// Tabs pane
 		tabPane = new JTabbedPane();
@@ -154,4 +114,59 @@ public class TLinkFrame extends JFrame {
 		setContentPane(mainPanel);		
 	}
 	
+	private JPanel createRoutePanel() {		
+			routeTable = new JTable();
+			JButton routeSearchBtn = new JButton("Search");
+			routeSearchBtn.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					Route route = new Route();
+					routeTable.setModel(route.displayRoutes());
+				}
+			});
+			
+			JButton stopsBtn = new JButton("Stops");
+			
+			JPanel routeMenu = new JPanel();
+			routeMenu.setLayout(new GridLayout(1, 2));
+			routeMenu.add(routeSearchBtn);
+			routeMenu.add(stopsBtn);
+			
+			routePanel = new JPanel();
+			routePanel.setLayout(new BorderLayout());
+			routePanel.add(routeMenu, BorderLayout.NORTH);
+			return routePanel;
+	}
+	
+	private JPanel createStopPanel() {
+			JButton stopSearchBtn = new JButton("Search");
+			JButton routesBtn = new JButton("Route(s)");
+			
+			JPanel stopMenu = new JPanel();
+			stopMenu.setLayout(new GridLayout(1, 2));
+			stopMenu.add(stopSearchBtn);
+			stopMenu.add(routesBtn);
+			
+			stopPanel = new JPanel();
+			stopPanel.setLayout(new BorderLayout());
+			stopPanel.add(stopMenu, BorderLayout.NORTH);
+			return stopPanel;
+	}
+
+	private JPanel createCustomerPanel() {
+		customerPanel = new JPanel();
+		customerPanel.setLayout(new BorderLayout());
+		return customerPanel;
+	}
+	
+	private JPanel createDriverPanel() {
+		driverPanel = new JPanel();
+		return driverPanel;
+	}
+	
+	private JPanel createOperatorPanel() {
+		operatorPanel = new JPanel();
+		return operatorPanel;
+	}
 }
