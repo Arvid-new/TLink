@@ -78,7 +78,7 @@ CREATE TABLE `driveable` (
   `vehicleNumber` int(11) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`vehicleNumber`),
-  CONSTRAINT `vehicleNumber` FOREIGN KEY (`vehicleNumber`) REFERENCES `Vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `drivableNumber` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -88,6 +88,7 @@ CREATE TABLE `driveable` (
 
 LOCK TABLES `driveable` WRITE;
 /*!40000 ALTER TABLE `driveable` DISABLE KEYS */;
+INSERT INTO `driveable` VALUES (101,'ferry'),(133,'bus'),(200,'ferry'),(664,'bus'),(965,'bus');
 /*!40000 ALTER TABLE `driveable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -344,6 +345,7 @@ CREATE TABLE `vehicle` (
 
 LOCK TABLES `vehicle` WRITE;
 /*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
+INSERT INTO `vehicle` VALUES (101,10,100),(133,2,50),(200,2,100),(348,5,50),(400,15,100),(512,9,50),(664,12,75),(965,4,100);
 /*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -356,4 +358,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-19 21:11:28
+-- Dump completed on 2015-03-19 21:36:26
