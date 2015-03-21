@@ -146,7 +146,12 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int rid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter route ID"));
+				int rid = -1;
+				try {
+					rid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter route ID"));
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				}
 				Route route = new Route();
 				ResultTableModel search = route.getAllStops(rid);
 				if (search.empty) {
@@ -211,7 +216,12 @@ public class TLinkFrame extends JFrame {
 		routesBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int sid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter stop ID"));
+				int sid = -1;
+				try {
+					sid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter stop ID"));
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				}
 				Stop stop = new Stop();
 				ResultTableModel search = stop.findAllRoutes(sid);
 				if (search.empty) {
