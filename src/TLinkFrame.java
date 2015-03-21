@@ -32,10 +32,8 @@ public class TLinkFrame extends JFrame {
 	private JPanel operatorPanel;
 	
 	private JPanel routeMenu;
-	private JPanel menuPanel;
 	private JTabbedPane tabPane;
 
-	private JTable searchTable;
 	private JTable customerTable;
 	private JPanel customerMenu;
 	private JTable routeTable;
@@ -46,7 +44,6 @@ public class TLinkFrame extends JFrame {
 	private JButton clearBtn;
 
 	private JLabel title;
-	private JTextField routeField;
 
 	public static void main(String[] args) {
 		try {
@@ -88,19 +85,12 @@ public class TLinkFrame extends JFrame {
 
 		title = new JLabel("TLink Database App");	
 
-		/*updateBtn = new JButton("Update");
-		clearBtn = new JButton("Clear");
-		routeField = new JTextField("Route");*/
-
 		routePanel = createRoutePanel();
 		stopPanel = createStopPanel();
 		customerPanel = createCustomerPanel();
 		driverPanel = createDriverPanel();
 		operatorPanel = createOperatorPanel();
-
-		Vehicle vehicle = new Vehicle();  
-		// Uncomment below to display from database
-		//customerTable = new JTable(vehicle.displayVehicles());	
+		
 
 		// Tabs pane
 		tabPane = new JTabbedPane();
@@ -129,14 +119,16 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				String routeName = JOptionPane.showInputDialog(null, "Enter route name");
-				Route route = new Route();
-				ResultTableModel search = route.searchRoutes(routeName);
-				if (search.empty) {
-					JOptionPane.showMessageDialog(null, "No routes found");
-				}
-				else {
-					routeTable.removeAll();
-					routeTable.setModel(search);
+				if(routeName != null) {
+					Route route = new Route();
+					ResultTableModel search = route.searchRoutes(routeName);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No routes found");
+					}
+					else {
+						routeTable.removeAll();
+						routeTable.setModel(search);
+					}
 				}
 			}
 		});
@@ -200,14 +192,16 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				String stopName = JOptionPane.showInputDialog(null, "Enter stop name");
-				Stop stop = new Stop();
-				ResultTableModel search = stop.searchStops(stopName);
-				if (search.empty) {
-					JOptionPane.showMessageDialog(null, "No stops found");
-				}
-				else {
-					stopTable.removeAll();
-					stopTable.setModel(search);
+				if (stopName != null) {
+					Stop stop = new Stop();
+					ResultTableModel search = stop.searchStops(stopName);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No stops found");
+					}
+					else {
+						stopTable.removeAll();
+						stopTable.setModel(search);
+					}
 				}
 			}
 		});
@@ -374,21 +368,4 @@ public class TLinkFrame extends JFrame {
 		operatorPanel = new JPanel();
 		return operatorPanel;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
