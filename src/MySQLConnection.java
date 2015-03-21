@@ -20,6 +20,7 @@ public class MySQLConnection {
 					.getConnection(url, username, password);
 		} catch (ClassNotFoundException e) {
 			// TODO:
+			System.out.println("JDBC drivers not found");
 		} catch (SQLException e) {
 			// TODO:
 			System.out.println("Enter your password in MySQLConnection class");
