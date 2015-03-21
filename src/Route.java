@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 
 
 public class Route {
@@ -11,13 +12,13 @@ public class Route {
 	
 	public Route() {}
 	
-	public void insertRoute(int routeNum, String rname, Date stop, Date start) {
+	public void insertRoute(int routeNum, String rname, Time stop, Time start) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO route VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, routeNum);
 			stmt.setString(2, rname);
-			stmt.setDate(3, stop);
-			stmt.setDate(4, start);
+			stmt.setTime(3, stop);
+			stmt.setTime(4, start);
 			stmt.executeUpdate();
 			con.commit();
 			stmt.close();

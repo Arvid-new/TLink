@@ -68,8 +68,8 @@ public class ResultTableModel extends AbstractTableModel {
 				case Types.DATE:
 					val = rs.getDate(i + 1);
 					break;
-				case Types.TIMESTAMP:
-					val = rs.getDate(i + 1);
+				case Types.TIME:
+					val = rs.getTime(i + 1);
 					break;
 				}
 
