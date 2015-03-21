@@ -189,7 +189,7 @@ public class TLinkFrame extends JFrame {
 		stopTable = new JTable();
 		JScrollPane stopScrollPanel = new JScrollPane(stopTable);
 		Stop stop = new Stop();
-		/*stopTable.setModel(stop.displayStops());*/
+		stopTable.setModel(stop.displayStops());
 
 		JButton stopSearchBtn = new JButton("Search");
 		stopSearchBtn.addActionListener(new ActionListener() {
@@ -203,8 +203,8 @@ public class TLinkFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "No stops found");
 				}
 				else {
-					routeTable.removeAll();
-					routeTable.setModel(search);
+					stopTable.removeAll();
+					stopTable.setModel(search);
 				}
 			}
 		});
