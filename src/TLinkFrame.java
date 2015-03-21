@@ -220,8 +220,8 @@ public class TLinkFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "No routes found");
 				}
 				else {
-					routeTable.removeAll();
-					routeTable.setModel(search);
+					stopTable.removeAll();
+					stopTable.setModel(search);
 				}
 			}
 		});
@@ -232,8 +232,8 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Stop stop = new Stop();
-				routeTable.removeAll();
-				routeTable.setModel(stop.displayStops());
+				stopTable.removeAll();
+				stopTable.setModel(stop.displayStops());
 			}
 		});
 
