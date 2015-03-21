@@ -9,6 +9,8 @@ import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class ResultTableModel extends AbstractTableModel {
+	
+	public boolean empty = false;
 
 	private int numCols;
 	private String[] columnNames;
@@ -77,6 +79,9 @@ public class ResultTableModel extends AbstractTableModel {
 			}
 
 			table.add(row);
+		}
+		if (table.isEmpty()) {
+			empty = true;
 		}
 	}
 	
