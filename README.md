@@ -3,16 +3,16 @@ CPSC 304 project
 
 
 Tables:<br>
-access<br>
-customer<br>
+access x<br>
+customer x<br>
 driveable x<br>
 driven_by<br>
 driver x<br>
-driverless<br>
+driverless x<br>
 duration x<br>
-follows<br>
-has<br>
-owns_pass<br>
+follows x<br>
+has x<br>
+owns_pass x<br>
 route x<br>
-stop<br>
+stop x<br>
 vehicle x<br>
