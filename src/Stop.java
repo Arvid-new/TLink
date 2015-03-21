@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class Stop {
 	
-	Connection con = OracleConnection.getInstance().getConnection();
+	Connection con = MySQLConnection.getInstance().getConnection();
 	
 	public Stop() {}
 	

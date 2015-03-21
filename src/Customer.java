@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class Customer {
 
-	Connection con = OracleConnection.getInstance().getConnection();
+	Connection con = MySQLConnection.getInstance().getConnection();
 
 	public Customer () {}
 	

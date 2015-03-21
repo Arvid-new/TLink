@@ -7,7 +7,7 @@ access<br>
 customer<br>
 driveable x<br>
 driven_by<br>
-driver<br>
+driver x<br>
 driverless<br>
 duration x<br>
 follows<br>

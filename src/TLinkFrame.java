@@ -30,9 +30,12 @@ public class TLinkFrame extends JFrame {
 	private JPanel customerPanel;
 	private JPanel driverPanel;
 	private JPanel operatorPanel;
+	
+	private JPanel routeMenu;
 	private JPanel menuPanel;
 	private JTabbedPane tabPane;
 
+	private JTable searchTable;
 	private JTable customerTable;
 	private JTable routeTable;
 	private JTable stopTable;
@@ -120,9 +123,8 @@ public class TLinkFrame extends JFrame {
 		routeTable = new JTable();
 		JScrollPane routeScrollPanel = new JScrollPane(routeTable);
 		Route route = new Route();
-		/*routeTable.setModel(route.displayRoutes());*/
+		routeTable.setModel(route.displayRoutes());
 
-		// Search button TODO
 		JButton routeSearchBtn = new JButton("Search");
 		routeSearchBtn.addActionListener(new ActionListener() {
 
@@ -130,25 +132,47 @@ public class TLinkFrame extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				String routeName = JOptionPane.showInputDialog(null, "Enter route name");
 				Route route = new Route();
-				// TODO check if search is empty then return no search results, otherwise remove all and show results
-				routeTable.removeAll();
-				routeTable.setModel(route.searchRoutes(routeName));
+				ResultTableModel search = route.searchRoutes(routeName);
+				if (search.empty) {
+					JOptionPane.showMessageDialog(null, "No routes found");
+				}
+				else {
+					routeTable.removeAll();
+					routeTable.setModel(search);
+				}
 			}
 		});
 
 		JButton stopsBtn = new JButton("Stops");
 		stopsBtn.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				int rid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter route ID"));
 				Route route = new Route();
-				// TODO check if search is empty then return no search results, otherwise remove all and show results
+				ResultTableModel search = route.getAllStops(rid);
+				if (search.empty) {
+					JOptionPane.showMessageDialog(null, "No stops found");
+				}
+				else {
+					routeTable.removeAll();
+					routeTable.setModel(search);
+				}
+			}
+		});
+		
+		JButton resetBtn = new JButton("Reset");
+		resetBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Route route = new Route();
 				routeTable.removeAll();
-				routeTable.setModel(route.getAllStops(rid));
+				routeTable.setModel(route.displayRoutes());
 			}
 		});
 
-		JPanel routeMenu = new JPanel();
+		routeMenu = new JPanel();
 		routeMenu.setLayout(new GridLayout(1, 2));
 		routeMenu.add(routeSearchBtn);
 		routeMenu.add(stopsBtn);
@@ -156,6 +180,7 @@ public class TLinkFrame extends JFrame {
 		routePanel = new JPanel();
 		routePanel.setLayout(new BorderLayout());
 		routePanel.add(routeScrollPanel);
+		routePanel.add(resetBtn, BorderLayout.SOUTH);
 		routePanel.add(routeMenu, BorderLayout.NORTH);
 		return routePanel;
 	}
@@ -166,7 +191,6 @@ public class TLinkFrame extends JFrame {
 		Stop stop = new Stop();
 		/*stopTable.setModel(stop.displayStops());*/
 
-		// Search button TODO
 		JButton stopSearchBtn = new JButton("Search");
 		stopSearchBtn.addActionListener(new ActionListener() {
 
@@ -174,21 +198,42 @@ public class TLinkFrame extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				String stopName = JOptionPane.showInputDialog(null, "Enter stop name");
 				Stop stop = new Stop();
-				// TODO check if search is empty then return no search results, otherwise remove all and show results
-				routeTable.removeAll();
-				routeTable.setModel(stop.searchStops(stopName));
+				ResultTableModel search = stop.searchStops(stopName);
+				if (search.empty) {
+					JOptionPane.showMessageDialog(null, "No stops found");
+				}
+				else {
+					routeTable.removeAll();
+					routeTable.setModel(search);
+				}
 			}
 		});
 
-		JButton routesBtn = new JButton("Route(s)");
+		JButton routesBtn = new JButton("Find route(s)");
 		routesBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				int sid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter stop ID"));
 				Stop stop = new Stop();
-				// TODO check if search is empty then return no search results, otherwise remove all and show results
+				ResultTableModel search = stop.findAllRoutes(sid);
+				if (search.empty) {
+					JOptionPane.showMessageDialog(null, "No routes found");
+				}
+				else {
+					routeTable.removeAll();
+					routeTable.setModel(search);
+				}
+			}
+		});
+		
+		JButton resetBtn = new JButton("Reset");
+		resetBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Stop stop = new Stop();
 				routeTable.removeAll();
-				routeTable.setModel(stop.findAllRoutes(sid));
+				routeTable.setModel(stop.displayStops());
 			}
 		});
 
@@ -201,6 +246,7 @@ public class TLinkFrame extends JFrame {
 		stopPanel.setLayout(new BorderLayout());
 		stopPanel.add(stopScrollPanel);
 		stopPanel.add(stopMenu, BorderLayout.NORTH);
+		stopPanel.add(resetBtn, BorderLayout.SOUTH);
 		return stopPanel;
 	}
 
