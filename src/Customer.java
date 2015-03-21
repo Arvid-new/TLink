@@ -60,50 +60,72 @@ public class Customer {
 		}
 	}
 	
+	// Customer "login"
+	public ResultTableModel login(String cid) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM customer, pass WHERE cid = " + cid);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}
 	
 	// adds to current balance
-	public void updateBalance(int cid, int add) {
+	public ResultTableModel updateBalance(int cid, int add) {
 		
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("UPDATE owns_pass SET balance = balance + " + add + "WHERE cid = " + cid);
 			con.commit();
 			con.close();
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
 		}
 		catch (SQLException ex) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				//TODO
+				return null;
 			}
+			return null;
 		}
 	}
 	
-	public int displayBalance(int cid) {
+	public ResultTableModel displayBalance(int cid) {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs.getInt("balance");
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO
-			return 0;
+			return null;
 		}
 	}
 	
-	public int displayPassId(int cid) {
+	public ResultTableModel displayPassId(int cid) {
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT pid FROM owns_pass WHERE cid =" + cid);
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs.getInt("pid");
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO
-			return 0;
+			return null;
 		}
 	}
 }

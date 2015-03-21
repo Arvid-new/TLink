@@ -37,6 +37,7 @@ public class TLinkFrame extends JFrame {
 
 	private JTable searchTable;
 	private JTable customerTable;
+	private JPanel customerMenu;
 	private JTable routeTable;
 	private JTable stopTable;
 	private JScrollPane customerScrollPane;
@@ -100,9 +101,6 @@ public class TLinkFrame extends JFrame {
 		Vehicle vehicle = new Vehicle();  
 		// Uncomment below to display from database
 		//customerTable = new JTable(vehicle.displayVehicles());	
-		customerTable = new JTable();
-		customerScrollPane = new JScrollPane(customerTable);
-		customerPanel.add(customerScrollPane, BorderLayout.CENTER);
 
 		// Tabs pane
 		tabPane = new JTabbedPane();
@@ -251,9 +249,88 @@ public class TLinkFrame extends JFrame {
 	}
 
 	private JPanel createCustomerPanel() {
+		customerTable = new JTable();
+		customerScrollPane = new JScrollPane(customerTable);
+		Customer customer = new Customer();
+		
+		JButton passIdBtn = new JButton("Pass Id");
+		passIdBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
+				Customer customer = new Customer();
+				ResultTableModel passResults = customer.displayPassId(cid);
+				if (passResults.empty) {
+					JOptionPane.showMessageDialog(null, "No pass found for that Customer ID");
+				}
+				else {
+					customerTable.removeAll();
+					customerTable.setModel(passResults);
+				}
+			}
+		});
+		
+		JButton displayBalanceBtn = new JButton("Get Balance");
+		displayBalanceBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
+				Customer customer = new Customer();
+				ResultTableModel displayBalanceResults = customer.displayBalance(cid);
+				if (displayBalanceResults.empty) {
+					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
+				}
+				else {
+					customerTable.removeAll();
+					customerTable.setModel(displayBalanceResults);
+				}
+			}
+		});
+		
+		JButton updateBalanceBtn = new JButton("Update Balance");
+		updateBalanceBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
+				int amtToAdd = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Amount to add"));
+				Customer customer = new Customer();
+				ResultTableModel updateBalanceResults = customer.updateBalance(cid, amtToAdd);
+				if (updateBalanceResults.empty) {
+					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
+				}
+				else {
+					customerTable.removeAll();
+					customerTable.setModel(updateBalanceResults);
+				}
+			}
+		});
+		
+		JButton resetBtn = new JButton("Reset");
+		resetBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Customer customer = new Customer();
+				customerTable.removeAll();
+			}
+		});
+		
+		customerMenu = new JPanel();
+		customerMenu.setLayout(new GridLayout(1, 2));
+		customerMenu.add(passIdBtn);
+		customerMenu.add(displayBalanceBtn);
+		customerMenu.add(updateBalanceBtn);
+		
 		customerPanel = new JPanel();
 		customerPanel.setLayout(new BorderLayout());
+		customerPanel.add(customerScrollPane);
+		customerPanel.add(resetBtn, BorderLayout.SOUTH);
+		customerPanel.add(customerMenu, BorderLayout.NORTH);
 		return customerPanel;
+		
 	}
 
 	private JPanel createDriverPanel() {
@@ -265,4 +342,21 @@ public class TLinkFrame extends JFrame {
 		operatorPanel = new JPanel();
 		return operatorPanel;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
