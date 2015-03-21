@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class Driver {
 	
-	Connection con = OracleConnection.getInstance().getConnection();
+	Connection con = MySQLConnection.getInstance().getConnection();
 	
 	public Driver() {}
 	

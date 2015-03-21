@@ -12,7 +12,7 @@ public class MySQLConnection {
 		
 		String url = "jdbc:mysql://localhost:3306/tlink";
 		String username = "root";
-		String password = ""; // enter your own
+		String password = "float"; // enter your own
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

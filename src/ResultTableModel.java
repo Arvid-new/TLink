@@ -21,7 +21,7 @@ public class ResultTableModel extends AbstractTableModel {
 			this.metadata = rs.getMetaData();
 			this.numCols = metadata.getColumnCount(); 
 			this.columnNames = new String[numCols];
-			
+
 			if(rs.isBeforeFirst()) {
 				for(int i = 0; i < numCols; i++) {
 					columnNames[i] = metadata.getColumnName(i + 1);
@@ -38,14 +38,14 @@ public class ResultTableModel extends AbstractTableModel {
 	private void formTable(ResultSet rs) throws SQLException {
 		
 		table = new ArrayList<Object[]>();
-		
+
 		while(rs.next() || rs.isBeforeFirst()) {
-			
+
 			Object[] row = new Object[numCols];
 			Object val = new Object();
 			
 			for(int i = 0; i < numCols; i++) {
-				
+			
 				int columnType = metadata.getColumnType(i + 1);
 				
 				switch(columnType) {
