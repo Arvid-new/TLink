@@ -144,6 +144,7 @@ CREATE TABLE `driver` (
 
 LOCK TABLES `driver` WRITE;
 /*!40000 ALTER TABLE `driver` DISABLE KEYS */;
+INSERT INTO `driver` VALUES (111111,'Sally Adams','3575 Granview St.','6042313248'),(123123,'Jane Smith','3819 Victoria Dr.','6047987522'),(123456,'John Smith','3761 Main St.','6045554568'),(222222,'Dave Davidson','521 Renfrew St.','6045465454'),(456456,'Bob Johnson','3802 Hastings St.','6047987985');
 /*!40000 ALTER TABLE `driver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -360,4 +361,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-20 14:29:26
+-- Dump completed on 2015-03-20 23:15:54
