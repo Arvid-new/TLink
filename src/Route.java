@@ -51,7 +51,7 @@ public class Route {
 	public ResultTableModel displayRoutes() {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM route");
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, routeName, startTime, stopTime FROM route");
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
