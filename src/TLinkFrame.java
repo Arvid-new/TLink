@@ -258,7 +258,12 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
+				int cid = -1;
+				try {
+					cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
 				Customer customer = new Customer();
 				ResultTableModel passResults = customer.displayPassId(cid);
 				if (passResults.empty) {
@@ -276,7 +281,12 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
+				int cid = -1;
+				try {
+					cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
 				Customer customer = new Customer();
 				ResultTableModel displayBalanceResults = customer.displayBalance(cid);
 				if (displayBalanceResults.empty) {
@@ -294,10 +304,21 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
-				int amtToAdd = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Amount to add"));
+				int cid = -1;
+				try {
+					cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
+				int amtToAdd = 0;
+				try {
+					amtToAdd = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Amount to add"));
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				}
 				Customer customer = new Customer();
-				ResultTableModel updateBalanceResults = customer.updateBalance(cid, amtToAdd);
+				customer.updateBalance(cid, amtToAdd);
+				ResultTableModel updateBalanceResults = customer.displayBalance(cid);
 				if (updateBalanceResults.empty) {
 					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
 				}

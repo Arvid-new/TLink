@@ -76,26 +76,20 @@ public class Customer {
 	}
 	
 	// adds to current balance
-	public ResultTableModel updateBalance(int cid, int add) {
+	public void updateBalance(int cid, int add) {
 		
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("UPDATE owns_pass SET balance = balance + " + add + "WHERE cid = " + cid);
 			con.commit();
 			con.close();
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
-			ResultTableModel rtm = new ResultTableModel(rs);
-			stmt.close();
-			return rtm;
 		}
 		catch (SQLException ex) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				return null;
+				// TODO
 			}
-			return null;
 		}
 	}
 	
