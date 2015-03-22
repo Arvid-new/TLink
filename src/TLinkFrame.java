@@ -444,13 +444,38 @@ public class TLinkFrame extends JFrame {
 			}
 		});
 		
+		JButton driverUpdateAddressBtn = new JButton("Update Address");
+		driverUpdateAddressBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int did = -1;
+				try {
+					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
+				String newAddress = JOptionPane.showInputDialog(null, "Enter new Address");
+				Driver driver = new Driver();
+				driver.updateAddress(did, newAddress);
+				ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
+				if (viewDriverInfo.empty) {
+					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
+				}
+				else {
+					driverTable.removeAll();
+					driverTable.setModel(viewDriverInfo);
+				}
+			}
+		});
+		
 		// Add Buttons to driverMenu
 		driverMenu = new JPanel();
 		driverMenu.setLayout(new GridLayout(1, 2));
 		driverMenu.add(driverGetShiftsBtn);
 		driverMenu.add(driverViewAllShiftsBtn);
 		driverMenu.add(driverUpdatePhoneBtn);
-		//driverMenu.add(someOtherBtn);
+		driverMenu.add(driverUpdateAddressBtn);
 		
 		driverPanel = new JPanel();
 		driverPanel.setLayout(new BorderLayout());

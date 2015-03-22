@@ -78,16 +78,17 @@ public class Driver {
 	
 	public void updateAddress(int empId, String address) {
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE driver SET address = '" + address + "' WHERE empId = " + empId);
+			PreparedStatement ps = con.prepareStatement("UPDATE driver SET address = ? WHERE empId =" + empId);
+			ps.setString(1, address);
+			ps.executeUpdate();
 			con.commit();
-			stmt.close();
+			ps.close();
 		}
 		catch (SQLException ex) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				//TODO
+				System.out.println("SQLException thrown in Driver.updateAddress()");
 			}
 		}
 	}
