@@ -40,9 +40,6 @@ public class TLinkFrame extends JFrame {
 	private JTable stopTable;
 	private JScrollPane customerScrollPane;
 
-	private JButton updateBtn;
-	private JButton clearBtn;
-
 	private JLabel title;
 
 	public static void main(String[] args) {
@@ -90,7 +87,6 @@ public class TLinkFrame extends JFrame {
 		customerPanel = createCustomerPanel();
 		driverPanel = createDriverPanel();
 		operatorPanel = createOperatorPanel();
-		
 
 		// Tabs pane
 		tabPane = new JTabbedPane();

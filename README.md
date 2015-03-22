@@ -6,7 +6,7 @@ Tables:<br>
 access x<br>
 customer x<br>
 driveable x<br>
-driven_by<br>
+driven_by x<br>
 driver x<br>
 driverless x<br>
 duration x<br>
