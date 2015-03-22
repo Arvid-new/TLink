@@ -328,14 +328,15 @@ public class TLinkFrame extends JFrame {
 				}
 				Customer customer = new Customer();
 				customer.updateBalance(cid, amtToAdd);
-				ResultTableModel updateBalanceResults = customer.updateBalance(cid, amtToAdd);
+				customerTable.setModel(customer.displayBalance(cid));
+				/*ResultTableModel updateBalanceResults = customer.updateBalance(cid, amtToAdd);
 				if (updateBalanceResults.empty) {
 					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
 				}
 				else {
 					customerTable.removeAll();
 					customerTable.setModel(updateBalanceResults);
-				}
+				}*/
 			}
 		});
 		

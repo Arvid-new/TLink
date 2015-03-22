@@ -76,22 +76,14 @@ public class Customer {
 	}
 	
 	// adds to current balance
-	public ResultTableModel updateBalance(int cid, int add) {
+	public void updateBalance(int cid, int add) {
 		
 		try {
-			Statement stmt = con.createStatement();
-			String selectBalQueryStr = "SELECT balance FROM owns_pass WHERE cid =" + cid;
-			ResultSet initResult = stmt.executeQuery(selectBalQueryStr);
-			int initBal = initResult.getInt("balance");
-			int newBal = initBal + add;
-			String newBalStr = String.valueOf(newBal);
-			String updateStr = "UPDATE owns_pass SET balance = " + newBalStr;
-			stmt.executeUpdate(updateStr);
-			ResultSet rs = stmt.executeQuery(selectBalQueryStr);
-			ResultTableModel rtm = new ResultTableModel(rs);
-			rs.close();
-			con.close();
-			return rtm;
+			PreparedStatement ps = con.prepareStatement("UPDATE owns_pass SET balance = balance + ? WHERE cid =" + cid);
+			ps.setInt(1, add);
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
 		}
 		catch (SQLException ex) {
 			try {
@@ -99,7 +91,6 @@ public class Customer {
 			} catch (SQLException e) {
 				// TODO
 			}
-			return null;
 		}
 	}
 	
