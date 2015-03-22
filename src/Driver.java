@@ -113,13 +113,14 @@ public class Driver {
 	public ResultTableModel viewShifts(int empId, String date) {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + "to_char(from, 'YYYY-MM-DD') = " + date);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + 
+					" AND fromDate LIKE '" + date + "%'");
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Ensure you entered date in format YYYY-MM-DD");
 			return null;
 		}		
 	}
