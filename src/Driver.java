@@ -62,6 +62,20 @@ public class Driver {
 		}
 	}
 	
+	public ResultTableModel viewDriverInfo(int empId) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driver WHERE empId = " + empId);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}
+	
 	public void updateAddress(int empId, String address) {
 		try {
 			Statement stmt = con.createStatement();
@@ -78,18 +92,20 @@ public class Driver {
 		}
 	}
 	
+	// phoneNum must be 6041234567 (no spaces or - )
 	public void updatePhoneNum(int empId, String phoneNum) {
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE driver SET phoneNumber = '" + phoneNum + "' WHERE empId = " + empId);
+			PreparedStatement ps = con.prepareStatement("UPDATE driver SET phoneNumber = ? WHERE empId =" + empId);
+			ps.setString(1, phoneNum);
+			ps.executeUpdate();
 			con.commit();
-			stmt.close();
+			ps.close();
 		}
 		catch (SQLException ex) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				//TODO
+				System.out.println("SQLException thrown in Driver.updatePhoneNumber()");
 			}
 		}
 	}

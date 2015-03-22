@@ -260,7 +260,7 @@ public class TLinkFrame extends JFrame {
 		stopPanel.add(resetBtn, BorderLayout.SOUTH);
 		return stopPanel;
 	}
-
+	
 	private JPanel createCustomerPanel() {
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
@@ -331,7 +331,7 @@ public class TLinkFrame extends JFrame {
 				}
 				Customer customer = new Customer();
 				customer.updateBalance(cid, amtToAdd);
-				ResultTableModel updateBalanceResults = customer.updateBalance(cid, amtToAdd);
+				ResultTableModel updateBalanceResults = customer.displayBalance(cid); 
 				if (updateBalanceResults.empty) {
 					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
 				}
@@ -386,7 +386,8 @@ public class TLinkFrame extends JFrame {
 				Driver driver = new Driver();
 				ResultTableModel getShiftsResults = driver.viewShifts(did, dateStr);
 				if (getShiftsResults.empty) {
-					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
+					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID and date. "
+							+ "Ensure date format is YYYY-MM-DD");
 				}
 				else {
 					driverTable.removeAll();
@@ -395,10 +396,60 @@ public class TLinkFrame extends JFrame {
 			}
 		});
 		
+		JButton driverViewAllShiftsBtn = new JButton("View All Shifts");
+		driverViewAllShiftsBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int did = -1;
+				try {
+					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
+				Driver driver = new Driver();
+				ResultTableModel viewAllShiftsResults = driver.viewAllShifts(did);
+				if (viewAllShiftsResults.empty) {
+					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
+				}
+				else {
+					driverTable.removeAll();
+					driverTable.setModel(viewAllShiftsResults);
+				}
+			}
+		});
+		
+		JButton driverUpdatePhoneBtn = new JButton("Update Phone Number");
+		driverUpdatePhoneBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int did = -1;
+				try {
+					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
+				String newPhone = JOptionPane.showInputDialog(null, "Enter new phone number (no spaces or dashes)");
+				Driver driver = new Driver();
+				driver.updatePhoneNum(did, newPhone);
+				ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
+				if (viewDriverInfo.empty) {
+					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
+				}
+				else {
+					driverTable.removeAll();
+					driverTable.setModel(viewDriverInfo);
+				}
+			}
+		});
+		
+		// Add Buttons to driverMenu
 		driverMenu = new JPanel();
 		driverMenu.setLayout(new GridLayout(1, 2));
 		driverMenu.add(driverGetShiftsBtn);
-		//driverMenu.add(someBtn);
+		driverMenu.add(driverViewAllShiftsBtn);
+		driverMenu.add(driverUpdatePhoneBtn);
 		//driverMenu.add(someOtherBtn);
 		
 		driverPanel = new JPanel();
