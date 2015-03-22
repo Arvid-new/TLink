@@ -103,13 +103,13 @@ DROP TABLE IF EXISTS `driven_by`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `driven_by` (
   `vehicleNumber` int(11) NOT NULL,
-  `from` datetime NOT NULL,
-  `to` datetime NOT NULL,
+  `fromDate` datetime NOT NULL,
+  `toDate` datetime NOT NULL,
   `empId` int(11) NOT NULL,
-  PRIMARY KEY (`vehicleNumber`,`from`,`to`,`empId`),
-  KEY `drivenDuration_idx` (`from`,`to`),
+  PRIMARY KEY (`vehicleNumber`,`fromDate`,`toDate`,`empId`),
+  KEY `drivenDuration_idx` (`fromDate`,`toDate`),
   KEY `drivenEmp_idx` (`empId`),
-  CONSTRAINT `drivenDuration` FOREIGN KEY (`from`, `to`) REFERENCES `duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `drivenDuration` FOREIGN KEY (`fromDate`, `toDate`) REFERENCES `duration` (`fromDate`, `toDate`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `drivenEmp` FOREIGN KEY (`empId`) REFERENCES `driver` (`empId`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `drivenVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -183,9 +183,9 @@ DROP TABLE IF EXISTS `duration`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `duration` (
-  `from` datetime NOT NULL,
-  `to` datetime NOT NULL,
-  PRIMARY KEY (`from`,`to`)
+  `fromDate` datetime NOT NULL,
+  `toDate` datetime NOT NULL,
+  PRIMARY KEY (`fromDate`,`toDate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -209,12 +209,12 @@ DROP TABLE IF EXISTS `follows`;
 CREATE TABLE `follows` (
   `vehicleNumber` int(11) NOT NULL,
   `routeNumber` int(11) NOT NULL,
-  `from` datetime NOT NULL,
-  `to` datetime NOT NULL,
-  PRIMARY KEY (`vehicleNumber`,`routeNumber`,`from`,`to`),
+  `fromDate` datetime NOT NULL,
+  `toDate` datetime NOT NULL,
+  PRIMARY KEY (`vehicleNumber`,`routeNumber`,`fromDate`,`toDate`),
   KEY `followsRoute_idx` (`routeNumber`),
-  KEY `followsDuration_idx` (`from`,`to`),
-  CONSTRAINT `followsDuration` FOREIGN KEY (`from`, `to`) REFERENCES `duration` (`from`, `to`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `followsDuration_idx` (`fromDate`,`toDate`),
+  CONSTRAINT `followsDuration` FOREIGN KEY (`fromDate`, `toDate`) REFERENCES `duration` (`fromDate`, `toDate`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `followsRoute` FOREIGN KEY (`routeNumber`) REFERENCES `route` (`routeNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `followsVehicle` FOREIGN KEY (`vehicleNumber`) REFERENCES `vehicle` (`vehicleNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

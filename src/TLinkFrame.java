@@ -37,10 +37,13 @@ public class TLinkFrame extends JFrame {
 
 	private JTable searchTable;
 	private JTable customerTable;
+	private JTable driverTable;
 	private JPanel customerMenu;
+	private JPanel driverMenu;
 	private JTable routeTable;
 	private JTable stopTable;
 	private JScrollPane customerScrollPane;
+	private JScrollPane driverScrollPane;
 
 	private JButton updateBtn;
 	private JButton clearBtn;
@@ -365,7 +368,44 @@ public class TLinkFrame extends JFrame {
 	}
 
 	private JPanel createDriverPanel() {
+		driverTable = new JTable();
+		driverScrollPane = new JScrollPane(driverTable);
+		Driver driver = new Driver();
+		JButton driverGetShiftsBtn = new JButton("Get Shifts");
+		driverGetShiftsBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int did = -1;
+				try {
+					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
+				} catch (NumberFormatException nfe) {
+					//ignore (this gets thrown only if user hits cancel before entering anything)
+				};
+				String dateStr = JOptionPane.showInputDialog(null, "Enter Date as: YYYY-MM-DD");
+				Driver driver = new Driver();
+				ResultTableModel getShiftsResults = driver.viewShifts(did, dateStr);
+				if (getShiftsResults.empty) {
+					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
+				}
+				else {
+					driverTable.removeAll();
+					driverTable.setModel(getShiftsResults);
+				}
+			}
+		});
+		
+		driverMenu = new JPanel();
+		driverMenu.setLayout(new GridLayout(1, 2));
+		driverMenu.add(driverGetShiftsBtn);
+		//driverMenu.add(someBtn);
+		//driverMenu.add(someOtherBtn);
+		
 		driverPanel = new JPanel();
+		driverPanel.setLayout(new BorderLayout());
+		driverPanel.add(driverScrollPane);
+		//driverPanel.add(resetBtn, BorderLayout.SOUTH);
+		driverPanel.add(driverMenu, BorderLayout.NORTH);
 		return driverPanel;
 	}
 

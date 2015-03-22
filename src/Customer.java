@@ -89,8 +89,6 @@ public class Customer {
 			stmt.executeUpdate(updateStr);
 			ResultSet rs = stmt.executeQuery(selectBalQueryStr);
 			ResultTableModel rtm = new ResultTableModel(rs);
-			rs.close();
-			con.close();
 			return rtm;
 		}
 		catch (SQLException ex) {
@@ -124,7 +122,6 @@ public class Customer {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT pid FROM owns_pass WHERE cid =" + cid);
 			ResultTableModel rtm = new ResultTableModel(rs);
-			stmt.close();
 			return rtm;
 		}
 		catch (SQLException ex) {

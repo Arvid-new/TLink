@@ -95,10 +95,25 @@ public class Driver {
 	}
 	
 	// date parameter is in YYYY-MM-DD format
+	public ResultTableModel viewAllShifts(int empId) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}		
+	}
+	
+	// date parameter is in YYYY-MM-DD format
 	public ResultTableModel viewShifts(int empId, String date) {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + "to_char(from, 'YYYY-MM-DD') =" + date);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + "to_char(from, 'YYYY-MM-DD') = " + date);
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
