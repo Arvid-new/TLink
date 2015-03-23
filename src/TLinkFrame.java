@@ -7,9 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -433,9 +431,9 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
-		JButton driverUpdatePhoneBtn = new JButton("Update Phone Number");
-		driverUpdatePhoneBtn.addActionListener(new ActionListener() {
+
+		JButton driverUpdateInfoBtn = new JButton("Update Information");
+		driverUpdateInfoBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -443,92 +441,63 @@ public class TLinkFrame extends JFrame {
 				updatePanel.setLayout(new GridLayout(0, 1));
 				JLabel didLabel = new JLabel("Enter DriverID:");
 				JLabel phoneLabel = new JLabel("Enter new phone number - no spaces or dashes");
-				JTextField didField = new JTextField();
-				JTextField phoneField = new JTextField();
-				updatePanel.add(didLabel);
-				updatePanel.add(didField);
-				updatePanel.add(phoneLabel);
-				updatePanel.add(phoneField);	
-				
-				String title = "Update Phone Number";
-				int option = JOptionPane.OK_CANCEL_OPTION;
-				
-				int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
-				if(input == JOptionPane.OK_OPTION) {
-					int did = -1;
-					
-					try {
-						did = Integer.parseInt(didField.getText());					
-					} catch (NumberFormatException nfe) {
-						//ignore
-					};	
-					String newPhone = phoneField.getText();
-					Driver driver = new Driver();
-					driver.updatePhoneNum(did, newPhone);
-					ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
-					if (viewDriverInfo.empty) {
-						JOptionPane.showMessageDialog(null, "Update unsuccessful - please try again");
-					}
-					else {
-						driverTable.removeAll();
-						driverTable.setModel(viewDriverInfo);
-						JOptionPane.showMessageDialog(null, "Update Successful");
-					}						
-				}
-			}
-		});
-		
-		JButton driverUpdateAddressBtn = new JButton("Update Address");
-		driverUpdateAddressBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JPanel updatePanel = new JPanel();
-				updatePanel.setLayout(new GridLayout(0, 1));
-				JLabel didLabel = new JLabel("Enter DriverID:");
 				JLabel addressLabel = new JLabel("Enter new address");
 				JTextField didField = new JTextField();
+				JTextField phoneField = new JTextField();
 				JTextField addressField = new JTextField();
 				updatePanel.add(didLabel);
 				updatePanel.add(didField);
+				updatePanel.add(phoneLabel);
+				updatePanel.add(phoneField);
 				updatePanel.add(addressLabel);
-				updatePanel.add(addressField);	
+				updatePanel.add(addressField);
 				
-				String title = "Update Address";
+				String title = "Update Information";
 				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
 				
-				int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
-				if(input == JOptionPane.OK_OPTION) {
-					int did = -1;
-					
-					try {
-						did = Integer.parseInt(didField.getText());					
-					} catch (NumberFormatException nfe) {
-						//ignore
-					};	
-					String newAddress = addressField.getText();
-					Driver driver = new Driver();
-					driver.updateAddress(did, newAddress);
-					ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
-					if (viewDriverInfo.empty) {
-						JOptionPane.showMessageDialog(null, "Update unsuccessful - please try again");
+				do {
+					int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int did = Integer.parseInt(didField.getText().trim());			
+							String newPhone = phoneField.getText().trim();
+							String newAddress = addressField.getText().trim();
+							Driver driver = new Driver();
+							
+							if (newPhone.equals("") && newAddress.equals("")) {
+								JOptionPane.showMessageDialog(null, "Please fill in at least one field");
+							} else if (driver.viewDriverInfo(did).empty) {
+								JOptionPane.showMessageDialog(null, "DriverID not found - please try again");
+							} else {							
+								if (!newPhone.equals("")) {
+									driver.updatePhoneNum(did, newPhone);
+								}
+								if (!newAddress.equals("")) {
+									driver.updateAddress(did, newAddress);	
+								}
+								driverTable.removeAll();							
+								ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
+								driverTable.setModel(viewDriverInfo);
+								JOptionPane.showMessageDialog(null, "Update Successful");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
 					}
-					else {
-						driverTable.removeAll();
-						driverTable.setModel(viewDriverInfo);
-						JOptionPane.showMessageDialog(null, "Update Successful");
-					}						
-				}
+				} while (!validInput);
 			}
-		});
+		});		
 		
 		// Add Buttons to driverMenu
 		driverMenu = new JPanel();
 		driverMenu.setLayout(new GridLayout(1, 2));
 		driverMenu.add(driverGetShiftsBtn);
 		driverMenu.add(driverViewAllShiftsBtn);
-		driverMenu.add(driverUpdatePhoneBtn);
-		driverMenu.add(driverUpdateAddressBtn);
+		driverMenu.add(driverUpdateInfoBtn);
 		
 		driverPanel = new JPanel();
 		driverPanel.setLayout(new BorderLayout());
