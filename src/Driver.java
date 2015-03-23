@@ -62,49 +62,82 @@ public class Driver {
 		}
 	}
 	
-	public void updateAddress(int empId, String address) {
+	public ResultTableModel viewDriverInfo(int empId) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE driver SET address = '" + address + "' WHERE empId = " + empId);
-			con.commit();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driver WHERE empId = " + empId);
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}
+	
+	public void updateAddress(int empId, String address) {
+		try {
+			PreparedStatement ps = con.prepareStatement("UPDATE driver SET address = ? WHERE empId =" + empId);
+			ps.setString(1, address);
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
 		}
 		catch (SQLException ex) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				//TODO
+				System.out.println("SQLException thrown in Driver.updateAddress()");
 			}
 		}
 	}
 	
+	// phoneNum must be 6041234567 (no spaces or - )
 	public void updatePhoneNum(int empId, String phoneNum) {
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE driver SET phoneNumber = '" + phoneNum + "' WHERE empId = " + empId);
+			PreparedStatement ps = con.prepareStatement("UPDATE driver SET phoneNumber = ? WHERE empId =" + empId);
+			ps.setString(1, phoneNum);
+			ps.executeUpdate();
 			con.commit();
-			stmt.close();
+			ps.close();
 		}
 		catch (SQLException ex) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				//TODO
+				System.out.println("SQLException thrown in Driver.updatePhoneNumber()");
 			}
 		}
 	}
 	
 	// date parameter is in YYYY-MM-DD format
-	public ResultTableModel viewShifts(int empId, String date) {
+	public ResultTableModel viewAllShifts(int empId) {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + "to_char(from, 'YYYY-MM-DD') =" + date);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId);
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
 		}
 		catch (SQLException ex) {
 			// TODO
+			return null;
+		}		
+	}
+	
+	// date parameter is in YYYY-MM-DD format
+	public ResultTableModel viewShifts(int empId, String date) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + 
+					" AND fromDate LIKE '" + date + "%'");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			System.out.println("Ensure you entered date in format YYYY-MM-DD");
 			return null;
 		}		
 	}
