@@ -567,6 +567,62 @@ public class TLinkFrame extends JFrame {
 		JButton deleteCustomerBtn = new JButton("Delete Customer");
 		
 		JButton addDriverBtn = new JButton("Add Driver");
+		addDriverBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel didLabel = new JLabel("Enter DriverID:");
+				JLabel nameLabel = new JLabel("Enter driver name");
+				JLabel phoneLabel = new JLabel("Enter phone number");
+				JLabel addressLabel = new JLabel("Enter address");
+				JTextField didField = new JTextField();
+				JTextField nameField = new JTextField();
+				JTextField phoneField = new JTextField();
+				JTextField addressField = new JTextField();
+				addPanel.add(didLabel);
+				addPanel.add(didField);
+				addPanel.add(nameLabel);
+				addPanel.add(nameField);
+				addPanel.add(phoneLabel);
+				addPanel.add(phoneField);
+				addPanel.add(addressLabel);
+				addPanel.add(addressField);
+				
+				String title = "Add Driver";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+				
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newDid = Integer.parseInt(didField.getText().trim());			
+							String newName = nameField.getText().trim();
+							String newPhone = phoneField.getText().trim();
+							String newAddress = addressField.getText().trim();
+							Driver driver = new Driver();
+							
+							if (newName.equals("") || newPhone.equals("") || newAddress.equals("")) {
+								JOptionPane.showMessageDialog(null, "Please fill in every field");
+							} else {							
+								driver.insertDriver(newDid, newName, newPhone, newAddress);
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverInfo = driver.viewDriverInfo(newDid);
+								operatorTable.setModel(viewDriverInfo);
+								JOptionPane.showMessageDialog(null, "Driver added");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});		
 
 		JButton deleteDriverBtn = new JButton("Delete Driver");	
 		
