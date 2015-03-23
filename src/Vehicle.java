@@ -19,7 +19,6 @@ public class Vehicle {
 			stmt.setInt(2, age);
 			stmt.setInt(3, capacity);
 			stmt.executeUpdate();
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {
@@ -35,7 +34,6 @@ public class Vehicle {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeQuery("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {

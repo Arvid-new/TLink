@@ -20,7 +20,6 @@ public class Driver {
 			stmt.setString(3, address);
 			stmt.setString(4, phoneNum);
 			stmt.executeUpdate();
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {
@@ -36,7 +35,6 @@ public class Driver {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeQuery("DELETE FROM driver WHERE empId = " + empId);
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {
@@ -81,7 +79,6 @@ public class Driver {
 			PreparedStatement ps = con.prepareStatement("UPDATE driver SET address = ? WHERE empId =" + empId);
 			ps.setString(1, address);
 			ps.executeUpdate();
-			con.commit();
 			ps.close();
 		}
 		catch (SQLException ex) {
@@ -99,7 +96,6 @@ public class Driver {
 			PreparedStatement ps = con.prepareStatement("UPDATE driver SET phoneNumber = ? WHERE empId =" + empId);
 			ps.setString(1, phoneNum);
 			ps.executeUpdate();
-			con.commit();
 			ps.close();
 		}
 		catch (SQLException ex) {

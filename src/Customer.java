@@ -17,7 +17,6 @@ public class Customer {
 			stmt.setInt(1, cid);
 			stmt.setString(2, name);
 			stmt.executeUpdate();
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {
@@ -82,7 +81,6 @@ public class Customer {
 			PreparedStatement ps = con.prepareStatement("UPDATE owns_pass SET balance = balance + ? WHERE cid =" + cid);
 			ps.setInt(1, add);
 			ps.executeUpdate();
-			con.commit();
 			ps.close();
 		}
 		catch (SQLException ex) {

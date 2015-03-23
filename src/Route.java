@@ -20,7 +20,6 @@ public class Route {
 			stmt.setTime(3, stop);
 			stmt.setTime(4, start);
 			stmt.executeUpdate();
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {
@@ -36,7 +35,6 @@ public class Route {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeQuery("DELETE FROM route WHERE routeNumber = " + routeNum);
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {

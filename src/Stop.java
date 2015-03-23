@@ -18,7 +18,6 @@ public class Stop {
 			stmt.setString(2, stopName);
 			stmt.setString(3, location);
 			stmt.executeUpdate();
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {
@@ -34,7 +33,6 @@ public class Stop {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeQuery("DELETE FROM stop WHERE stopNumber = " + stopNum);
-			con.commit();
 			stmt.close();
 		}
 		catch (SQLException ex) {

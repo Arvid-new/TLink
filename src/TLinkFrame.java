@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -155,7 +156,7 @@ public class TLinkFrame extends JFrame {
 			}
 		});
 		
-		JButton resetBtn = new JButton("Reset");
+		JButton resetBtn = new JButton("Show All");
 		resetBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -227,7 +228,7 @@ public class TLinkFrame extends JFrame {
 			}
 		});
 		
-		JButton resetBtn = new JButton("Reset");
+		JButton resetBtn = new JButton("Show All");
 		resetBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -254,7 +255,6 @@ public class TLinkFrame extends JFrame {
 	private JPanel createCustomerPanel() {
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
-		Customer customer = new Customer();
 		
 		JButton passIdBtn = new JButton("Pass Id");
 		passIdBtn.addActionListener(new ActionListener() {
@@ -284,20 +284,23 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				String cidStr = JOptionPane.showInputDialog(null, "Enter Customer ID");
 				int cid = -1;
-				try {
-					cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID")); 
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				};
-				Customer customer = new Customer();
-				ResultTableModel displayBalanceResults = customer.displayBalance(cid);
-				if (displayBalanceResults.empty) {
-					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
-				}
-				else {
-					customerTable.removeAll();
-					customerTable.setModel(displayBalanceResults);
+				if (cidStr != null) {
+					try {
+						cid = Integer.parseInt(cidStr); 
+						Customer customer = new Customer();
+						ResultTableModel displayBalanceResults = customer.displayBalance(cid);
+						if (displayBalanceResults.empty) {
+							JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
+						}
+						else {
+							customerTable.removeAll();
+							customerTable.setModel(displayBalanceResults);
+						}						
+					} catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, "Invalid input - please try again");
+					};
 				}
 			}
 		});
@@ -307,37 +310,51 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int cid = -1;
-				try {
-					cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID")); 
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				};
-				int amtToAdd = 0;
-				try {
-					amtToAdd = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Amount to add"));
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				}
-				Customer customer = new Customer();
-				customer.updateBalance(cid, amtToAdd);
-				ResultTableModel updateBalanceResults = customer.displayBalance(cid);
-				if (updateBalanceResults.empty) {
-					JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
-				}
-				else {
-					customerTable.removeAll();
-					customerTable.setModel(updateBalanceResults);
-				}
+				JPanel updatePanel = new JPanel();
+				updatePanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter CustomerID:");
+				JLabel amtLabel = new JLabel("Enter new amount to add");
+				JTextField cidField = new JTextField();
+				JTextField amtField = new JTextField();
+				updatePanel.add(cidLabel);
+				updatePanel.add(cidField);
+				updatePanel.add(amtLabel);
+				updatePanel.add(amtField);	
+				
+				String title = "Update Address";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				
+				int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
+				if(input == JOptionPane.OK_OPTION) {				
+					int cid = -1;
+					int amtToAdd = 0;
+					try {
+						cid = Integer.parseInt(cidField.getText()); 
+						amtToAdd = Integer.parseInt(amtField.getText());
+						
+						Customer customer = new Customer();
+						customer.updateBalance(cid, amtToAdd);
+						ResultTableModel updateBalanceResults = customer.displayBalance(cid);
+						if (updateBalanceResults.empty) {
+							JOptionPane.showMessageDialog(null, "CustomerID not found - please try again");
+						}
+						else {
+							customerTable.removeAll();
+							customerTable.setModel(updateBalanceResults);
+							JOptionPane.showMessageDialog(null, "Update successful");
+						}						
+					} catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, "Invalid input - please try again");
+					}
+				}				
 			}
 		});
 		
-		JButton resetBtn = new JButton("Reset");
+		JButton resetBtn = new JButton("Show All");
 		resetBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Customer customer = new Customer();
 				customerTable.removeAll();
 			}
 		});
@@ -360,7 +377,6 @@ public class TLinkFrame extends JFrame {
 	private JPanel createDriverPanel() {
 		driverTable = new JTable();
 		driverScrollPane = new JScrollPane(driverTable);
-		Driver driver = new Driver();
 		JButton driverGetShiftsBtn = new JButton("Get Shifts");
 		driverGetShiftsBtn.addActionListener(new ActionListener() {
 			
@@ -414,22 +430,41 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int did = -1;
-				try {
-					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				};
-				String newPhone = JOptionPane.showInputDialog(null, "Enter new phone number (no spaces or dashes)");
-				Driver driver = new Driver();
-				driver.updatePhoneNum(did, newPhone);
-				ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
-				if (viewDriverInfo.empty) {
-					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
-				}
-				else {
-					driverTable.removeAll();
-					driverTable.setModel(viewDriverInfo);
+				JPanel updatePanel = new JPanel();
+				updatePanel.setLayout(new GridLayout(0, 1));
+				JLabel didLabel = new JLabel("Enter DriverID:");
+				JLabel phoneLabel = new JLabel("Enter new phone number - no spaces or dashes");
+				JTextField didField = new JTextField();
+				JTextField phoneField = new JTextField();
+				updatePanel.add(didLabel);
+				updatePanel.add(didField);
+				updatePanel.add(phoneLabel);
+				updatePanel.add(phoneField);	
+				
+				String title = "Update Phone Number";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				
+				int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
+				if(input == JOptionPane.OK_OPTION) {
+					int did = -1;
+					
+					try {
+						did = Integer.parseInt(didField.getText());					
+					} catch (NumberFormatException nfe) {
+						//ignore
+					};	
+					String newPhone = phoneField.getText();
+					Driver driver = new Driver();
+					driver.updatePhoneNum(did, newPhone);
+					ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
+					if (viewDriverInfo.empty) {
+						JOptionPane.showMessageDialog(null, "Update unsuccessful - please try again");
+					}
+					else {
+						driverTable.removeAll();
+						driverTable.setModel(viewDriverInfo);
+						JOptionPane.showMessageDialog(null, "Update Successful");
+					}						
 				}
 			}
 		});
@@ -439,22 +474,41 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int did = -1;
-				try {
-					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				};
-				String newAddress = JOptionPane.showInputDialog(null, "Enter new Address");
-				Driver driver = new Driver();
-				driver.updateAddress(did, newAddress);
-				ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
-				if (viewDriverInfo.empty) {
-					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
-				}
-				else {
-					driverTable.removeAll();
-					driverTable.setModel(viewDriverInfo);
+				JPanel updatePanel = new JPanel();
+				updatePanel.setLayout(new GridLayout(0, 1));
+				JLabel didLabel = new JLabel("Enter DriverID:");
+				JLabel addressLabel = new JLabel("Enter new address");
+				JTextField didField = new JTextField();
+				JTextField addressField = new JTextField();
+				updatePanel.add(didLabel);
+				updatePanel.add(didField);
+				updatePanel.add(addressLabel);
+				updatePanel.add(addressField);	
+				
+				String title = "Update Address";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				
+				int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
+				if(input == JOptionPane.OK_OPTION) {
+					int did = -1;
+					
+					try {
+						did = Integer.parseInt(didField.getText());					
+					} catch (NumberFormatException nfe) {
+						//ignore
+					};	
+					String newAddress = addressField.getText();
+					Driver driver = new Driver();
+					driver.updateAddress(did, newAddress);
+					ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
+					if (viewDriverInfo.empty) {
+						JOptionPane.showMessageDialog(null, "Update unsuccessful - please try again");
+					}
+					else {
+						driverTable.removeAll();
+						driverTable.setModel(viewDriverInfo);
+						JOptionPane.showMessageDialog(null, "Update Successful");
+					}						
 				}
 			}
 		});
