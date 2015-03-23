@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +27,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class TLinkFrame extends JFrame {
 
 	private JPanel mainPanel;
+	private JPanel headerPanel;
 	private JPanel routePanel;
 	private JPanel stopPanel;
 	private JPanel customerPanel;
@@ -45,6 +47,7 @@ public class TLinkFrame extends JFrame {
 	private JScrollPane driverScrollPane;
 
 	private JLabel title;
+	private JLabel welcome;
 
 	public static void main(String[] args) {
 		try {
@@ -84,7 +87,13 @@ public class TLinkFrame extends JFrame {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
-		title = new JLabel("TLink Database App");	
+		headerPanel = new JPanel();
+		headerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		headerPanel.setLayout(new BorderLayout());
+		title = new JLabel("TLink Database");	
+		welcome = new JLabel("Welcome, Guest");
+		headerPanel.add(title, BorderLayout.WEST);
+		headerPanel.add(welcome, BorderLayout.EAST);
 
 		routePanel = createRoutePanel();
 		stopPanel = createStopPanel();
@@ -101,7 +110,7 @@ public class TLinkFrame extends JFrame {
 		tabPane.addTab("Operator", operatorPanel);
 		tabPane.setFocusable(false);
 
-		mainPanel.add(title, BorderLayout.PAGE_START);
+		mainPanel.add(headerPanel, BorderLayout.PAGE_START);
 		mainPanel.add(tabPane, BorderLayout.CENTER);
 
 		setContentPane(mainPanel);
