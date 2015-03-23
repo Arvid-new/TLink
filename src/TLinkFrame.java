@@ -5,9 +5,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.text.NumberFormatter;
 
 
 @SuppressWarnings("serial")
@@ -37,27 +40,30 @@ public class TLinkFrame extends JFrame {
 
 	private JTable customerTable;
 	private JTable driverTable;
+	private JTable operatorTable;
 	private JPanel customerMenu;
 	private JPanel driverMenu;
+	private JPanel operatorMenu;
 	private JTable routeTable;
 	private JTable stopTable;
 	private JScrollPane customerScrollPane;
 	private JScrollPane driverScrollPane;
+	private JScrollPane operatorScrollPane;
 
 	private JLabel title;
 	private JLabel welcome;
 
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
-			/*
+			
 			for(LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if("Nimbus".equals(info.getName())) {
 					UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
-			}*/
+			}
 		} catch (Exception e) {
 
 		}
@@ -508,7 +514,74 @@ public class TLinkFrame extends JFrame {
 	}
 
 	private JPanel createOperatorPanel() {
+		operatorTable = new JTable();
+		operatorScrollPane = new JScrollPane(operatorTable);
+		JButton addCustomerBtn = new JButton("Add Customer");
+		addCustomerBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter CustomerID:");
+				JLabel nameLabel = new JLabel("Enter customer name");
+				JTextField cidField = new JTextField();
+				JTextField nameField = new JTextField();
+				addPanel.add(cidLabel);
+				addPanel.add(cidField);
+				addPanel.add(nameLabel);
+				addPanel.add(nameField);
+				
+				String title = "Add Customer";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+				
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newCid = Integer.parseInt(cidField.getText().trim());			
+							String newName = nameField.getText().trim();
+							Customer customer = new Customer();
+							
+							if (newName.equals("")) {
+								JOptionPane.showMessageDialog(null, "Please fill in every field");
+							} else {							
+								customer.insertCustomer(newCid, newName);
+								operatorTable.removeAll();							
+								ResultTableModel viewCustomerInfo = customer.displayCustomers();
+								operatorTable.setModel(viewCustomerInfo);
+								JOptionPane.showMessageDialog(null, "Customer added");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
+		JButton deleteCustomerBtn = new JButton("Delete Customer");
+		
+		JButton addDriverBtn = new JButton("Add Driver");
+
+		JButton deleteDriverBtn = new JButton("Delete Driver");	
+		
+		// Add Buttons to driverMenu
+		operatorMenu = new JPanel();
+		operatorMenu.setLayout(new GridLayout(1, 4));
+		operatorMenu.add(addCustomerBtn);
+		operatorMenu.add(deleteCustomerBtn);
+		operatorMenu.add(addDriverBtn);
+		operatorMenu.add(deleteDriverBtn);		
+		
 		operatorPanel = new JPanel();
+		operatorPanel.setLayout(new BorderLayout());
+		operatorPanel.add(operatorScrollPane);
+		operatorPanel.add(operatorMenu, BorderLayout.NORTH);
 		return operatorPanel;
 	}
 }
