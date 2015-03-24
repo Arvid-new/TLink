@@ -31,7 +31,7 @@ public class Customer {
 	public void deleteCustomer(int cid) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM customer WHERE cid = " + cid);
+			stmt.executeUpdate("DELETE FROM customer WHERE cid = " + cid);
 			con.commit();
 			stmt.close();
 		}

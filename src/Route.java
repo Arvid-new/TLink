@@ -34,7 +34,7 @@ public class Route {
 	public void deleteRoute(int routeNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM route WHERE routeNumber = " + routeNum);
+			stmt.executeUpdate("DELETE FROM route WHERE routeNumber = " + routeNum);
 			stmt.close();
 		}
 		catch (SQLException ex) {

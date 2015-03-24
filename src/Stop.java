@@ -32,7 +32,7 @@ public class Stop {
 	public void deleteStop(int stopNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM stop WHERE stopNumber = " + stopNum);
+			stmt.executeUpdate("DELETE FROM stop WHERE stopNumber = " + stopNum);
 			stmt.close();
 		}
 		catch (SQLException ex) {
