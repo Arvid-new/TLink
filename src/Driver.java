@@ -137,4 +137,18 @@ public class Driver {
 			return null;
 		}		
 	}
+	
+	public ResultTableModel login(int did) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driver WHERE empID = " + did);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			System.out.println("Invalid employee ID");
+			return null;
+		}
+	}
 }

@@ -35,7 +35,7 @@ public class TLinkFrame extends JFrame {
 	private JPanel customerPanel;
 	private JPanel driverPanel;
 	private JPanel operatorPanel;
-	
+
 	private JPanel routeMenu;
 	private JTabbedPane tabPane;
 
@@ -47,18 +47,21 @@ public class TLinkFrame extends JFrame {
 	private JPanel operatorMenu;
 	private JTable routeTable;
 	private JTable stopTable;
+
 	private JScrollPane customerScrollPane;
 	private JScrollPane driverScrollPane;
 	private JScrollPane operatorScrollPane;
 
 	private JLabel title;
 	private JLabel welcome;
+	
+	private int empId = -1;
 
 	public static void main(String[] args) {
 		try {
 			//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
-			
+
 			for(LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if("Nimbus".equals(info.getName())) {
 					UIManager.setLookAndFeel(info.getClassName());
@@ -149,7 +152,7 @@ public class TLinkFrame extends JFrame {
 
 		JButton stopsBtn = new JButton("Stops");
 		stopsBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				int rid = -1;
@@ -169,10 +172,10 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		JButton resetBtn = new JButton("Show All");
 		resetBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Route route = new Route();
@@ -185,7 +188,7 @@ public class TLinkFrame extends JFrame {
 		routeMenu.setLayout(new GridLayout(1, 2));
 		routeMenu.add(routeSearchBtn);
 		routeMenu.add(stopsBtn);
-		
+
 		routePanel = new JPanel();
 		routePanel.setLayout(new BorderLayout());
 		routePanel.add(routeScrollPanel);
@@ -241,10 +244,10 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		JButton resetBtn = new JButton("Show All");
 		resetBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Stop stop = new Stop();
@@ -266,7 +269,7 @@ public class TLinkFrame extends JFrame {
 		return stopPanel;
 	}
 
-JPanel createCustomerPanel() {
+	private JPanel createCustomerPanel() {
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
 		final int[] custID = {-1};
@@ -274,7 +277,7 @@ JPanel createCustomerPanel() {
 		final JButton loginBtn = new JButton("Login");
 		final JButton updateBalanceBtn = new JButton("Update Balance");
 		loginBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				int cid = -1;
@@ -328,10 +331,10 @@ JPanel createCustomerPanel() {
 				JTextField amtField = new JTextField();
 				updatePanel.add(amtLabel);
 				updatePanel.add(amtField);	
-				
+
 				String title = "Update Address";
 				int option = JOptionPane.OK_CANCEL_OPTION;
-				
+
 				int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
 				if(input == JOptionPane.OK_OPTION) {				
 					int cid = -1;
@@ -339,7 +342,7 @@ JPanel createCustomerPanel() {
 					try {
 						cid = custID[0];
 						amtToAdd = Integer.parseInt(amtField.getText());
-						
+
 						Customer customer = new Customer();
 						customer.updateBalance(cid, amtToAdd);
 						ResultTableModel updateBalanceResults = customer.login(cid);
@@ -357,10 +360,10 @@ JPanel createCustomerPanel() {
 				}				
 			}
 		});
-		
+
 		JButton resetBtn = new JButton("Show All");
 		resetBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				customerTable.removeAll();
@@ -368,20 +371,20 @@ JPanel createCustomerPanel() {
 				customerTable.repaint();
 			}
 		});
-		
+
 		customerMenu = new JPanel();
 		customerMenu.setLayout(new GridLayout(1, 2));
 		customerMenu.add(loginBtn);
 		//customerMenu.add(logoutBtn);
 		//customerMenu.add(updateBalanceBtn);
-		
+
 		customerPanel = new JPanel();
 		customerPanel.setLayout(new BorderLayout());
 		customerPanel.add(customerScrollPane);
 		customerPanel.add(resetBtn, BorderLayout.SOUTH);
 		customerPanel.add(customerMenu, BorderLayout.NORTH);
 		return customerPanel;
-		
+
 	}
 
 
@@ -389,20 +392,74 @@ JPanel createCustomerPanel() {
 	private JPanel createDriverPanel() {
 		driverTable = new JTable();
 		driverScrollPane = new JScrollPane(driverTable);
+		
+		JButton driverUpdateInfoBtn = new JButton("Update Information");
+		JButton driverViewAllShiftsBtn = new JButton("View All Shifts");
 		JButton driverGetShiftsBtn = new JButton("Get Shifts");
-		driverGetShiftsBtn.addActionListener(new ActionListener() {
+		final JButton logoutBtn = new JButton("Logout");
+		final JButton loginBtn = new JButton("Login");
+		
+		final JPanel loginMenu = new JPanel();
+		loginMenu.setLayout(new GridLayout(1,2));
+		loginMenu.add(loginBtn);
+		
+		
+		// Add Buttons to driverMenu
+		driverMenu = new JPanel();
+		driverMenu.setLayout(new GridLayout(1, 3));
+		driverMenu.add(driverGetShiftsBtn);
+		driverMenu.add(driverViewAllShiftsBtn);
+		driverMenu.add(driverUpdateInfoBtn);
+		driverMenu.setVisible(false);
+		
+		loginBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				int did = -1;
 				try {
-					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
+					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Employee ID")); 
 				} catch (NumberFormatException nfe) {
 					//ignore (this gets thrown only if user hits cancel before entering anything)
 				};
+				Driver driver= new Driver();
+				ResultTableModel passResults = driver.login(did);
+				if (passResults.empty) {
+					JOptionPane.showMessageDialog(null, "Login failed");
+				}
+				else {
+					empId = did;
+					driverMenu.setVisible(true);
+					loginMenu.add(logoutBtn);
+					loginMenu.remove(loginBtn);
+					/*driverPanel.revalidate();
+					driverPanel.repaint();*/
+					driverTable.removeAll();
+					driverTable.setModel(passResults);
+				}
+			}
+		});
+
+		logoutBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Driver driver = new Driver();
+				empId = -1;
+				loginMenu.add(loginBtn);
+				loginMenu.remove(logoutBtn);
+				driverTable.setModel(driver.login(-1));
+				driverMenu.setVisible(false);
+			}
+		});
+
+		driverGetShiftsBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
 				String dateStr = JOptionPane.showInputDialog(null, "Enter Date as: YYYY-MM-DD");
 				Driver driver = new Driver();
-				ResultTableModel getShiftsResults = driver.viewShifts(did, dateStr);
+				ResultTableModel getShiftsResults = driver.viewShifts(empId, dateStr);
 				if (getShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID and date. "
 							+ "Ensure date format is YYYY-MM-DD");
@@ -413,20 +470,13 @@ JPanel createCustomerPanel() {
 				}
 			}
 		});
-		
-		JButton driverViewAllShiftsBtn = new JButton("View All Shifts");
+
 		driverViewAllShiftsBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int did = -1;
-				try {
-					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID")); 
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				};
 				Driver driver = new Driver();
-				ResultTableModel viewAllShiftsResults = driver.viewAllShifts(did);
+				ResultTableModel viewAllShiftsResults = driver.viewAllShifts(empId);
 				if (viewAllShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
 				}
@@ -437,52 +487,44 @@ JPanel createCustomerPanel() {
 			}
 		});
 
-		JButton driverUpdateInfoBtn = new JButton("Update Information");
 		driverUpdateInfoBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel updatePanel = new JPanel();
 				updatePanel.setLayout(new GridLayout(0, 1));
-				JLabel didLabel = new JLabel("Enter DriverID:");
 				JLabel phoneLabel = new JLabel("Enter new phone number - no spaces or dashes");
 				JLabel addressLabel = new JLabel("Enter new address");
-				JTextField didField = new JTextField();
 				JTextField phoneField = new JTextField();
 				JTextField addressField = new JTextField();
-				updatePanel.add(didLabel);
-				updatePanel.add(didField);
 				updatePanel.add(phoneLabel);
 				updatePanel.add(phoneField);
 				updatePanel.add(addressLabel);
 				updatePanel.add(addressField);
-				
+
 				String title = "Update Information";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
-				
+
 				do {
 					int input = JOptionPane.showConfirmDialog(null, updatePanel, title, option);
 					if(input == JOptionPane.OK_OPTION) {
-						try {
-							int did = Integer.parseInt(didField.getText().trim());			
+						try {			
 							String newPhone = phoneField.getText().trim();
 							String newAddress = addressField.getText().trim();
 							Driver driver = new Driver();
-							
+
 							if (newPhone.equals("") && newAddress.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in at least one field");
-							} else if (driver.viewDriverInfo(did).empty) {
-								JOptionPane.showMessageDialog(null, "DriverID not found - please try again");
 							} else {							
 								if (!newPhone.equals("")) {
-									driver.updatePhoneNum(did, newPhone);
+									driver.updatePhoneNum(empId, newPhone);
 								}
 								if (!newAddress.equals("")) {
-									driver.updateAddress(did, newAddress);	
+									driver.updateAddress(empId, newAddress);	
 								}
 								driverTable.removeAll();							
-								ResultTableModel viewDriverInfo = driver.viewDriverInfo(did);
+								ResultTableModel viewDriverInfo = driver.viewDriverInfo(empId);
 								driverTable.setModel(viewDriverInfo);
 								JOptionPane.showMessageDialog(null, "Update Successful");
 								validInput = true;
@@ -496,17 +538,13 @@ JPanel createCustomerPanel() {
 				} while (!validInput);
 			}
 		});		
-		
-		// Add Buttons to driverMenu
-		driverMenu = new JPanel();
-		driverMenu.setLayout(new GridLayout(1, 2));
-		driverMenu.add(driverGetShiftsBtn);
-		driverMenu.add(driverViewAllShiftsBtn);
-		driverMenu.add(driverUpdateInfoBtn);
-		
+
+
+
 		driverPanel = new JPanel();
 		driverPanel.setLayout(new BorderLayout());
 		driverPanel.add(driverScrollPane);
+		driverPanel.add(loginMenu, BorderLayout.SOUTH);
 		//driverPanel.add(resetBtn, BorderLayout.SOUTH);
 		driverPanel.add(driverMenu, BorderLayout.NORTH);
 		return driverPanel;
@@ -517,7 +555,7 @@ JPanel createCustomerPanel() {
 		operatorScrollPane = new JScrollPane(operatorTable);
 		JButton addCustomerBtn = new JButton("Add Customer");
 		addCustomerBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel addPanel = new JPanel();
@@ -530,11 +568,11 @@ JPanel createCustomerPanel() {
 				addPanel.add(cidField);
 				addPanel.add(nameLabel);
 				addPanel.add(nameField);
-				
+
 				String title = "Add Customer";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
-				
+
 				do {
 					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
 					if(input == JOptionPane.OK_OPTION) {
@@ -542,7 +580,7 @@ JPanel createCustomerPanel() {
 							int newCid = Integer.parseInt(cidField.getText().trim());			
 							String newName = nameField.getText().trim();
 							Customer customer = new Customer();
-							
+
 							if (newName.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
@@ -562,12 +600,12 @@ JPanel createCustomerPanel() {
 				} while (!validInput);
 			}				
 		});
-		
+
 		JButton deleteCustomerBtn = new JButton("Delete Customer");
-		
+
 		JButton addDriverBtn = new JButton("Add Driver");
 		addDriverBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel addPanel = new JPanel();
@@ -588,11 +626,11 @@ JPanel createCustomerPanel() {
 				addPanel.add(phoneField);
 				addPanel.add(addressLabel);
 				addPanel.add(addressField);
-				
+
 				String title = "Add Driver";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
-				
+
 				do {
 					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
 					if(input == JOptionPane.OK_OPTION) {
@@ -602,7 +640,7 @@ JPanel createCustomerPanel() {
 							String newPhone = phoneField.getText().trim();
 							String newAddress = addressField.getText().trim();
 							Driver driver = new Driver();
-							
+
 							if (newName.equals("") || newPhone.equals("") || newAddress.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
@@ -624,7 +662,7 @@ JPanel createCustomerPanel() {
 		});		
 
 		JButton deleteDriverBtn = new JButton("Delete Driver");	
-		
+
 		// Add Buttons to driverMenu
 		operatorMenu = new JPanel();
 		operatorMenu.setLayout(new GridLayout(1, 4));
@@ -632,7 +670,7 @@ JPanel createCustomerPanel() {
 		operatorMenu.add(deleteCustomerBtn);
 		operatorMenu.add(addDriverBtn);
 		operatorMenu.add(deleteDriverBtn);		
-		
+
 		operatorPanel = new JPanel();
 		operatorPanel.setLayout(new BorderLayout());
 		operatorPanel.add(operatorScrollPane);
