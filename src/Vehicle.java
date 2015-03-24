@@ -33,7 +33,7 @@ public class Vehicle {
 	public void deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
+			stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
 			stmt.close();
 		}
 		catch (SQLException ex) {

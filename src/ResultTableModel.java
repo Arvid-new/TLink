@@ -58,6 +58,15 @@ public class ResultTableModel extends AbstractTableModel {
 				case Types.VARCHAR:
 					val = rs.getString(i + 1);
 					break;
+				case Types.TIMESTAMP:
+					val = rs.getTimestamp(i + 1);
+					break;
+				case Types.DATE:
+					val = rs.getDate(i + 1);
+					break;
+				case Types.TIME:
+					val = rs.getTime(i + 1);
+					break;						
 				case Types.INTEGER:
 					val = rs.getInt(i + 1);	
 					break;
@@ -66,12 +75,6 @@ public class ResultTableModel extends AbstractTableModel {
 					break;					
 				case Types.NUMERIC:
 					val = rs.getInt(i + 1);
-					break;
-				case Types.DATE:
-					val = rs.getDate(i + 1);
-					break;
-				case Types.TIME:
-					val = rs.getTime(i + 1);
 					break;
 				}
 

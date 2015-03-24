@@ -34,7 +34,7 @@ public class Driver {
 	public void deleteDriver(int empId) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("DELETE FROM driver WHERE empId = " + empId);
+			stmt.executeUpdate("DELETE FROM driver WHERE empId = " + empId);
 			stmt.close();
 		}
 		catch (SQLException ex) {
