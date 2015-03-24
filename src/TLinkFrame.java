@@ -627,7 +627,47 @@ public class TLinkFrame extends JFrame {
 		});
 
 		JButton deleteCustomerBtn = new JButton("Delete Customer");
+/*		deleteCustomerBtn.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel deletePanel = new JPanel();
+				deletePanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter CustomerID:");
+				JTextField cidField = new JTextField();
+				deletePanel.add(cidLabel);
+				deletePanel.add(cidField);
+
+				String title = "Remove Driver";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, deletePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newCid = Integer.parseInt(cidField.getText().trim());			
+							Customer customer = new Customer();
+							if (customer.displayCustomers()) {
+								JOptionPane.showMessageDialog(null, "Customer not found - please try again");
+							} else {					
+								customer.deleteCustomer(newCid);
+								operatorTable.removeAll();							
+								ResultTableModel viewCustomerInfo = customer.viewCustomerInfo(newCid);
+								operatorTable.setModel(viewCustomerInfo);
+								JOptionPane.showMessageDialog(null, "Customer" + newCid + " removed");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});	*/
+		
 		JButton addDriverBtn = new JButton("Add Driver");
 		addDriverBtn.addActionListener(new ActionListener() {
 
