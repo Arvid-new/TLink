@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.table.TableModel;
 import javax.swing.text.NumberFormatter;
 
 
@@ -265,12 +266,14 @@ public class TLinkFrame extends JFrame {
 		return stopPanel;
 	}
 
-	private JPanel createCustomerPanel() {
+JPanel createCustomerPanel() {
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
-		
-		JButton passIdBtn = new JButton("Pass Id");
-		passIdBtn.addActionListener(new ActionListener() {
+		final int[] custID = {-1};
+		final JButton logoutBtn = new JButton("Logout");
+		final JButton loginBtn = new JButton("Login");
+		final JButton updateBalanceBtn = new JButton("Update Balance");
+		loginBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -281,56 +284,48 @@ public class TLinkFrame extends JFrame {
 					//ignore (this gets thrown only if user hits cancel before entering anything)
 				};
 				Customer customer = new Customer();
-				ResultTableModel passResults = customer.displayPassId(cid);
+				ResultTableModel passResults = customer.login(cid);
 				if (passResults.empty) {
-					JOptionPane.showMessageDialog(null, "No pass found for that Customer ID");
+					JOptionPane.showMessageDialog(null, "Login failed");
 				}
 				else {
+					custID[0] = cid;
+					customerMenu.setLayout(new GridLayout(2, 2));
+					customerMenu.add(updateBalanceBtn);
+					customerMenu.add(logoutBtn);
+					customerMenu.remove(loginBtn);
+					customerPanel.revalidate();
+					customerPanel.repaint();
 					customerTable.removeAll();
 					customerTable.setModel(passResults);
 				}
 			}
 		});
-		
-		JButton displayBalanceBtn = new JButton("Get Balance");
-		displayBalanceBtn.addActionListener(new ActionListener() {
-			
+
+
+		logoutBtn.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				String cidStr = JOptionPane.showInputDialog(null, "Enter Customer ID");
-				int cid = -1;
-				if (cidStr != null) {
-					try {
-						cid = Integer.parseInt(cidStr); 
-						Customer customer = new Customer();
-						ResultTableModel displayBalanceResults = customer.displayBalance(cid);
-						if (displayBalanceResults.empty) {
-							JOptionPane.showMessageDialog(null, "No result found for that Customer ID");
-						}
-						else {
-							customerTable.removeAll();
-							customerTable.setModel(displayBalanceResults);
-						}						
-					} catch (NumberFormatException nfe) {
-						JOptionPane.showMessageDialog(null, "Invalid input - please try again");
-					};
-				}
+				Customer customer = new Customer();
+				customerTable.setModel(customer.login(-1));
+				customerMenu.add(loginBtn);
+				customerMenu.remove(logoutBtn);
+				customerMenu.remove(updateBalanceBtn);
+				customerMenu.setLayout(new GridLayout(1, 2));
+				customerMenu.revalidate();
+				customerMenu.repaint();
 			}
 		});
-		
-		JButton updateBalanceBtn = new JButton("Update Balance");
+
+
 		updateBalanceBtn.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel updatePanel = new JPanel();
 				updatePanel.setLayout(new GridLayout(0, 1));
-				JLabel cidLabel = new JLabel("Enter CustomerID:");
 				JLabel amtLabel = new JLabel("Enter new amount to add");
-				JTextField cidField = new JTextField();
 				JTextField amtField = new JTextField();
-				updatePanel.add(cidLabel);
-				updatePanel.add(cidField);
 				updatePanel.add(amtLabel);
 				updatePanel.add(amtField);	
 				
@@ -342,12 +337,12 @@ public class TLinkFrame extends JFrame {
 					int cid = -1;
 					int amtToAdd = 0;
 					try {
-						cid = Integer.parseInt(cidField.getText()); 
+						cid = custID[0];
 						amtToAdd = Integer.parseInt(amtField.getText());
 						
 						Customer customer = new Customer();
 						customer.updateBalance(cid, amtToAdd);
-						ResultTableModel updateBalanceResults = customer.displayBalance(cid);
+						ResultTableModel updateBalanceResults = customer.login(cid);
 						if (updateBalanceResults.empty) {
 							JOptionPane.showMessageDialog(null, "CustomerID not found - please try again");
 						}
@@ -369,14 +364,16 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				customerTable.removeAll();
+				customerTable.revalidate();
+				customerTable.repaint();
 			}
 		});
 		
 		customerMenu = new JPanel();
 		customerMenu.setLayout(new GridLayout(1, 2));
-		customerMenu.add(passIdBtn);
-		customerMenu.add(displayBalanceBtn);
-		customerMenu.add(updateBalanceBtn);
+		customerMenu.add(loginBtn);
+		//customerMenu.add(logoutBtn);
+		//customerMenu.add(updateBalanceBtn);
 		
 		customerPanel = new JPanel();
 		customerPanel.setLayout(new BorderLayout());
@@ -386,6 +383,8 @@ public class TLinkFrame extends JFrame {
 		return customerPanel;
 		
 	}
+
+
 
 	private JPanel createDriverPanel() {
 		driverTable = new JTable();

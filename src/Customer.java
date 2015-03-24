@@ -60,10 +60,10 @@ public class Customer {
 	}
 	
 	// Customer "login"
-	public ResultTableModel login(String cid) {
+	public ResultTableModel login(int cid) {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM customer, pass WHERE cid = " + cid);
+			ResultSet rs = stmt.executeQuery("SELECT name, C.cid, O.pid, balance FROM customer C, owns_pass O WHERE O.cid = C.cid and C.cid = " + cid);
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
