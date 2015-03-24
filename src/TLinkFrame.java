@@ -419,29 +419,47 @@ public class TLinkFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int did = -1;
-				try {
-					did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Employee ID")); 
-				} catch (NumberFormatException nfe) {
-					//ignore (this gets thrown only if user hits cancel before entering anything)
-				};
-				Driver driver= new Driver();
-				ResultTableModel passResults = driver.login(did);
-				if (passResults.empty) {
-					JOptionPane.showMessageDialog(null, "Login failed");
-				}
-				else {
-					empId = did;
-					String name = passResults.getValueAt(0, 1).toString();
-					welcome.setText("Welcome, " + name);
-					driverMenu.setVisible(true);
-					loginMenu.add(logoutBtn);
-					loginMenu.remove(loginBtn);
-					/*driverPanel.revalidate();
-					driverPanel.repaint();*/
-					driverTable.removeAll();
-					driverTable.setModel(passResults);
-				}
+				JPanel loginPanel = new JPanel();
+				loginPanel.setLayout(new GridLayout(0, 1));
+				JLabel loginLabel = new JLabel("Enter Employee ID");
+				JTextField loginField = new JTextField();
+				loginPanel.add(loginLabel);
+				loginPanel.add(loginField);
+				
+				String title = "Login";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, loginPanel, title, option);
+					if (input == JOptionPane.OK_OPTION) {
+						try {
+							int did = Integer.parseInt(loginField.getText());
+							Driver driver= new Driver();
+							ResultTableModel passResults = driver.login(did);
+							if (passResults.empty) {
+								JOptionPane.showMessageDialog(null, "Login failed");
+							}
+							else {
+								empId = did;
+								String name = passResults.getValueAt(0, 1).toString();
+								welcome.setText("Welcome, " + name);
+								driverMenu.setVisible(true);
+								loginMenu.add(logoutBtn);
+								loginMenu.remove(loginBtn);
+								/*driverPanel.revalidate();
+								driverPanel.repaint();*/
+								driverTable.removeAll();
+								driverTable.setModel(passResults);
+								validInput = true;
+							}
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Login failed");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
 			}
 		});
 
@@ -454,6 +472,7 @@ public class TLinkFrame extends JFrame {
 				empId = -1;
 				loginMenu.add(loginBtn);
 				loginMenu.remove(logoutBtn);
+				driverTable.removeAll();
 				driverTable.setModel(driver.login(-1));
 				driverMenu.setVisible(false);
 			}
