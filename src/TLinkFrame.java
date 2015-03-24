@@ -292,6 +292,8 @@ public class TLinkFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "Login failed");
 				}
 				else {
+					String name = passResults.getValueAt(0, 0).toString();
+					welcome.setText("Welcome, " + name);
 					custID[0] = cid;
 					customerMenu.setLayout(new GridLayout(2, 2));
 					customerMenu.add(updateBalanceBtn);
@@ -311,6 +313,7 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				Customer customer = new Customer();
+				welcome.setText("Welcome, Guest");
 				customerTable.setModel(customer.login(-1));
 				customerMenu.add(loginBtn);
 				customerMenu.remove(logoutBtn);
@@ -429,6 +432,8 @@ public class TLinkFrame extends JFrame {
 				}
 				else {
 					empId = did;
+					String name = passResults.getValueAt(0, 1).toString();
+					welcome.setText("Welcome, " + name);
 					driverMenu.setVisible(true);
 					loginMenu.add(logoutBtn);
 					loginMenu.remove(loginBtn);
@@ -445,6 +450,7 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				Driver driver = new Driver();
+				welcome.setText("Welcome, Guest");
 				empId = -1;
 				loginMenu.add(loginBtn);
 				loginMenu.remove(logoutBtn);
