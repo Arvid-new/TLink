@@ -45,7 +45,6 @@ public class Customer {
 	}
 	
 	public ResultTableModel displayCustomers() {
-		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
@@ -58,6 +57,20 @@ public class Customer {
 			return null;
 		}
 	}
+	
+	public ResultTableModel searchCustomers(int cid) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM customer WHERE cid = " + cid);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}	
 	
 	// Customer "login"
 	public ResultTableModel login(int cid) {

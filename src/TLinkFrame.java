@@ -627,7 +627,7 @@ public class TLinkFrame extends JFrame {
 		});
 
 		JButton deleteCustomerBtn = new JButton("Delete Customer");
-/*		deleteCustomerBtn.addActionListener(new ActionListener() {
+		deleteCustomerBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -638,7 +638,7 @@ public class TLinkFrame extends JFrame {
 				deletePanel.add(cidLabel);
 				deletePanel.add(cidField);
 
-				String title = "Remove Driver";
+				String title = "Delete Customer";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
 
@@ -648,12 +648,13 @@ public class TLinkFrame extends JFrame {
 						try {
 							int newCid = Integer.parseInt(cidField.getText().trim());			
 							Customer customer = new Customer();
-							if (customer.displayCustomers()) {
+							ResultTableModel viewCurrentCustomerInfo = customer.searchCustomers(newCid);
+							if (viewCurrentCustomerInfo.empty) {
 								JOptionPane.showMessageDialog(null, "Customer not found - please try again");
 							} else {					
 								customer.deleteCustomer(newCid);
 								operatorTable.removeAll();							
-								ResultTableModel viewCustomerInfo = customer.viewCustomerInfo(newCid);
+								ResultTableModel viewCustomerInfo = customer.searchCustomers(newCid);
 								operatorTable.setModel(viewCustomerInfo);
 								JOptionPane.showMessageDialog(null, "Customer" + newCid + " removed");
 								validInput = true;
@@ -666,7 +667,7 @@ public class TLinkFrame extends JFrame {
 					}
 				} while (!validInput);
 			}				
-		});	*/
+		});
 		
 		JButton addDriverBtn = new JButton("Add Driver");
 		addDriverBtn.addActionListener(new ActionListener() {
