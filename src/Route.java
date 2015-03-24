@@ -63,7 +63,7 @@ public class Route {
 	public ResultTableModel getAllStops(int routeNum) {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT s.stopNumber, stopName, location FROM has h, stop s WHERE h.routeNumber = " + routeNum);
+			ResultSet rs = stmt.executeQuery("SELECT s.stopNumber, stopName, location FROM has h NATURAL JOIN stop s WHERE h.routeNumber = " + routeNum);
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
