@@ -671,7 +671,9 @@ public class TLinkFrame extends JFrame {
 		addPane.setLayout(overlay);
 		addPane.add(addCustomerBtn);
 		addPane.add(addDriverBtn);
-
+		addPane.add(addRouteBtn);
+		addPane.add(addStopBtn);
+		
 		addList.addActionListener(new ActionListener() {
 
 			@Override
@@ -689,6 +691,8 @@ public class TLinkFrame extends JFrame {
 				else if (addOption.equals("Customer")) {
 					addCustomerBtn.setVisible(true);
 					addDriverBtn.setVisible(false);
+					addRouteBtn.setVisible(false);
+					addStopBtn.setVisible(false);
 					Customer customer = new Customer();
 					operatorTable.setModel(customer.displayCustomers());
 				}
@@ -696,8 +700,28 @@ public class TLinkFrame extends JFrame {
 				else if (addOption.equals("Driver")) {
 					addDriverBtn.setVisible(true);
 					addCustomerBtn.setVisible(false);
+					addRouteBtn.setVisible(false);
+					addStopBtn.setVisible(false);
 					Driver driver = new Driver();
 					operatorTable.setModel(driver.displayDrivers());
+				}
+				
+				else if (addOption.equals("Route")) {
+					addDriverBtn.setVisible(false);
+					addCustomerBtn.setVisible(false);
+					addRouteBtn.setVisible(true);
+					addStopBtn.setVisible(false);
+					Route route = new Route();
+					operatorTable.setModel(route.displayRoutes());
+				}
+				
+				else if (addOption.equals("Stop")) {
+					addDriverBtn.setVisible(false);
+					addCustomerBtn.setVisible(false);
+					addRouteBtn.setVisible(false);
+					addStopBtn.setVisible(true);
+					Stop stop = new Stop();
+					operatorTable.setModel(stop.displayStops());
 				}
 			}
 		});
@@ -754,8 +778,6 @@ public class TLinkFrame extends JFrame {
 			}				
 		});
 
-
-
 		addDriverBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -801,6 +823,58 @@ public class TLinkFrame extends JFrame {
 								ResultTableModel viewDriverInfo = driver.viewDriverInfo(newDid);
 								operatorTable.setModel(viewDriverInfo);
 								JOptionPane.showMessageDialog(null, "Driver added");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
+		addStopBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel sidLabel = new JLabel("Enter stop number:");
+				JLabel nameLabel = new JLabel("Enter stop name:");
+				JLabel locationLabel = new JLabel("Enter stop location");
+				JTextField sidField = new JTextField();
+				JTextField nameField = new JTextField();
+				JTextField locationField = new JTextField();
+				addPanel.add(sidLabel);
+				addPanel.add(sidField);
+				addPanel.add(nameLabel);
+				addPanel.add(nameField);
+				addPanel.add(locationLabel);
+				addPanel.add(locationField);
+
+				String title = "Add Stop";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newSid = Integer.parseInt(sidField.getText().trim());			
+							String newName = nameField.getText().trim();
+							String newLocation = locationField.getText().trim();
+							Stop stop = new Stop();
+
+							if (newName.equals("") || newLocation.equals("")) {
+								JOptionPane.showMessageDialog(null, "Please fill in every field");
+							} else {							
+								stop.insertStop(newSid, newName, newLocation);
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverInfo = stop.displayStops();
+								operatorTable.setModel(viewDriverInfo);
+								JOptionPane.showMessageDialog(null, "Stop added");
 								validInput = true;
 							}							
 						} catch (NumberFormatException nfe) {
