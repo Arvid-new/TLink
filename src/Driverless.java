@@ -30,6 +30,37 @@ public class Driverless extends Vehicle {
 	}
 	
 	@Override
+	public void deleteVehicle(int vehicleNumber) {
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM Driverless) AND vehicleNumber = " + vehicleNumber);
+			stmt.close();
+		}
+		catch (SQLException ex) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				//TODO
+			}
+		}
+	}
+
+	@Override
+	public ResultTableModel searchVehicles(int vehicleNumber) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM driverless WHERE vehicleNumber = " + vehicleNumber);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}
+	
+	@Override
 	public ResultTableModel displayVehicles() {
 		try {
 			Statement stmt = con.createStatement();

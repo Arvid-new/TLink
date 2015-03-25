@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Time;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,6 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
@@ -585,7 +588,6 @@ public class TLinkFrame extends JFrame {
 		operatorTabs.add("Remove", removePanel);
 		operatorTabs.addTab("Update", updatePanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
-
 		operatorPanel = new JPanel();
 		operatorPanel.setLayout(new BorderLayout());
 		operatorPanel.add(operatorTabs, BorderLayout.CENTER);
@@ -1066,6 +1068,8 @@ public class TLinkFrame extends JFrame {
 		removeDriverBtn.setVisible(false);
 		removeRouteBtn.setVisible(false);
 		removeStopBtn.setVisible(false);
+		removeDriverVehicleBtn.setVisible(false);
+		removeDriverlessVehicleBtn.setVisible(false);
 
 		String[] removeOptions = {"Select where to remove from...", "Customer", "Driver", "Route", "Stop", "Driver Vehicle", "Driverless Vehicle"};
 		JComboBox<String> removeList = new JComboBox<String>(removeOptions);
@@ -1080,6 +1084,8 @@ public class TLinkFrame extends JFrame {
 		removePane.add(removeDriverBtn);
 		removePane.add(removeRouteBtn);
 		removePane.add(removeStopBtn);
+		removePane.add(removeDriverVehicleBtn);
+		removePane.add(removeDriverlessVehicleBtn);
 
 		removeList.addActionListener(new ActionListener() {
 			@Override
@@ -1312,7 +1318,48 @@ public class TLinkFrame extends JFrame {
 						validInput = true;
 					}
 				} while (!validInput);
-			}				
+			}			
+		});
+		
+		removeDriverVehicleBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel removePanel = new JPanel();
+				removePanel.setLayout(new GridLayout(0, 1));
+				JLabel vidLabel = new JLabel("Enter vehicle number:");
+				JTextField vidField = new JTextField();
+				removePanel.add(vidLabel);
+				removePanel.add(vidField);
+
+				String title = "Remove Vehicle";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, removePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int vid = Integer.parseInt(vidField.getText().trim());			
+							Driveable driveable = new Driveable();
+							if (!driveable.searchVehicles(vid).empty) {
+								driveable.deleteVehicle(vid);
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverVehicleInfo = driveable.displayVehicles();
+								operatorTable.setModel(viewDriverVehicleInfo);
+								JOptionPane.showMessageDialog(null, "Vehicle removed");
+								validInput = true;	
+							} else {
+								JOptionPane.showMessageDialog(null, "Driver ID not found - please try again");								
+							}
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}	
 		});
 
 		return removePanel;

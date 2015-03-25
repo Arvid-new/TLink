@@ -46,7 +46,6 @@ public class Vehicle {
 	}
 	
 	public ResultTableModel displayVehicles() {
-		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle");
@@ -59,6 +58,20 @@ public class Vehicle {
 			return null;
 		}
 	}
+	
+	public ResultTableModel searchVehicles(int vehicleNumber) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}	
 	
 	public ResultSet generateVehicleReport() {
 		
