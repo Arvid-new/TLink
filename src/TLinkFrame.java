@@ -14,12 +14,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -56,7 +58,7 @@ public class TLinkFrame extends JFrame {
 
 	private JLabel title;
 	private JLabel welcome;
-	
+
 	private int empId = -1;
 
 	public static void main(String[] args) {
@@ -126,9 +128,9 @@ public class TLinkFrame extends JFrame {
 		setContentPane(mainPanel);
 	}
 
-	
+
 	// ROUTE SECTION
-	
+
 	private JPanel createRoutePanel() {		
 		routeTable = new JTable();
 		JScrollPane routeScrollPanel = new JScrollPane(routeTable);
@@ -203,7 +205,7 @@ public class TLinkFrame extends JFrame {
 	}
 
 	// STOP SECTION
-	
+
 	private JPanel createStopPanel() {
 		stopTable = new JTable();
 		JScrollPane stopScrollPanel = new JScrollPane(stopTable);
@@ -277,7 +279,7 @@ public class TLinkFrame extends JFrame {
 	}
 
 	// CUSTOMER SECTION
-	
+
 	private JPanel createCustomerPanel() {
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
@@ -401,22 +403,22 @@ public class TLinkFrame extends JFrame {
 
 
 	// DRIVER SECTION
-	
+
 	private JPanel createDriverPanel() {
 		driverTable = new JTable();
 		driverScrollPane = new JScrollPane(driverTable);
-		
+
 		JButton driverUpdateInfoBtn = new JButton("Update Information");
 		JButton driverViewAllShiftsBtn = new JButton("View All Shifts");
 		JButton driverGetShiftsBtn = new JButton("Get Shifts");
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
-		
+
 		final JPanel loginMenu = new JPanel();
 		loginMenu.setLayout(new GridLayout(1,2));
 		loginMenu.add(loginBtn);
-		
-		
+
+
 		// Add Buttons to driverMenu
 		driverMenu = new JPanel();
 		driverMenu.setLayout(new GridLayout(1, 3));
@@ -424,9 +426,9 @@ public class TLinkFrame extends JFrame {
 		driverMenu.add(driverViewAllShiftsBtn);
 		driverMenu.add(driverUpdateInfoBtn);
 		driverMenu.setVisible(false);
-		
+
 		loginBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel loginPanel = new JPanel();
@@ -435,7 +437,7 @@ public class TLinkFrame extends JFrame {
 				JTextField loginField = new JTextField();
 				loginPanel.add(loginLabel);
 				loginPanel.add(loginField);
-				
+
 				String title = "Login";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
@@ -588,9 +590,7 @@ public class TLinkFrame extends JFrame {
 	private JPanel createOperatorPanel() {
 		operatorTable = new JTable();
 		operatorScrollPane = new JScrollPane(operatorTable);
-		JButton addCustomerBtn = new JButton("Add Customer");
-		
-		JPanel addPanel = new JPanel();
+		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = new JPanel();
 		JPanel updatePanel = new JPanel();
 		JTabbedPane operatorTabs = new JTabbedPane();
@@ -598,18 +598,112 @@ public class TLinkFrame extends JFrame {
 		operatorTabs.add("Remove", removePanel);
 		operatorTabs.addTab("Update", updatePanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
-		
-		String[] addOptions = {"Customer, Driver, Route, Stop, Driver Vehicle, Driverless Vehicle"};
-		JComboBox addList = new JComboBox(addOptions);
-		addPanel.setLayout(new CardLayout());
-		
-		JPanel textPanel = new JPanel();
-		
-		addPanel.add(addList);
-		
-		
+
+
+		JButton deleteCustomerBtn = new JButton("Delete Customer");
+		JButton deleteDriverBtn = new JButton("Delete Driver");	
+		deleteCustomerBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel deletePanel = new JPanel();
+				deletePanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter CustomerID:");
+				JTextField cidField = new JTextField();
+				deletePanel.add(cidLabel);
+				deletePanel.add(cidField);
+
+				String title = "Delete Customer";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, deletePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newCid = Integer.parseInt(cidField.getText().trim());			
+							Customer customer = new Customer();
+							ResultTableModel viewCurrentCustomerInfo = customer.searchCustomers(newCid);
+							if (viewCurrentCustomerInfo.empty) {
+								JOptionPane.showMessageDialog(null, "Customer not found - please try again");
+							} else {					
+								customer.deleteCustomer(newCid);
+								operatorTable.removeAll();							
+								ResultTableModel viewCustomerInfo = customer.searchCustomers(newCid);
+								operatorTable.setModel(viewCustomerInfo);
+								JOptionPane.showMessageDialog(null, "Customer" + newCid + " removed");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+
+		operatorPanel = new JPanel();
+		operatorPanel.setLayout(new BorderLayout());
+		operatorPanel.add(operatorTabs, BorderLayout.CENTER);
+		return operatorPanel;
+	}
+
+	private JPanel createAddTabPanel() {
+		JPanel addPanel = new JPanel();
+		JPanel addPane = new JPanel();
+		final JButton addCustomerBtn = new JButton("Add Customer");
+		final JButton addDriverBtn = new JButton("Add Driver");
+		final JButton addRouteBtn = new JButton("Add Route");
+		final JButton addStopBtn = new JButton("Add Stop");
+		addCustomerBtn.setVisible(false);
+		addDriverBtn.setVisible(false);
+
+		String[] addOptions = {"Select where to add to...", "Customer", "Driver", "Route", "Stop", "Driver Vehicle", "Driverless Vehicle"};
+		JComboBox<String> addList = new JComboBox<String>(addOptions);
+		addPanel.setLayout(new BorderLayout());
+
+		addPanel.add(addList, BorderLayout.NORTH);
+		addPanel.add(operatorScrollPane);
+		addPanel.add(addPane, BorderLayout.SOUTH);
+		OverlayLayout overlay = new OverlayLayout(addPane);
+		addPane.setLayout(overlay);
+		addPane.add(addCustomerBtn);
+		addPane.add(addDriverBtn);
+
+		addList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
+				String addOption = (String)cb.getSelectedItem();
+
+				if (addOption.equals("Select where to add to...")) {
+					addCustomerBtn.setVisible(false);
+					addDriverBtn.setVisible(false);
+					addRouteBtn.setVisible(false);
+					addStopBtn.setVisible(false);
+				}
+
+				else if (addOption.equals("Customer")) {
+					addCustomerBtn.setVisible(true);
+					addDriverBtn.setVisible(false);
+					Customer customer = new Customer();
+					operatorTable.setModel(customer.displayCustomers());
+				}
+
+				else if (addOption.equals("Driver")) {
+					addDriverBtn.setVisible(true);
+					addCustomerBtn.setVisible(false);
+					Driver driver = new Driver();
+					operatorTable.setModel(driver.displayDrivers());
+				}
+			}
+		});
+
 		addCustomerBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel addPanel = new JPanel();
@@ -655,50 +749,8 @@ public class TLinkFrame extends JFrame {
 			}				
 		});
 
-		JButton deleteCustomerBtn = new JButton("Delete Customer");
-		deleteCustomerBtn.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JPanel deletePanel = new JPanel();
-				deletePanel.setLayout(new GridLayout(0, 1));
-				JLabel cidLabel = new JLabel("Enter CustomerID:");
-				JTextField cidField = new JTextField();
-				deletePanel.add(cidLabel);
-				deletePanel.add(cidField);
 
-				String title = "Delete Customer";
-				int option = JOptionPane.OK_CANCEL_OPTION;
-				boolean validInput = false;
-
-				do {
-					int input = JOptionPane.showConfirmDialog(null, deletePanel, title, option);
-					if(input == JOptionPane.OK_OPTION) {
-						try {
-							int newCid = Integer.parseInt(cidField.getText().trim());			
-							Customer customer = new Customer();
-							ResultTableModel viewCurrentCustomerInfo = customer.searchCustomers(newCid);
-							if (viewCurrentCustomerInfo.empty) {
-								JOptionPane.showMessageDialog(null, "Customer not found - please try again");
-							} else {					
-								customer.deleteCustomer(newCid);
-								operatorTable.removeAll();							
-								ResultTableModel viewCustomerInfo = customer.searchCustomers(newCid);
-								operatorTable.setModel(viewCustomerInfo);
-								JOptionPane.showMessageDialog(null, "Customer" + newCid + " removed");
-								validInput = true;
-							}							
-						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
-						};
-					} else {
-						validInput = true;
-					}
-				} while (!validInput);
-			}				
-		});
-		
-		JButton addDriverBtn = new JButton("Add Driver");
 		addDriverBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -754,22 +806,8 @@ public class TLinkFrame extends JFrame {
 					}
 				} while (!validInput);
 			}				
-		});		
+		});
 
-		JButton deleteDriverBtn = new JButton("Delete Driver");	
-
-		// Add Buttons to driverMenu
-		operatorMenu = new JPanel();
-		operatorMenu.setLayout(new GridLayout(1, 4));
-		operatorMenu.add(addCustomerBtn);
-		operatorMenu.add(deleteCustomerBtn);
-		operatorMenu.add(addDriverBtn);
-		operatorMenu.add(deleteDriverBtn);		
-
-		operatorPanel = new JPanel();
-		operatorPanel.setLayout(new BorderLayout());
-		operatorPanel.add(operatorScrollPane);
-		operatorPanel.add(operatorMenu, BorderLayout.NORTH);
-		return operatorPanel;
+		return addPanel;
 	}
 }
