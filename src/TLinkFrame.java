@@ -583,6 +583,9 @@ public class TLinkFrame extends JFrame {
 		return driverPanel;
 	}
 
+	
+	// OPERATOR SECTION
+	
 	private JPanel createOperatorPanel() {
 		operatorTable = new JTable();
 		operatorScrollPane = new JScrollPane(operatorTable);
@@ -593,14 +596,18 @@ public class TLinkFrame extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				JPanel addPanel = new JPanel();
 				addPanel.setLayout(new GridLayout(0, 1));
-				JLabel cidLabel = new JLabel("Enter CustomerID:");
-				JLabel nameLabel = new JLabel("Enter customer name");
+				JLabel cidLabel = new JLabel("Enter CustomerID");
+				JLabel nameLabel = new JLabel("Enter Customer name");
+				JLabel pidLabel = new JLabel("Enter Pass ID");
 				JTextField cidField = new JTextField();
 				JTextField nameField = new JTextField();
+				JTextField pidField = new JTextField();
 				addPanel.add(cidLabel);
 				addPanel.add(cidField);
 				addPanel.add(nameLabel);
 				addPanel.add(nameField);
+				addPanel.add(pidLabel);
+				addPanel.add(pidField);
 
 				String title = "Add Customer";
 				int option = JOptionPane.OK_CANCEL_OPTION;
@@ -612,12 +619,13 @@ public class TLinkFrame extends JFrame {
 						try {
 							int newCid = Integer.parseInt(cidField.getText().trim());			
 							String newName = nameField.getText().trim();
+							int newPid = Integer.parseInt(pidField.getText().trim());
 							Customer customer = new Customer();
 
 							if (newName.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
-								customer.insertCustomer(newCid, newName);
+								customer.insertCustomer(newCid, newName, newPid);
 								operatorTable.removeAll();							
 								ResultTableModel viewCustomerInfo = customer.displayCustomers();
 								operatorTable.setModel(viewCustomerInfo);
