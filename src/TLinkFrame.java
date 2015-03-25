@@ -641,8 +641,8 @@ public class TLinkFrame extends JFrame {
 					addDriverBtn.setVisible(false);
 					addRouteBtn.setVisible(false);
 					addStopBtn.setVisible(false);
-					Customer customer = new Customer();
-					operatorTable.setModel(customer.displayCustomers());
+					OwnsPass ownsPass = new OwnsPass();
+					operatorTable.setModel(ownsPass.displayOwnsPass());
 				}
 
 				else if (addOption.equals("Driver")) {
@@ -705,13 +705,15 @@ public class TLinkFrame extends JFrame {
 							String newName = nameField.getText().trim();
 							int newPid = Integer.parseInt(pidField.getText().trim());
 							Customer customer = new Customer();
+							OwnsPass ownsPass = new OwnsPass();
 
 							if (newName.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
 								customer.insertCustomer(newCid, newName);
+								ownsPass.insertOwnsPass(newPid, 0, newCid);
 								operatorTable.removeAll();							
-								ResultTableModel viewCustomerInfo = customer.displayCustomers();
+								ResultTableModel viewCustomerInfo = ownsPass.displayOwnsPass();
 								operatorTable.setModel(viewCustomerInfo);
 								JOptionPane.showMessageDialog(null, "Customer added");
 								validInput = true;
@@ -1167,8 +1169,8 @@ public class TLinkFrame extends JFrame {
 				else if (addOption.equals("Customer")) {
 					updateCustomerNameBtn.setVisible(true);
 					updateCustomerBalanceBtn.setVisible(true);
-					Customer customer = new Customer();
-					operatorTable.setModel(customer.displayCustomers());
+					OwnsPass ownsPass = new OwnsPass();
+					operatorTable.setModel(ownsPass.displayOwnsPass());
 				}
 			}
 		});
