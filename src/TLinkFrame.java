@@ -933,6 +933,66 @@ public class TLinkFrame extends JFrame {
 			}				
 		});
 
+		addDriverVehicleBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel vidLabel = new JLabel("Enter vehicle number:");
+				JLabel ageLabel = new JLabel("Enter vehicle age:");
+				JLabel capLabel = new JLabel("Enter vehicle capacity:");
+				JLabel typeLabel = new JLabel("Enter vehicle type:");
+				JTextField vidField = new JTextField();
+				JTextField ageField = new JTextField();				
+				JTextField capField = new JTextField();
+				JTextField typeField = new JTextField();
+				addPanel.add(vidLabel);
+				addPanel.add(vidField);
+				addPanel.add(ageLabel);
+				addPanel.add(ageField);
+				addPanel.add(capLabel);
+				addPanel.add(capField);
+				addPanel.add(typeLabel);
+				addPanel.add(typeField);
+				
+				String title = "Add Driveable Vehicle";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						String vidStr = vidField.getText().trim();
+						String ageStr = ageField.getText().trim();
+						String capStr = capField.getText().trim();
+						String typeStr = typeField.getText().trim();
+						
+						if (vidStr.equals("") || ageStr.equals("") || capStr.equals("") || typeStr.equals("")) {
+							JOptionPane.showMessageDialog(null, "Please fill in every field");
+						} else {		
+							try {
+								int newVid = Integer.parseInt(vidField.getText().trim());
+								int newAge = Integer.parseInt(ageField.getText().trim());
+								int newCap = Integer.parseInt(capField.getText().trim());
+								Driveable driveable = new Driveable();			
+								driveable.insertVehicle(newVid, newAge, newCap, typeStr);
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverlessInfo = driveable.displayVehicles();
+								operatorTable.setModel(viewDriverlessInfo);
+								JOptionPane.showMessageDialog(null, "Driveable vehicle added");
+								validInput = true;								
+							} catch (NumberFormatException nfe) {
+								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
+							}
+						}
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}
+		});
+		
 		addDriverlessVehicleBtn.addActionListener(new ActionListener() {
 
 			@Override
