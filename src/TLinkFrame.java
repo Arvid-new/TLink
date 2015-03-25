@@ -285,7 +285,6 @@ public class TLinkFrame extends JFrame {
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
 		final JButton updateBalanceBtn = new JButton("Update Balance");
-		final JLabel allVehiclesLbl = new JLabel("Congratulations! You have accessed every vehicle");
 		loginBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -312,7 +311,7 @@ public class TLinkFrame extends JFrame {
 					//customerPanel.revalidate();
 					//customerPanel.repaint();
 					if(customer.accessedAllVehicles(cid)){
-						customerMenu.add(allVehiclesLbl);
+						JOptionPane.showMessageDialog(customerMenu, "You have accessed every vehicle", "Congratulations!", JOptionPane.PLAIN_MESSAGE);
 					}
 					customerTable.removeAll();
 					customerTable.setModel(passResults);
@@ -332,7 +331,6 @@ public class TLinkFrame extends JFrame {
 				customerMenu.remove(logoutBtn);
 				customerMenu.remove(updateBalanceBtn);
 				customerMenu.setLayout(new GridLayout(1, 2));
-				customerMenu.remove(allVehiclesLbl);
 				customerMenu.revalidate();
 				customerMenu.repaint();
 			}
@@ -589,7 +587,7 @@ public class TLinkFrame extends JFrame {
 	}
 
 	
-	// OPERATOR SECTION
+	// OPERATOR SECTION......................................................................................................................
 	
 	private JPanel createOperatorPanel() {
 		operatorTable = new JTable();
