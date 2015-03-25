@@ -276,7 +276,7 @@ public class TLinkFrame extends JFrame {
 		return stopPanel;
 	}
 
-	// CUSTOMER SECTION
+	// CUSTOMER SECTION.......................................................................................................................
 	
 	private JPanel createCustomerPanel() {
 		customerTable = new JTable();
@@ -285,6 +285,7 @@ public class TLinkFrame extends JFrame {
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
 		final JButton updateBalanceBtn = new JButton("Update Balance");
+		final JLabel allVehiclesLbl = new JLabel("Congratulations! You have accessed every vehicle");
 		loginBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -308,8 +309,11 @@ public class TLinkFrame extends JFrame {
 					customerMenu.add(updateBalanceBtn);
 					customerMenu.add(logoutBtn);
 					customerMenu.remove(loginBtn);
-					customerPanel.revalidate();
-					customerPanel.repaint();
+					//customerPanel.revalidate();
+					//customerPanel.repaint();
+					if(customer.accessedAllVehicles(cid)){
+						customerMenu.add(allVehiclesLbl);
+					}
 					customerTable.removeAll();
 					customerTable.setModel(passResults);
 				}
@@ -328,6 +332,7 @@ public class TLinkFrame extends JFrame {
 				customerMenu.remove(logoutBtn);
 				customerMenu.remove(updateBalanceBtn);
 				customerMenu.setLayout(new GridLayout(1, 2));
+				customerMenu.remove(allVehiclesLbl);
 				customerMenu.revalidate();
 				customerMenu.repaint();
 			}
@@ -400,7 +405,7 @@ public class TLinkFrame extends JFrame {
 	}
 
 
-	// DRIVER SECTION
+	// DRIVER SECTION.................................................................................................................................
 	
 	private JPanel createDriverPanel() {
 		driverTable = new JTable();
@@ -411,7 +416,7 @@ public class TLinkFrame extends JFrame {
 		JButton driverGetShiftsBtn = new JButton("Get Shifts");
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
-		
+
 		final JPanel loginMenu = new JPanel();
 		loginMenu.setLayout(new GridLayout(1,2));
 		loginMenu.add(loginBtn);
@@ -457,8 +462,6 @@ public class TLinkFrame extends JFrame {
 								driverMenu.setVisible(true);
 								loginMenu.add(logoutBtn);
 								loginMenu.remove(loginBtn);
-								/*driverPanel.revalidate();
-								driverPanel.repaint();*/
 								driverTable.removeAll();
 								driverTable.setModel(passResults);
 								validInput = true;
@@ -646,7 +649,7 @@ public class TLinkFrame extends JFrame {
 							if (newName.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
-								customer.insertCustomer(newCid, newName, newPid);
+								customer.insertCustomer(newCid, newName);
 								operatorTable.removeAll();							
 								ResultTableModel viewCustomerInfo = customer.displayCustomers();
 								operatorTable.setModel(viewCustomerInfo);
