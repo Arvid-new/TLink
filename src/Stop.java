@@ -78,7 +78,7 @@ public class Stop {
 		
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT r.routeNumber, routeName FROM has h, route r WHERE h.stopNumber = " + stopNum);
+			ResultSet rs = stmt.executeQuery("SELECT r.routeNumber, routeName FROM has h NATURAL JOIN route r WHERE h.stopNumber = " + stopNum);
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
