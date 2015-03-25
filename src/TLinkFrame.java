@@ -126,6 +126,9 @@ public class TLinkFrame extends JFrame {
 		setContentPane(mainPanel);
 	}
 
+	
+	// ROUTE SECTION
+	
 	private JPanel createRoutePanel() {		
 		routeTable = new JTable();
 		JScrollPane routeScrollPanel = new JScrollPane(routeTable);
@@ -199,6 +202,8 @@ public class TLinkFrame extends JFrame {
 		return routePanel;
 	}
 
+	// STOP SECTION
+	
 	private JPanel createStopPanel() {
 		stopTable = new JTable();
 		JScrollPane stopScrollPanel = new JScrollPane(stopTable);
@@ -271,6 +276,8 @@ public class TLinkFrame extends JFrame {
 		return stopPanel;
 	}
 
+	// CUSTOMER SECTION
+	
 	private JPanel createCustomerPanel() {
 		customerTable = new JTable();
 		customerScrollPane = new JScrollPane(customerTable);
@@ -393,7 +400,8 @@ public class TLinkFrame extends JFrame {
 	}
 
 
-
+	// DRIVER SECTION
+	
 	private JPanel createDriverPanel() {
 		driverTable = new JTable();
 		driverScrollPane = new JScrollPane(driverTable);
