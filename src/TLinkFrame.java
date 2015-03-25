@@ -601,10 +601,14 @@ public class TLinkFrame extends JFrame {
 		final JButton addDriverBtn = new JButton("Add Driver");
 		final JButton addRouteBtn = new JButton("Add Route");
 		final JButton addStopBtn = new JButton("Add Stop");
+		final JButton addDriverVehicleBtn = new JButton("Add Driver Vehicle");
+		final JButton addDriverlessVehicleBtn = new JButton("Add Driverless Vehicle");
 		addCustomerBtn.setVisible(false);
 		addDriverBtn.setVisible(false);
 		addRouteBtn.setVisible(false);
 		addStopBtn.setVisible(false);
+		addDriverVehicleBtn.setVisible(false);
+		addDriverlessVehicleBtn.setVisible(false);
 
 		String[] addOptions = {"Select where to add to...", "Customer", "Driver", "Route", "Stop", "Driver Vehicle", "Driverless Vehicle"};
 		JComboBox<String> addList = new JComboBox<String>(addOptions);
@@ -619,6 +623,8 @@ public class TLinkFrame extends JFrame {
 		addPane.add(addDriverBtn);
 		addPane.add(addRouteBtn);
 		addPane.add(addStopBtn);
+		addPane.add(addDriverVehicleBtn);
+		addPane.add(addDriverlessVehicleBtn);
 
 		addList.addActionListener(new ActionListener() {
 
@@ -632,6 +638,8 @@ public class TLinkFrame extends JFrame {
 					addDriverBtn.setVisible(false);
 					addRouteBtn.setVisible(false);
 					addStopBtn.setVisible(false);
+					addDriverVehicleBtn.setVisible(false);
+					addDriverlessVehicleBtn.setVisible(false);
 					Customer customer = new Customer();
 					operatorTable.setModel(customer.displayBalance(-1));
 				}
@@ -641,6 +649,8 @@ public class TLinkFrame extends JFrame {
 					addDriverBtn.setVisible(false);
 					addRouteBtn.setVisible(false);
 					addStopBtn.setVisible(false);
+					addDriverVehicleBtn.setVisible(false);
+					addDriverlessVehicleBtn.setVisible(false);
 					OwnsPass ownsPass = new OwnsPass();
 					operatorTable.setModel(ownsPass.displayOwnsPass());
 				}
@@ -650,6 +660,8 @@ public class TLinkFrame extends JFrame {
 					addCustomerBtn.setVisible(false);
 					addRouteBtn.setVisible(false);
 					addStopBtn.setVisible(false);
+					addDriverVehicleBtn.setVisible(false);
+					addDriverlessVehicleBtn.setVisible(false);
 					Driver driver = new Driver();
 					operatorTable.setModel(driver.displayDrivers());
 				}
@@ -659,6 +671,8 @@ public class TLinkFrame extends JFrame {
 					addCustomerBtn.setVisible(false);
 					addRouteBtn.setVisible(true);
 					addStopBtn.setVisible(false);
+					addDriverVehicleBtn.setVisible(false);
+					addDriverlessVehicleBtn.setVisible(false);
 					Route route = new Route();
 					operatorTable.setModel(route.displayRoutes());
 				}
@@ -668,8 +682,32 @@ public class TLinkFrame extends JFrame {
 					addCustomerBtn.setVisible(false);
 					addRouteBtn.setVisible(false);
 					addStopBtn.setVisible(true);
+					addDriverVehicleBtn.setVisible(false);
+					addDriverlessVehicleBtn.setVisible(false);
 					Stop stop = new Stop();
 					operatorTable.setModel(stop.displayStops());
+				}
+				
+				else if (addOption.equals("Driver Vehicle")) {
+					addDriverBtn.setVisible(false);
+					addCustomerBtn.setVisible(false);
+					addRouteBtn.setVisible(false);
+					addStopBtn.setVisible(false);
+					addDriverVehicleBtn.setVisible(true);
+					addDriverlessVehicleBtn.setVisible(false);
+					Driveable driveable = new Driveable();
+					operatorTable.setModel(driveable.displayVehicles());
+				}
+				
+				else if (addOption.equals("Driverless Vehicle")) {
+					addDriverBtn.setVisible(false);
+					addCustomerBtn.setVisible(false);
+					addRouteBtn.setVisible(false);
+					addStopBtn.setVisible(false);
+					addDriverVehicleBtn.setVisible(false);
+					addDriverlessVehicleBtn.setVisible(true);
+					Driverless driverless = new Driverless();
+					operatorTable.setModel(driverless.displayVehicles());
 				}
 			}
 		});
@@ -895,6 +933,61 @@ public class TLinkFrame extends JFrame {
 			}				
 		});
 
+		addDriverlessVehicleBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel vidLabel = new JLabel("Enter vehicle number:");
+				JLabel ageLabel = new JLabel("Enter vehicle age:");
+				JLabel capLabel = new JLabel("Enter vehicle capacity:");
+				JTextField vidField = new JTextField();
+				JTextField ageField = new JTextField();				
+				JTextField capField = new JTextField();
+				addPanel.add(vidLabel);
+				addPanel.add(vidField);
+				addPanel.add(ageLabel);
+				addPanel.add(ageField);
+				addPanel.add(capLabel);
+				addPanel.add(capField);
+				
+				String title = "Add Driverless Vehicle";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						String vidStr = vidField.getText().trim();
+						String ageStr = ageField.getText().trim();
+						String capStr = capField.getText().trim();
+
+						if (vidStr.equals("") || ageStr.equals("") || capStr.equals("")) {
+							JOptionPane.showMessageDialog(null, "Please fill in every field");
+						} else {		
+							try {
+								int newVid = Integer.parseInt(vidField.getText().trim());
+								int newAge = Integer.parseInt(ageField.getText().trim());
+								int newCap = Integer.parseInt(capField.getText().trim());								
+								Driverless driverless = new Driverless();			
+								driverless.insertVehicle(newVid, newAge, newCap);
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverlessInfo = driverless.displayVehicles();
+								operatorTable.setModel(viewDriverlessInfo);
+								JOptionPane.showMessageDialog(null, "Driverless vehicle added");
+								validInput = true;								
+							} catch (NumberFormatException nfe) {
+								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
+							}
+						}
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});		
+		
 		return addPanel;
 	}
 

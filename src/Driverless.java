@@ -5,52 +5,42 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class Driverless {
+public class Driverless extends Vehicle {
+	
 	Connection con = MySQLConnection.getInstance().getConnection();
-
-	public void insertDriverless(int vehicleNumber) {
-			try {
-				PreparedStatement stmt = con.prepareStatement("INSERT INTO driverless VALUES (?)");
-				stmt.setInt(1, vehicleNumber);
-				stmt.executeUpdate();
-				stmt.close();
-			}
-			catch (SQLException ex) {
-				try {
-					con.rollback();
-				} catch (SQLException e) {
-					//TODO
-				}
-			}
+	
+	public Driverless() {};
+	
+	@Override
+	public void insertVehicle(int vehicleNumber, int age, int capacity) {
+		super.insertVehicle(vehicleNumber, age, capacity);
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO driverless VALUES (?)");
+			stmt.setInt(1, vehicleNumber);
+			stmt.executeUpdate();
+			stmt.close();
 		}
-		
-		public void deleteDriverless(int vehicleNumber) {
+		catch (SQLException ex) {
 			try {
-				Statement stmt = con.createStatement();
-				stmt.executeUpdate("DELETE FROM driverless WHERE vehicleNumber = " + vehicleNumber);
-				stmt.close();
-			}
-			catch (SQLException ex) {
-				try {
-					con.rollback();
-				} catch (SQLException e) {
-					//TODO
-				}
-			}
-		}
-		
-		public ResultTableModel displayDriverless() {
-			
-			try {
-				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM driverless");
-				ResultTableModel rtm = new ResultTableModel(rs);
-				stmt.close();
-				return rtm;
-			}
-			catch (SQLException ex) {
+				con.rollback();
+			} catch (SQLException e) {
 				//TODO
-				return null;
 			}
 		}
+	}
+	
+	@Override
+	public ResultTableModel displayVehicles() {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT D.vehicleNumber, V.age, V.capacity FROM driverless D INNER JOIN vehicle V ON D.vehicleNumber = V.vehicleNumber");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
+		}
+	}
 }
