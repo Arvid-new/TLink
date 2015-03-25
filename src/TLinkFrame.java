@@ -588,11 +588,14 @@ public class TLinkFrame extends JFrame {
 		return driverPanel;
 	}
 
+	
+	// OPERATOR SECTION
+	
 	private JPanel createOperatorPanel() {
 		operatorTable = new JTable();
 		operatorScrollPane = new JScrollPane(operatorTable);
 		JPanel addPanel = createAddTabPanel();
-		JPanel removePanel = new JPanel();
+		JPanel removePanel = createRemoveTabPanel();
 		JPanel updatePanel = new JPanel();
 		JTabbedPane operatorTabs = new JTabbedPane();
 		operatorTabs.add("Add", addPanel);
@@ -600,50 +603,6 @@ public class TLinkFrame extends JFrame {
 		operatorTabs.addTab("Update", updatePanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
 
-
-		JButton deleteCustomerBtn = new JButton("Delete Customer");
-		JButton deleteDriverBtn = new JButton("Delete Driver");	
-		deleteCustomerBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JPanel deletePanel = new JPanel();
-				deletePanel.setLayout(new GridLayout(0, 1));
-				JLabel cidLabel = new JLabel("Enter CustomerID:");
-				JTextField cidField = new JTextField();
-				deletePanel.add(cidLabel);
-				deletePanel.add(cidField);
-
-				String title = "Delete Customer";
-				int option = JOptionPane.OK_CANCEL_OPTION;
-				boolean validInput = false;
-
-				do {
-					int input = JOptionPane.showConfirmDialog(null, deletePanel, title, option);
-					if(input == JOptionPane.OK_OPTION) {
-						try {
-							int newCid = Integer.parseInt(cidField.getText().trim());			
-							Customer customer = new Customer();
-							ResultTableModel viewCurrentCustomerInfo = customer.searchCustomers(newCid);
-							if (viewCurrentCustomerInfo.empty) {
-								JOptionPane.showMessageDialog(null, "Customer not found - please try again");
-							} else {					
-								customer.deleteCustomer(newCid);
-								operatorTable.removeAll();							
-								ResultTableModel viewCustomerInfo = customer.searchCustomers(newCid);
-								operatorTable.setModel(viewCustomerInfo);
-								JOptionPane.showMessageDialog(null, "Customer" + newCid + " removed");
-								validInput = true;
-							}							
-						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
-						};
-					} else {
-						validInput = true;
-					}
-				} while (!validInput);
-			}				
-		});
 
 		operatorPanel = new JPanel();
 		operatorPanel.setLayout(new BorderLayout());
@@ -947,5 +906,234 @@ public class TLinkFrame extends JFrame {
 		});
 
 		return addPanel;
+	}
+	
+	private JPanel createRemoveTabPanel() {
+		JPanel removePanel = new JPanel();
+		JPanel removePane = new JPanel();
+		final JButton removeCustomerBtn = new JButton("Remove Customer");
+		final JButton removeDriverBtn = new JButton("Remove Driver");
+		final JButton removeRouteBtn = new JButton("Remove Route");
+		final JButton removeStopBtn = new JButton("Remove Stop");
+		removeCustomerBtn.setVisible(false);
+		removeDriverBtn.setVisible(false);
+		removeRouteBtn.setVisible(false);
+		removeStopBtn.setVisible(false);
+		
+		String[] removeOptions = {"Select where to remove from...", "Customer", "Driver", "Route", "Stop", "Driver Vehicle", "Driverless Vehicle"};
+		JComboBox<String> removeList = new JComboBox<String>(removeOptions);
+		removePanel.setLayout(new BorderLayout());
+		
+		removePanel.add(removeList, BorderLayout.NORTH);
+		removePanel.add(operatorScrollPane);
+		removePanel.add(removePane, BorderLayout.SOUTH);
+		OverlayLayout overlay = new OverlayLayout(removePane);
+		removePane.setLayout(overlay);
+		removePane.add(removeCustomerBtn);
+		removePane.add(removeDriverBtn);
+		removePane.add(removeRouteBtn);
+		removePane.add(removeStopBtn);
+		
+		removeList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
+				String removeOption = (String)cb.getSelectedItem();
+
+				if (removeOption.equals("Select where to remove from...")) {
+					removeCustomerBtn.setVisible(false);
+					removeDriverBtn.setVisible(false);
+					removeRouteBtn.setVisible(false);
+					removeStopBtn.setVisible(false);
+				}
+
+				else if (removeOption.equals("Customer")) {
+					removeCustomerBtn.setVisible(true);
+					removeDriverBtn.setVisible(false);
+					removeRouteBtn.setVisible(false);
+					removeStopBtn.setVisible(false);
+					Customer customer = new Customer();
+					operatorTable.setModel(customer.displayCustomers());
+				}
+
+				else if (removeOption.equals("Driver")) {
+					removeDriverBtn.setVisible(true);
+					removeCustomerBtn.setVisible(false);
+					removeRouteBtn.setVisible(false);
+					removeStopBtn.setVisible(false);
+					Driver driver = new Driver();
+					operatorTable.setModel(driver.displayDrivers());
+				}
+				
+				else if (removeOption.equals("Route")) {
+					removeDriverBtn.setVisible(false);
+					removeCustomerBtn.setVisible(false);
+					removeRouteBtn.setVisible(true);
+					removeStopBtn.setVisible(false);
+					Route route = new Route();
+					operatorTable.setModel(route.displayRoutes());
+				}
+				
+				else if (removeOption.equals("Stop")) {
+					removeDriverBtn.setVisible(false);
+					removeCustomerBtn.setVisible(false);
+					removeRouteBtn.setVisible(false);
+					removeStopBtn.setVisible(true);
+					Stop stop = new Stop();
+					operatorTable.setModel(stop.displayStops());
+				}
+			}
+		});
+		
+		removeCustomerBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel removePanel = new JPanel();
+				removePanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter CustomerID");
+				JTextField cidField = new JTextField();
+				removePanel.add(cidLabel);
+				removePanel.add(cidField);
+
+				String title = "Remove Customer";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, removePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int cid = Integer.parseInt(cidField.getText().trim());			
+							Customer customer = new Customer();				
+							customer.deleteCustomer(cid);
+							operatorTable.removeAll();							
+							ResultTableModel viewCustomerInfo = customer.displayCustomers();
+							operatorTable.setModel(viewCustomerInfo);
+							JOptionPane.showMessageDialog(null, "Customer " + cid + " removed");
+							validInput = true;						
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
+		removeDriverBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel removePanel = new JPanel();
+				removePanel.setLayout(new GridLayout(0, 1));
+				JLabel didLabel = new JLabel("Enter DriverID:");
+				JTextField didField = new JTextField();
+				removePanel.add(didLabel);
+				removePanel.add(didField);
+
+				String title = "Remove Driver";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, removePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int did = Integer.parseInt(didField.getText().trim());			
+							Driver driver = new Driver();
+						
+							driver.deleteDriver(did);
+							operatorTable.removeAll();							
+							ResultTableModel viewDriverInfo = driver.displayDrivers();
+							operatorTable.setModel(viewDriverInfo);
+							JOptionPane.showMessageDialog(null, "Driver " + did + " removed");
+							validInput = true;							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
+		removeRouteBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel removePanel = new JPanel();
+				removePanel.setLayout(new GridLayout(0, 1));
+				JLabel ridLabel = new JLabel("Enter route number:");
+				JTextField ridField = new JTextField();
+				removePanel.add(ridLabel);
+				removePanel.add(ridField);
+
+				String title = "Remove Route";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, removePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int rid = Integer.parseInt(ridField.getText().trim());			
+							Route route = new Route();							
+							route.deleteRoute(rid);
+							operatorTable.removeAll();							
+							ResultTableModel viewRouteInfo = route.displayRoutes();
+							operatorTable.setModel(viewRouteInfo);
+							JOptionPane.showMessageDialog(null, "Route removed");
+							validInput = true;						
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
+		removeStopBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel removePanel = new JPanel();
+				removePanel.setLayout(new GridLayout(0, 1));
+				JLabel sidLabel = new JLabel("Enter stop number:");
+				JTextField sidField = new JTextField();
+				removePanel.add(sidLabel);
+				removePanel.add(sidField);
+
+				String title = "Remove Stop";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, removePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int sid = Integer.parseInt(sidField.getText().trim());			
+							Stop stop = new Stop();						
+							stop.deleteStop(sid);
+							operatorTable.removeAll();							
+							ResultTableModel viewStopInfo = stop.displayStops();
+							operatorTable.setModel(viewStopInfo);
+							JOptionPane.showMessageDialog(null, "Stop removed");
+							validInput = true;					
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+
+		return removePanel;
 	}
 }
