@@ -10,7 +10,7 @@ public class Customer {
 	Connection con = MySQLConnection.getInstance().getConnection();
 
 	public Customer () {}
-	
+
 	public void insertCustomer(int cid, String name) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO customer VALUES (?, ?)");
@@ -94,7 +94,7 @@ public class Customer {
 			return null;
 		}
 	}
-	
+
 	// Customer "login"
 	public ResultTableModel login(int cid) {
 		try {
@@ -109,10 +109,10 @@ public class Customer {
 			return null;
 		}
 	}
-	
+
 	// adds to current balance
 	public void updateBalance(int cid, int add) {
-		
+
 		try {
 			PreparedStatement ps = con.prepareStatement("UPDATE owns_pass SET balance = balance + ? WHERE cid =" + cid);
 			ps.setInt(1, add);
@@ -127,9 +127,26 @@ public class Customer {
 			}
 		}
 	}
-	
+
+	public void updateName(int cid, String name) {
+
+		try {
+			PreparedStatement ps = con.prepareStatement("UPDATE customer SET name = ? WHERE cid =" + cid);
+			ps.setString(1, name);
+			ps.executeUpdate();
+			ps.close();
+		}
+		catch (SQLException ex) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.out.println("SQLException thrown in Customer.updateName()");
+			}
+		}
+	}
+
 	public ResultTableModel displayBalance(int cid) {
-		
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
@@ -142,9 +159,9 @@ public class Customer {
 			return null;
 		}
 	}
-	
+
 	public ResultTableModel displayPassId(int cid) {
-		
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT pid FROM owns_pass WHERE cid =" + cid);
