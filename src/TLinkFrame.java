@@ -593,7 +593,7 @@ public class TLinkFrame extends JFrame {
 		operatorScrollPane = new JScrollPane(operatorTable);
 		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = new JPanel();
-		JPanel updatePanel = new JPanel();
+		JPanel updatePanel = createUpdateTabPanel();
 		JTabbedPane operatorTabs = new JTabbedPane();
 		operatorTabs.add("Add", addPanel);
 		operatorTabs.add("Remove", removePanel);
@@ -947,5 +947,143 @@ public class TLinkFrame extends JFrame {
 		});
 
 		return addPanel;
+	}
+	
+	private JPanel createUpdateTabPanel() {
+		JPanel updatePanel = new JPanel();
+		JPanel updatePane = new JPanel();
+		final JButton updateCustomerNameBtn = new JButton("Update Customer name");
+		final JButton updateCustomerBalanceBtn = new JButton("Update Customer balance");
+		updateCustomerNameBtn.setVisible(false);
+		updateCustomerBalanceBtn.setVisible(false);
+
+		String[] addOptions = {"Select where to update from...", "Customer"};
+		JComboBox<String> addList = new JComboBox<String>(addOptions);
+		updatePanel.setLayout(new BorderLayout());
+
+		updatePanel.add(addList, BorderLayout.NORTH);
+		updatePanel.add(operatorScrollPane);
+		updatePanel.add(updatePane, BorderLayout.SOUTH);
+		updatePane.setLayout(new GridLayout(0, 2));
+		updatePane.add(updateCustomerNameBtn);
+		updatePane.add(updateCustomerBalanceBtn);
+		
+		addList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
+				String addOption = (String)cb.getSelectedItem();
+
+				if (addOption.equals("Select where to update from...")) {
+					updateCustomerNameBtn.setVisible(false);
+				}
+
+				else if (addOption.equals("Customer")) {
+					updateCustomerNameBtn.setVisible(true);
+					updateCustomerBalanceBtn.setVisible(true);
+					Customer customer = new Customer();
+					operatorTable.setModel(customer.displayCustomers());
+				}
+			}
+		});
+
+		updateCustomerNameBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter Customer ID:");
+				JLabel nameLabel = new JLabel("Enter new name:");
+				JTextField cidField = new JTextField();
+				JTextField nameField = new JTextField();
+				addPanel.add(cidLabel);
+				addPanel.add(cidField);
+				addPanel.add(nameLabel);
+				addPanel.add(nameField);
+
+				String title = "Update Customer name";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newCid = Integer.parseInt(cidField.getText().trim());			
+							String newName = nameField.getText().trim();
+							Customer customer = new Customer();
+
+							if (newName.equals("")) {
+								JOptionPane.showMessageDialog(null, "Please fill in every field.");
+							} else {							
+								customer.updateName(newCid, newName);
+								operatorTable.removeAll();							
+								ResultTableModel viewCustomerInfo = customer.displayCustomers();
+								operatorTable.setModel(viewCustomerInfo);
+								JOptionPane.showMessageDialog(null, "Customer name updated.");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again.");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+
+		updateCustomerBalanceBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel cidLabel = new JLabel("Enter Customer ID:");
+				JLabel pidLabel = new JLabel("Enter Pass ID:");
+				JLabel balanceLabel = new JLabel("Enter amount to add to balance:");
+				JTextField cidField = new JTextField();
+				JTextField pidField = new JTextField();
+				JTextField balanceField = new JTextField();
+				addPanel.add(cidLabel);
+				addPanel.add(cidField);
+				addPanel.add(balanceLabel);
+				addPanel.add(balanceField);
+				addPanel.add(pidLabel);
+				addPanel.add(pidField);
+
+				String title = "Update Customer balance";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newCid = Integer.parseInt(cidField.getText().trim());	
+							int newPid = Integer.parseInt(pidField.getText().trim());		
+							int newBalance = Integer.parseInt(balanceField.getText().trim());
+							Customer customer = new Customer();
+					
+							customer.updateBalance(newCid, newBalance);
+							operatorTable.removeAll();							
+							ResultTableModel customers = customer.displayCustomers();
+							operatorTable.setModel(customers);
+							JOptionPane.showMessageDialog(null, "Balance updated");
+							validInput = true;
+												
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
+		return updatePanel;
 	}
 }
