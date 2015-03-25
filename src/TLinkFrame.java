@@ -1060,6 +1060,8 @@ public class TLinkFrame extends JFrame {
 		final JButton removeDriverBtn = new JButton("Remove Driver");
 		final JButton removeRouteBtn = new JButton("Remove Route");
 		final JButton removeStopBtn = new JButton("Remove Stop");
+		final JButton removeDriverVehicleBtn = new JButton("Remove Vehicle");
+		final JButton removeDriverlessVehicleBtn = new JButton("Remove Vehicle");
 		removeCustomerBtn.setVisible(false);
 		removeDriverBtn.setVisible(false);
 		removeRouteBtn.setVisible(false);
@@ -1090,6 +1092,8 @@ public class TLinkFrame extends JFrame {
 					removeDriverBtn.setVisible(false);
 					removeRouteBtn.setVisible(false);
 					removeStopBtn.setVisible(false);
+					removeDriverVehicleBtn.setVisible(false);
+					removeDriverlessVehicleBtn.setVisible(false);
 					Customer customer = new Customer();
 					operatorTable.setModel(customer.displayBalance(-1));
 				}
@@ -1099,6 +1103,8 @@ public class TLinkFrame extends JFrame {
 					removeDriverBtn.setVisible(false);
 					removeRouteBtn.setVisible(false);
 					removeStopBtn.setVisible(false);
+					removeDriverVehicleBtn.setVisible(false);
+					removeDriverlessVehicleBtn.setVisible(false);
 					Customer customer = new Customer();
 					operatorTable.setModel(customer.displayCustomers());
 				}
@@ -1108,6 +1114,8 @@ public class TLinkFrame extends JFrame {
 					removeCustomerBtn.setVisible(false);
 					removeRouteBtn.setVisible(false);
 					removeStopBtn.setVisible(false);
+					removeDriverVehicleBtn.setVisible(false);
+					removeDriverlessVehicleBtn.setVisible(false);
 					Driver driver = new Driver();
 					operatorTable.setModel(driver.displayDrivers());
 				}
@@ -1117,6 +1125,8 @@ public class TLinkFrame extends JFrame {
 					removeCustomerBtn.setVisible(false);
 					removeRouteBtn.setVisible(true);
 					removeStopBtn.setVisible(false);
+					removeDriverVehicleBtn.setVisible(false);
+					removeDriverlessVehicleBtn.setVisible(false);
 					Route route = new Route();
 					operatorTable.setModel(route.displayRoutes());
 				}
@@ -1126,8 +1136,32 @@ public class TLinkFrame extends JFrame {
 					removeCustomerBtn.setVisible(false);
 					removeRouteBtn.setVisible(false);
 					removeStopBtn.setVisible(true);
+					removeDriverVehicleBtn.setVisible(false);
+					removeDriverlessVehicleBtn.setVisible(false);
 					Stop stop = new Stop();
 					operatorTable.setModel(stop.displayStops());
+				}
+				
+				else if (removeOption.equals("Driver Vehicle")) {
+					removeDriverBtn.setVisible(false);
+					removeCustomerBtn.setVisible(false);
+					removeRouteBtn.setVisible(false);
+					removeStopBtn.setVisible(false);
+					removeDriverVehicleBtn.setVisible(true);
+					removeDriverlessVehicleBtn.setVisible(false);
+					Driveable driveable = new Driveable();
+					operatorTable.setModel(driveable.displayVehicles());
+				}
+				
+				else if (removeOption.equals("Driverless Vehicle")) {
+					removeDriverBtn.setVisible(false);
+					removeCustomerBtn.setVisible(false);
+					removeRouteBtn.setVisible(false);
+					removeStopBtn.setVisible(false);
+					removeDriverVehicleBtn.setVisible(false);
+					removeDriverlessVehicleBtn.setVisible(true);
+					Driverless driverless = new Driverless();
+					operatorTable.setModel(driverless.displayVehicles());
 				}
 			}
 		});
