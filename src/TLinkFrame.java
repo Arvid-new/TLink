@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
@@ -835,6 +836,64 @@ public class TLinkFrame extends JFrame {
 			}				
 		});
 		
+		addRouteBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel addPanel = new JPanel();
+				addPanel.setLayout(new GridLayout(0, 1));
+				JLabel ridLabel = new JLabel("Enter route number:");
+				JLabel nameLabel = new JLabel("Enter route name:");
+				JLabel startLabel = new JLabel("Enter start time HH:MM:SS");
+				JLabel endLabel = new JLabel("Enter end time HH:MM:SS");
+				JTextField ridField = new JTextField();
+				JTextField nameField = new JTextField();
+				JTextField startField = new JTextField();
+				JTextField endField = new JTextField();
+				addPanel.add(ridLabel);
+				addPanel.add(ridField);
+				addPanel.add(nameLabel);
+				addPanel.add(nameField);
+				addPanel.add(startLabel);
+				addPanel.add(startField);
+				addPanel.add(endLabel);
+				addPanel.add(endField);
+
+				String title = "Add Route";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int newRid = Integer.parseInt(ridField.getText().trim());			
+							String newName = nameField.getText().trim();
+							
+							Time newStart = Time.valueOf(startField.getText().trim());
+							Time newEnd = Time.valueOf(endField.getText().trim());
+							Route route = new Route();
+
+							if (newName.equals("") || newStart.equals("") || newEnd.equals("")) {
+								JOptionPane.showMessageDialog(null, "Please fill in every field");
+							} else {							
+								route.insertRoute(newRid, newName, newStart, newEnd);
+								operatorTable.removeAll();							
+								ResultTableModel viewRouteInfo = route.displayRoutes();
+								operatorTable.setModel(viewRouteInfo);
+								JOptionPane.showMessageDialog(null, "Route added");
+								validInput = true;
+							}							
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}				
+		});
+		
 		addStopBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -872,8 +931,8 @@ public class TLinkFrame extends JFrame {
 							} else {							
 								stop.insertStop(newSid, newName, newLocation);
 								operatorTable.removeAll();							
-								ResultTableModel viewDriverInfo = stop.displayStops();
-								operatorTable.setModel(viewDriverInfo);
+								ResultTableModel viewStopInfo = stop.displayStops();
+								operatorTable.setModel(viewStopInfo);
 								JOptionPane.showMessageDialog(null, "Stop added");
 								validInput = true;
 							}							
