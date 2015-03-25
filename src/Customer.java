@@ -27,7 +27,7 @@ public class Customer {
 			}
 		}
 	}
-	
+
 	public void deleteCustomer(int cid) {
 		try {
 			Statement stmt = con.createStatement();
@@ -43,7 +43,7 @@ public class Customer {
 			}
 		}
 	}
-	
+
 	public ResultTableModel displayCustomers() {
 		try {
 			Statement stmt = con.createStatement();
@@ -57,7 +57,30 @@ public class Customer {
 			return null;
 		}
 	}
-	
+
+	public boolean accessedAllVehicles(int cid){
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT cid\n" +
+					"FROM owns_pass O\n" +
+					"WHERE cid = " + cid + " AND NOT EXISTS(\n" +
+					"\tSELECT V.vehicleNumber\n" +
+					"\tFROM vehicle V\n" +
+					"\tWHERE NOT EXISTS\n" +
+					"\t(SELECT A.vehicleNumber\n" +
+					"\tFROM access A\n" +
+					"\tWHERE V.vehicleNumber = A.vehicleNumber\n" +
+					"\tAND A.cid = O.cid));");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return !rtm.empty;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return false;
+		}
+	}
+
 	public ResultTableModel searchCustomers(int cid) {
 		try {
 			Statement stmt = con.createStatement();
@@ -70,7 +93,7 @@ public class Customer {
 			//TODO
 			return null;
 		}
-	}	
+	}
 	
 	// Customer "login"
 	public ResultTableModel login(int cid) {
