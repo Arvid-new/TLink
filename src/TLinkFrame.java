@@ -1,21 +1,14 @@
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Time;
-import java.text.NumberFormat;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,10 +17,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.table.TableModel;
-import javax.swing.text.NumberFormatter;
 
 
 @SuppressWarnings("serial")
@@ -46,7 +36,6 @@ public class TLinkFrame extends JFrame {
 
 	private JTable customerTable;
 	private JTable driverTable;
-	private JTable operatorTable;
 	private JPanel customerMenu;
 	private JPanel driverMenu;
 	private JPanel operatorMenu;
@@ -55,7 +44,6 @@ public class TLinkFrame extends JFrame {
 
 	private JScrollPane customerScrollPane;
 	private JScrollPane driverScrollPane;
-	private JScrollPane operatorScrollPane;
 
 	private JLabel title;
 	private JLabel welcome;
@@ -589,8 +577,6 @@ public class TLinkFrame extends JFrame {
 	}
 
 	private JPanel createOperatorPanel() {
-		operatorTable = new JTable();
-		operatorScrollPane = new JScrollPane(operatorTable);
 		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = createRemoveTabPanel();
 		JPanel updatePanel = createUpdateTabPanel();
@@ -607,6 +593,8 @@ public class TLinkFrame extends JFrame {
 	}
 
 	private JPanel createAddTabPanel() {
+		final JTable operatorTable = new JTable();
+		JScrollPane operatorScrollPane = new JScrollPane(operatorTable);
 		JPanel addPanel = new JPanel();
 		JPanel addPane = new JPanel();
 		final JButton addCustomerBtn = new JButton("Add Customer");
@@ -615,6 +603,8 @@ public class TLinkFrame extends JFrame {
 		final JButton addStopBtn = new JButton("Add Stop");
 		addCustomerBtn.setVisible(false);
 		addDriverBtn.setVisible(false);
+		addRouteBtn.setVisible(false);
+		addStopBtn.setVisible(false);
 
 		String[] addOptions = {"Select where to add to...", "Customer", "Driver", "Route", "Stop", "Driver Vehicle", "Driverless Vehicle"};
 		JComboBox<String> addList = new JComboBox<String>(addOptions);
@@ -629,7 +619,7 @@ public class TLinkFrame extends JFrame {
 		addPane.add(addDriverBtn);
 		addPane.add(addRouteBtn);
 		addPane.add(addStopBtn);
-		
+
 		addList.addActionListener(new ActionListener() {
 
 			@Override
@@ -642,6 +632,8 @@ public class TLinkFrame extends JFrame {
 					addDriverBtn.setVisible(false);
 					addRouteBtn.setVisible(false);
 					addStopBtn.setVisible(false);
+					Customer customer = new Customer();
+					operatorTable.setModel(customer.displayBalance(-1));
 				}
 
 				else if (addOption.equals("Customer")) {
@@ -661,7 +653,7 @@ public class TLinkFrame extends JFrame {
 					Driver driver = new Driver();
 					operatorTable.setModel(driver.displayDrivers());
 				}
-				
+
 				else if (addOption.equals("Route")) {
 					addDriverBtn.setVisible(false);
 					addCustomerBtn.setVisible(false);
@@ -670,7 +662,7 @@ public class TLinkFrame extends JFrame {
 					Route route = new Route();
 					operatorTable.setModel(route.displayRoutes());
 				}
-				
+
 				else if (addOption.equals("Stop")) {
 					addDriverBtn.setVisible(false);
 					addCustomerBtn.setVisible(false);
@@ -790,7 +782,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});
-		
+
 		addRouteBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -824,7 +816,7 @@ public class TLinkFrame extends JFrame {
 						try {
 							int newRid = Integer.parseInt(ridField.getText().trim());			
 							String newName = nameField.getText().trim();
-							
+
 							Time newStart = Time.valueOf(startField.getText().trim());
 							Time newEnd = Time.valueOf(endField.getText().trim());
 							Route route = new Route();
@@ -848,7 +840,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});
-		
+
 		addStopBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -903,8 +895,10 @@ public class TLinkFrame extends JFrame {
 
 		return addPanel;
 	}
-	
-		private JPanel createRemoveTabPanel() {
+
+	private JPanel createRemoveTabPanel() {
+		final JTable operatorTable = new JTable();
+		JScrollPane operatorScrollPane = new JScrollPane(operatorTable);
 		JPanel removePanel = new JPanel();
 		JPanel removePane = new JPanel();
 		final JButton removeCustomerBtn = new JButton("Remove Customer");
@@ -915,11 +909,11 @@ public class TLinkFrame extends JFrame {
 		removeDriverBtn.setVisible(false);
 		removeRouteBtn.setVisible(false);
 		removeStopBtn.setVisible(false);
-		
+
 		String[] removeOptions = {"Select where to remove from...", "Customer", "Driver", "Route", "Stop", "Driver Vehicle", "Driverless Vehicle"};
 		JComboBox<String> removeList = new JComboBox<String>(removeOptions);
 		removePanel.setLayout(new BorderLayout());
-		
+
 		removePanel.add(removeList, BorderLayout.NORTH);
 		removePanel.add(operatorScrollPane);
 		removePanel.add(removePane, BorderLayout.SOUTH);
@@ -929,7 +923,7 @@ public class TLinkFrame extends JFrame {
 		removePane.add(removeDriverBtn);
 		removePane.add(removeRouteBtn);
 		removePane.add(removeStopBtn);
-		
+
 		removeList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -941,6 +935,8 @@ public class TLinkFrame extends JFrame {
 					removeDriverBtn.setVisible(false);
 					removeRouteBtn.setVisible(false);
 					removeStopBtn.setVisible(false);
+					Customer customer = new Customer();
+					operatorTable.setModel(customer.displayBalance(-1));
 				}
 
 				else if (removeOption.equals("Customer")) {
@@ -960,7 +956,7 @@ public class TLinkFrame extends JFrame {
 					Driver driver = new Driver();
 					operatorTable.setModel(driver.displayDrivers());
 				}
-				
+
 				else if (removeOption.equals("Route")) {
 					removeDriverBtn.setVisible(false);
 					removeCustomerBtn.setVisible(false);
@@ -969,7 +965,7 @@ public class TLinkFrame extends JFrame {
 					Route route = new Route();
 					operatorTable.setModel(route.displayRoutes());
 				}
-				
+
 				else if (removeOption.equals("Stop")) {
 					removeDriverBtn.setVisible(false);
 					removeCustomerBtn.setVisible(false);
@@ -980,7 +976,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		removeCustomerBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1017,14 +1013,14 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});
-		
+
 		removeDriverBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel removePanel = new JPanel();
 				removePanel.setLayout(new GridLayout(0, 1));
-				JLabel didLabel = new JLabel("Enter DriverID:");
+				JLabel didLabel = new JLabel("Enter Driver ID:");
 				JTextField didField = new JTextField();
 				removePanel.add(didLabel);
 				removePanel.add(didField);
@@ -1039,7 +1035,7 @@ public class TLinkFrame extends JFrame {
 						try {
 							int did = Integer.parseInt(didField.getText().trim());			
 							Driver driver = new Driver();
-						
+
 							driver.deleteDriver(did);
 							operatorTable.removeAll();							
 							ResultTableModel viewDriverInfo = driver.displayDrivers();
@@ -1055,7 +1051,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});
-		
+
 		removeRouteBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1092,7 +1088,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});
-		
+
 		removeStopBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1132,8 +1128,10 @@ public class TLinkFrame extends JFrame {
 
 		return removePanel;
 	}
-	
+
 	private JPanel createUpdateTabPanel() {
+		final JTable operatorTable = new JTable();
+		JScrollPane operatorScrollPane = new JScrollPane(operatorTable);
 		JPanel updatePanel = new JPanel();
 		JPanel updatePane = new JPanel();
 		final JButton updateCustomerNameBtn = new JButton("Update Customer name");
@@ -1142,17 +1140,17 @@ public class TLinkFrame extends JFrame {
 		updateCustomerBalanceBtn.setVisible(false);
 
 		String[] addOptions = {"Select where to update from...", "Customer"};
-		JComboBox<String> addList = new JComboBox<String>(addOptions);
+		JComboBox<String> updateList = new JComboBox<String>(addOptions);
 		updatePanel.setLayout(new BorderLayout());
 
-		updatePanel.add(addList, BorderLayout.NORTH);
+		updatePanel.add(updateList, BorderLayout.NORTH);
 		updatePanel.add(operatorScrollPane);
 		updatePanel.add(updatePane, BorderLayout.SOUTH);
 		updatePane.setLayout(new GridLayout(0, 2));
 		updatePane.add(updateCustomerNameBtn);
 		updatePane.add(updateCustomerBalanceBtn);
-		
-		addList.addActionListener(new ActionListener() {
+
+		updateList.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -1160,7 +1158,10 @@ public class TLinkFrame extends JFrame {
 				String addOption = (String)cb.getSelectedItem();
 
 				if (addOption.equals("Select where to update from...")) {
+					Customer customer = new Customer();
 					updateCustomerNameBtn.setVisible(false);
+					updateCustomerBalanceBtn.setVisible(false);
+					operatorTable.setModel(customer.displayBalance(-1));
 				}
 
 				else if (addOption.equals("Customer")) {
@@ -1250,14 +1251,14 @@ public class TLinkFrame extends JFrame {
 							int newPid = Integer.parseInt(pidField.getText().trim());		
 							int newBalance = Integer.parseInt(balanceField.getText().trim());
 							Customer customer = new Customer();
-					
+
 							customer.updateBalance(newCid, newBalance);
 							operatorTable.removeAll();							
-							ResultTableModel customers = customer.displayCustomers();
-							operatorTable.setModel(customers);
+							ResultTableModel customerModel = customer.displayCustomers();
+							operatorTable.setModel(customerModel);
 							JOptionPane.showMessageDialog(null, "Balance updated");
 							validInput = true;
-												
+
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
 						};
@@ -1267,7 +1268,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});
-		
+
 		return updatePanel;
 	}
 }
