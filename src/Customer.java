@@ -11,19 +11,13 @@ public class Customer {
 
 	public Customer () {}
 	
-	public void insertCustomer(int cid, String name, int pid) {
+	public void insertCustomer(int cid, String name) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO customer VALUES (?, ?)");
 			stmt.setInt(1, cid);
 			stmt.setString(2, name);
 			stmt.executeUpdate();
 			stmt.close();
-			
-			PreparedStatement stmt2 = con.prepareStatement("INSERT INTO owns_pass VALUES (?, 0, ?)");
-			stmt2.setInt(1, pid);
-			stmt2.setInt(2, cid);
-			stmt2.executeUpdate();
-			stmt2.close();
 		}
 		catch (SQLException ex) {
 			try {
@@ -33,7 +27,7 @@ public class Customer {
 			}
 		}
 	}
-	
+
 	public void deleteCustomer(int cid) {
 		try {
 			Statement stmt = con.createStatement();
@@ -49,25 +43,11 @@ public class Customer {
 			}
 		}
 	}
-	
+
 	public ResultTableModel displayCustomers() {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT C.cid, C.name, O.pid FROM customer C, owns_pass O WHERE C.cid = O.cid");
-			ResultTableModel rtm = new ResultTableModel(rs);
-			stmt.close();
-			return rtm;
-		}
-		catch (SQLException ex) {
-			//TODO
-			return null;
-		}
-	}
-	
-	public ResultTableModel searchCustomers(int cid) {
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT C.cid, C.name, O.pid, O.balance FROM customer C, owns_pass O WHERE C.cid = " + cid + "AND C.cid = O.cid");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
@@ -98,6 +78,20 @@ public class Customer {
 		catch (SQLException ex) {
 			//TODO
 			return false;
+		}
+	}
+
+	public ResultTableModel searchCustomers(int cid) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM customer WHERE cid = " + cid);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return null;
 		}
 	}
 	
