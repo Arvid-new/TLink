@@ -70,7 +70,30 @@ public class Customer {
 			//TODO
 			return null;
 		}
-	}	
+	}
+
+	public boolean accessedAllVehicles(int cid){
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT cid\n" +
+					"FROM owns_pass O\n" +
+					"WHERE cid = " + cid + " AND NOT EXISTS(\n" +
+					"\tSELECT V.vehicleNumber\n" +
+					"\tFROM vehicle V\n" +
+					"\tWHERE NOT EXISTS\n" +
+					"\t(SELECT A.vehicleNumber\n" +
+					"\tFROM access A\n" +
+					"\tWHERE V.vehicleNumber = A.vehicleNumber\n" +
+					"\tAND A.cid = O.cid));");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return !rtm.empty;
+		}
+		catch (SQLException ex) {
+			//TODO
+			return false;
+		}
+	}
 	
 	// Customer "login"
 	public ResultTableModel login(int cid) {
