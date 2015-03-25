@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -9,6 +10,7 @@ import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -590,8 +592,27 @@ public class TLinkFrame extends JFrame {
 		operatorTable = new JTable();
 		operatorScrollPane = new JScrollPane(operatorTable);
 		JButton addCustomerBtn = new JButton("Add Customer");
+		
+		JPanel addPanel = new JPanel();
+		JPanel removePanel = new JPanel();
+		JPanel updatePanel = new JPanel();
+		JTabbedPane operatorTabs = new JTabbedPane();
+		operatorTabs.add("Add", addPanel);
+		operatorTabs.add("Remove", removePanel);
+		operatorTabs.addTab("Update", updatePanel);
+		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
+		
+		String[] addOptions = {"Customer, Driver, Route, Stop, Driver Vehicle, Driverless Vehicle"};
+		JComboBox addList = new JComboBox(addOptions);
+		addPanel.setLayout(new CardLayout());
+		
+		JPanel textPanel = new JPanel();
+		
+		addPanel.add(addList);
+		
+		
 		addCustomerBtn.addActionListener(new ActionListener() {
-
+			
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JPanel addPanel = new JPanel();
