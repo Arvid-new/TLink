@@ -912,7 +912,7 @@ public class TLinkFrame extends JFrame {
 								boolean success = driver.insertDriver(newDid, newName, newPhone, newAddress);
 								if (success) {
 									operatorTable.removeAll();							
-									ResultTableModel viewDriverInfo = driver.viewDriverInfo(newDid);
+									ResultTableModel viewDriverInfo = driver.displayDrivers();
 									operatorTable.setModel(viewDriverInfo);
 									JOptionPane.showMessageDialog(null, "Driver added");
 									validInput = true;
@@ -1744,12 +1744,12 @@ public class TLinkFrame extends JFrame {
 					try {
 						report = vehicle.generateVehicleReport(DATE.getCurrentDate().intValue());
 					} catch (SQLException e) {
-						e.printStackTrace();
 					}
 				}
 
 				if (report.empty) {
 					JOptionPane.showMessageDialog(null, "No report for vehicles this month");
+					report = vehicle.searchVehicles(-1);
 				}
 
 				reportTable.setModel(report);
