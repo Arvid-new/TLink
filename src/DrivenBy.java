@@ -20,11 +20,7 @@ public class DrivenBy {
 				stmt.close();
 			}
 			catch (SQLException ex) {
-				try {
-					con.rollback();
-				} catch (SQLException e) {
-					//TODO
-				}
+				
 			}
 		}
 		
@@ -36,11 +32,7 @@ public class DrivenBy {
 				stmt.close();
 			}
 			catch (SQLException ex) {
-				try {
-					con.rollback();
-				} catch (SQLException e) {
-					//TODO
-				}
+				
 			}
 		}
 		
@@ -48,7 +40,12 @@ public class DrivenBy {
 			
 			try {
 				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by");
+				ResultSet rs = stmt.executeQuery("SELECT DB.empId, DV.name, DB.vehicleNumber, DA.type, DB.fromDate, DB.toDate " + 
+												  "FROM driven_by DB " +
+												  "INNER JOIN driver DV " +
+												  "ON DB.empId = DV.empId " + 												  
+												  "INNER JOIN driveable DA " +  
+												  "ON DB.vehicleNumber = DA.vehicleNumber");
 				ResultTableModel rtm = new ResultTableModel(rs);
 				stmt.close();
 				return rtm;

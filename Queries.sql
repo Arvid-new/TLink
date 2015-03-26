@@ -70,7 +70,12 @@ WHERE vehicleNumber = ? AND
 	to = ?
 	AND empId = ?
 	
-SELECT * FROM driven_by
+SELECT DB.empId, DV.name, DB.vehicleNumber, DA.type, DB.fromDate, DB.toDate
+FROM driven_by DB
+INNER JOIN driver DV
+ON DB.empId = DV.empId 												  
+INNER JOIN driveable DA  
+ON DB.vehicleNumber = DA.vehicleNumber
 
 --Driver-----------------------------------------------------------------------------------------------------------------------------
 
@@ -117,7 +122,7 @@ VALUES (?)
 
 DELETE FROM vehicle 
 WHERE vehicleNumber IN (
-	SELECT vehicleNumber FROM Driverless) 
+	SELECT vehicleNumber FROM driverless) 
 	AND vehicleNumber = ?
 	
 SELECT * 

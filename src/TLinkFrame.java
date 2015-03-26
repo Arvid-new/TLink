@@ -1785,7 +1785,9 @@ public class TLinkFrame extends JFrame {
 		searchDriverVehicleBtn.setVisible(false);
 		searchDriverlessVehicleBtn.setVisible(false);
 
-		String[] viewOptions = {"Select what to view...", "Customers", "Drivers", "Routes", "Stops", "Driver Vehicles", "Driverless Vehicles"};
+		String[] viewOptions = {"Select what to view...", "Customers", "Drivers", 
+								"Routes", "Stops", "Driver Vehicles",
+								"Driverless Vehicles", "Vehicle Drivers"};
 		JComboBox<String> viewList = new JComboBox<String>(viewOptions);
 		viewPanel.setLayout(new BorderLayout());
 
@@ -1932,6 +1934,23 @@ public class TLinkFrame extends JFrame {
 					searchDriverlessVehicleBtn.setVisible(true);
 					Driverless driverless = new Driverless();
 					viewTable.setModel(driverless.displayVehicles());
+				}
+				
+				else if (addOption.equals("Vehicle Drivers")) {
+					viewDriversBtn.setVisible(false);
+					viewCustomersBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(false);
+					DrivenBy drivenBy = new DrivenBy();
+					viewTable.setModel(drivenBy.displayDrivenBy());
 				}
 			}
 		});

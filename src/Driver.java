@@ -12,7 +12,7 @@ public class Driver {
 
 	public Driver() {}
 
-	public boolean insertDriver(int empId, String name, String phoneNum, String address) {
+	public boolean insertDriver(int empId, String name, String address, String phoneNum) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO driver VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, empId);
