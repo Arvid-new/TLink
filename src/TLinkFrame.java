@@ -3,6 +3,8 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 
 import javax.swing.BorderFactory;
@@ -22,6 +24,8 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import oracle.sql.DATE;
 
 
 @SuppressWarnings("serial")
@@ -583,10 +587,12 @@ public class TLinkFrame extends JFrame {
 		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = createRemoveTabPanel();
 		JPanel updatePanel = createUpdateTabPanel();
+		JPanel reportPanel = createReportTabPanel();
 		final JTabbedPane operatorTabs = new JTabbedPane();
 		operatorTabs.add("Add", addPanel);
 		operatorTabs.add("Remove", removePanel);
 		operatorTabs.addTab("Update", updatePanel);
+		operatorTabs.addTab("Report", reportPanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
 		operatorTabs.setVisible(false);
 		
@@ -612,6 +618,7 @@ public class TLinkFrame extends JFrame {
 					int input = JOptionPane.showConfirmDialog(null, loginPanel, title, option);
 					if (input == JOptionPane.OK_OPTION) {
 						try {
+							@SuppressWarnings("deprecation")
 							String pw = loginField.getText();;
 							if (!pw.equals(password)) {
 								JOptionPane.showMessageDialog(null, "Login failed");
@@ -1563,5 +1570,76 @@ public class TLinkFrame extends JFrame {
 		});
 
 		return updatePanel;
+	}
+	
+	public JPanel createReportTabPanel() {
+		final JTable reportTable = new JTable();
+		JScrollPane reportTableScrollPane = new JScrollPane(reportTable);
+		final JPanel reportPanel = new JPanel();
+		
+		String[] options = {"This month", "January", "February", "March", "April", "May", "June", "July", 
+				"August", "September", "October", "November", "December"};
+		final JComboBox<String> monthList = new JComboBox<String>(options);
+		
+		String[] reportOptions = {"Select report to view...", "Vehicle"};
+		JComboBox<String> reportList = new JComboBox<String>(reportOptions);
+		
+		reportPanel.setLayout(new BorderLayout());
+		reportPanel.add(reportList, BorderLayout.NORTH);
+		reportPanel.add(reportTableScrollPane);
+		
+		reportList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
+				String reportOption = (String)cb.getSelectedItem();
+
+				if (reportOption.equals("Select report to view...")) {
+					reportPanel.remove(monthList);
+				}
+
+				else if (reportOption.equals("Vehicle")) {
+					reportPanel.add(monthList, BorderLayout.SOUTH);
+				}
+			}
+		});
+		
+		monthList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
+				String monthOption = (String)cb.getSelectedItem();
+				Vehicle vehicle = new Vehicle();
+				ResultTableModel report = vehicle.searchVehicles(-1);
+				
+
+				if (monthOption.equals("January")) report = vehicle.generateVehicleReport(1);
+				else if (monthOption.equals("February")) report = vehicle.generateVehicleReport(2);
+				else if (monthOption.equals("March")) report = vehicle.generateVehicleReport(3);
+				else if (monthOption.equals("April")) report = vehicle.generateVehicleReport(4);
+				else if (monthOption.equals("May")) report = vehicle.generateVehicleReport(5);
+				else if (monthOption.equals("June")) report = vehicle.generateVehicleReport(6);
+				else if (monthOption.equals("July")) report = vehicle.generateVehicleReport(7);
+				else if (monthOption.equals("August")) report = vehicle.generateVehicleReport(8);
+				else if (monthOption.equals("September")) report = vehicle.generateVehicleReport(9);
+				else if (monthOption.equals("October")) report = vehicle.generateVehicleReport(10);
+				else if (monthOption.equals("November")) report = vehicle.generateVehicleReport(11);
+				else if (monthOption.equals("December")) report = vehicle.generateVehicleReport(12);
+
+				else {
+					try {
+						report = vehicle.generateVehicleReport(DATE.getCurrentDate().intValue());
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				reportTable.setModel(report);
+			}
+		});
+		
+		return reportPanel;
 	}
 }

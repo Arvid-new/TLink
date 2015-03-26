@@ -73,14 +73,15 @@ public class Vehicle {
 		}
 	}	
 	
-	public ResultSet generateVehicleReport() {
+	public ResultTableModel generateVehicleReport(int month) {
 		
 		try	{
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT vehicleNumber, COUNT(vehicleNumber) "
-					+ "FROM driven_by WHERE MONTH(from) = MONTH(CURRENT_DATE)");
+					+ "FROM driven_by WHERE MONTH(fromDate) = " + month + " GROUP BY vehicleNumber");
+			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
-			return rs;
+			return rtm;
 		}
 		catch (SQLException ex) {
 			//TODO 
