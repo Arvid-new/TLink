@@ -76,6 +76,9 @@ public class ResultTableModel extends AbstractTableModel {
 				case Types.NUMERIC:
 					val = rs.getInt(i + 1);
 					break;
+				case Types.BIGINT:
+					val = rs.getInt(i + 1);	
+					break;
 				}
 
 				row[i] = val;
