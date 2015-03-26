@@ -12,36 +12,30 @@ public class Driverless extends Vehicle {
 	public Driverless() {};
 	
 	@Override
-	public void insertVehicle(int vehicleNumber, int age, int capacity) {
+	public boolean insertVehicle(int vehicleNumber, int age, int capacity) {
 		super.insertVehicle(vehicleNumber, age, capacity);
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO driverless VALUES (?)");
 			stmt.setInt(1, vehicleNumber);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	
 	@Override
-	public void deleteVehicle(int vehicleNumber) {
+	public boolean deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM Driverless) AND vehicleNumber = " + vehicleNumber);
+			int rows = stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM Driverless) AND vehicleNumber = " + vehicleNumber);
 			stmt.close();
+			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 

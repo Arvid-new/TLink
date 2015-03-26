@@ -11,7 +11,7 @@ public class Driveable extends Vehicle {
 	
 	public Driveable() {};
 	
-	public void insertVehicle(int vehicleNumber, int age, int capacity, String type) {
+	public boolean insertVehicle(int vehicleNumber, int age, int capacity, String type) {
 		super.insertVehicle(vehicleNumber, age, capacity);
 		try {			
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO driveable VALUES (?, ?)");
@@ -19,29 +19,23 @@ public class Driveable extends Vehicle {
 			stmt.setString(2, type);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 
 	@Override
-	public void deleteVehicle(int vehicleNumber) {
+	public boolean deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM driveable) AND vehicleNumber = " + vehicleNumber);
+			int rows = stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM driveable) AND vehicleNumber = " + vehicleNumber);
 			stmt.close();
+			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}	
 
@@ -62,7 +56,6 @@ public class Driveable extends Vehicle {
 	
 	@Override
 	public ResultTableModel displayVehicles() {
-		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT D.vehicleNumber, D.type, V.age, V.capacity FROM driveable D INNER JOIN vehicle V ON D.vehicleNumber = V.vehicleNumber");

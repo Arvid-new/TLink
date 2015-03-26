@@ -12,7 +12,7 @@ public class Driver {
 
 	public Driver() {}
 
-	public void insertDriver(int empId, String name, String address, String phoneNum) {
+	public boolean insertDriver(int empId, String name, String address, String phoneNum) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO driver VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, empId);
@@ -21,28 +21,22 @@ public class Driver {
 			stmt.setString(4, phoneNum);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 
-	public void deleteDriver(int empId) {
+	public boolean deleteDriver(int empId) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM driver WHERE empId = " + empId);
+			int rows = stmt.executeUpdate("DELETE FROM driver WHERE empId = " + empId);
 			stmt.close();
+			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 

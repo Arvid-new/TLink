@@ -12,7 +12,7 @@ public class Route {
 	
 	public Route() {}
 	
-	public void insertRoute(int routeNum, String rname, Time stop, Time start) {
+	public boolean insertRoute(int routeNum, String rname, Time stop, Time start) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO route VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, routeNum);
@@ -21,28 +21,22 @@ public class Route {
 			stmt.setTime(4, start);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	
-	public void deleteRoute(int routeNum) {
+	public boolean deleteRoute(int routeNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM route WHERE routeNumber = " + routeNum);
+			int rows = stmt.executeUpdate("DELETE FROM route WHERE routeNumber = " + routeNum);
 			stmt.close();
+			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	

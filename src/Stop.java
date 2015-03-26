@@ -11,7 +11,7 @@ public class Stop {
 	
 	public Stop() {}
 	
-	public void insertStop(int stopNum, String stopName, String location) {
+	public boolean insertStop(int stopNum, String stopName, String location) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO stop VALUES (?, ?, ?)");
 			stmt.setInt(1, stopNum);
@@ -19,28 +19,22 @@ public class Stop {
 			stmt.setString(3, location);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	
-	public void deleteStop(int stopNum) {
+	public boolean deleteStop(int stopNum) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM stop WHERE stopNumber = " + stopNum);
+			int rows = stmt.executeUpdate("DELETE FROM stop WHERE stopNumber = " + stopNum);
 			stmt.close();
+			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	

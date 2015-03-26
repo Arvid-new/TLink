@@ -12,7 +12,7 @@ public class Vehicle {
 	
 	public Vehicle() {}
 	
-	public void insertVehicle(int vehicleNumber, int age, int capacity) {
+	public boolean insertVehicle(int vehicleNumber, int age, int capacity) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO vehicle VALUES (?, ?, ?)");
 			stmt.setInt(1, vehicleNumber);
@@ -20,28 +20,22 @@ public class Vehicle {
 			stmt.setInt(3, capacity);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	
-	public void deleteVehicle(int vehicleNumber) {
+	public boolean deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
+			int rows = stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber = " + vehicleNumber);
 			stmt.close();
+			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 	
