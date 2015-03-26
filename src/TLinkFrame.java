@@ -167,14 +167,16 @@ public class TLinkFrame extends JFrame {
 				} catch (NumberFormatException nfe) {
 					//ignore (this gets thrown only if user hits cancel before entering anything)
 				}
-				Route route = new Route();
-				ResultTableModel search = route.getAllStops(rid);
-				if (search.empty) {
-					JOptionPane.showMessageDialog(null, "No stops found");
-				}
-				else {
-					routeTable.removeAll();
-					routeTable.setModel(search);
+				if (rid != -1) {
+					Route route = new Route();
+					ResultTableModel search = route.getAllStops(rid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No stops found");
+					}
+					else {
+						routeTable.removeAll();
+						routeTable.setModel(search);
+					}
 				}
 			}
 		});
@@ -241,14 +243,16 @@ public class TLinkFrame extends JFrame {
 				} catch (NumberFormatException nfe) {
 					//ignore (this gets thrown only if user hits cancel before entering anything)
 				}
-				Stop stop = new Stop();
-				ResultTableModel search = stop.findAllRoutes(sid);
-				if (search.empty) {
-					JOptionPane.showMessageDialog(null, "No routes found");
-				}
-				else {
-					stopTable.removeAll();
-					stopTable.setModel(search);
+				if (sid != -1) {
+					Stop stop = new Stop();
+					ResultTableModel search = stop.findAllRoutes(sid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No routes found");
+					}
+					else {
+						stopTable.removeAll();
+						stopTable.setModel(search);
+					}
 				}
 			}
 		});
@@ -286,6 +290,7 @@ public class TLinkFrame extends JFrame {
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
 		final JButton updateBalanceBtn = new JButton("Update Balance");
+
 		loginBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -499,14 +504,16 @@ public class TLinkFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				String dateStr = JOptionPane.showInputDialog(null, "Enter Date as: YYYY-MM-DD");
-				Driver driver = new Driver();
-				ResultTableModel getShiftsResults = driver.viewShifts(empId, dateStr);
-				if (getShiftsResults.empty) {
-					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID and date. "
-							+ "Ensure date format is YYYY-MM-DD");
-				} else {
-					driverTable.removeAll();
-					driverTable.setModel(getShiftsResults);
+				if (dateStr != null) {
+					Driver driver = new Driver();
+					ResultTableModel getShiftsResults = driver.viewShifts(empId, dateStr);
+					if (getShiftsResults.empty) {
+						JOptionPane.showMessageDialog(null, "No shifts found for given DriverID and date. "
+								+ "Ensure date format is YYYY-MM-DD");
+					} else {
+						driverTable.removeAll();
+						driverTable.setModel(getShiftsResults);
+					}
 				}
 			}
 		});
@@ -525,7 +532,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		driverViewWeekShiftsBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -604,7 +611,7 @@ public class TLinkFrame extends JFrame {
 	}
 
 	// OPERATOR SECTION
-	
+
 	private JPanel createOperatorPanel() {
 		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = createRemoveTabPanel();
@@ -619,10 +626,10 @@ public class TLinkFrame extends JFrame {
 		operatorTabs.addTab("View", viewPanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
 		operatorTabs.setVisible(false);
-		
+
 		final JButton operatorLogin = new JButton("Login");
 		final JButton operatorLogout = new JButton("Logout");
-		
+
 		operatorLogin.addActionListener(new ActionListener() {
 
 			@Override
@@ -663,7 +670,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}
 		});
-		
+
 		operatorLogout.addActionListener(new ActionListener() {
 
 			@Override
@@ -674,7 +681,7 @@ public class TLinkFrame extends JFrame {
 				operatorTabs.setVisible(false);
 			}
 		});
-		
+
 		operatorPanel = new JPanel();
 		operatorPanel.setLayout(new BorderLayout());
 		operatorPanel.add(operatorTabs, BorderLayout.CENTER);
@@ -777,7 +784,7 @@ public class TLinkFrame extends JFrame {
 					Stop stop = new Stop();
 					operatorTable.setModel(stop.displayStops());
 				}
-				
+
 				else if (addOption.equals("Driver Vehicle")) {
 					addDriverBtn.setVisible(false);
 					addCustomerBtn.setVisible(false);
@@ -788,7 +795,7 @@ public class TLinkFrame extends JFrame {
 					Driveable driveable = new Driveable();
 					operatorTable.setModel(driveable.displayVehicles());
 				}
-				
+
 				else if (addOption.equals("Driverless Vehicle")) {
 					addDriverBtn.setVisible(false);
 					addCustomerBtn.setVisible(false);
@@ -1045,7 +1052,7 @@ public class TLinkFrame extends JFrame {
 				addPanel.add(capField);
 				addPanel.add(typeLabel);
 				addPanel.add(typeField);
-				
+
 				String title = "Add Driveable Vehicle";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
@@ -1057,7 +1064,7 @@ public class TLinkFrame extends JFrame {
 						String ageStr = ageField.getText().trim();
 						String capStr = capField.getText().trim();
 						String typeStr = typeField.getText().trim();
-						
+
 						if (vidStr.equals("") || ageStr.equals("") || capStr.equals("") || typeStr.equals("")) {
 							JOptionPane.showMessageDialog(null, "Please fill in every field");
 						} else {		
@@ -1082,7 +1089,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}
 		});
-		
+
 		addDriverlessVehicleBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1101,7 +1108,7 @@ public class TLinkFrame extends JFrame {
 				addPanel.add(ageField);
 				addPanel.add(capLabel);
 				addPanel.add(capField);
-				
+
 				String title = "Add Driverless Vehicle";
 				int option = JOptionPane.OK_CANCEL_OPTION;
 				boolean validInput = false;
@@ -1137,7 +1144,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}				
 		});		
-		
+
 		return addPanel;
 	}
 
@@ -1235,7 +1242,7 @@ public class TLinkFrame extends JFrame {
 					Stop stop = new Stop();
 					operatorTable.setModel(stop.displayStops());
 				}
-				
+
 				else if (removeOption.equals("Driver Vehicle")) {
 					removeDriverBtn.setVisible(false);
 					removeCustomerBtn.setVisible(false);
@@ -1246,7 +1253,7 @@ public class TLinkFrame extends JFrame {
 					Driveable driveable = new Driveable();
 					operatorTable.setModel(driveable.displayVehicles());
 				}
-				
+
 				else if (removeOption.equals("Driverless Vehicle")) {
 					removeDriverBtn.setVisible(false);
 					removeCustomerBtn.setVisible(false);
@@ -1408,7 +1415,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}			
 		});
-		
+
 		removeDriverVehicleBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1595,23 +1602,23 @@ public class TLinkFrame extends JFrame {
 
 		return updatePanel;
 	}
-	
+
 	public JPanel createReportTabPanel() {
 		final JTable reportTable = new JTable();
 		JScrollPane reportTableScrollPane = new JScrollPane(reportTable);
 		final JPanel reportPanel = new JPanel();
-		
+
 		String[] options = {"This month", "January", "February", "March", "April", "May", "June", "July", 
 				"August", "September", "October", "November", "December"};
 		final JComboBox<String> monthList = new JComboBox<String>(options);
-		
+
 		String[] reportOptions = {"Select report to view...", "Vehicle"};
 		JComboBox<String> reportList = new JComboBox<String>(reportOptions);
-		
+
 		reportPanel.setLayout(new BorderLayout());
 		reportPanel.add(reportList, BorderLayout.NORTH);
 		reportPanel.add(reportTableScrollPane);
-		
+
 		reportList.addActionListener(new ActionListener() {
 
 			@Override
@@ -1628,7 +1635,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		monthList.addActionListener(new ActionListener() {
 
 			@Override
@@ -1637,7 +1644,7 @@ public class TLinkFrame extends JFrame {
 				String monthOption = (String)cb.getSelectedItem();
 				Vehicle vehicle = new Vehicle();
 				ResultTableModel report = vehicle.searchVehicles(-1);
-				
+
 				if (monthOption.equals("January")) report = vehicle.generateVehicleReport(1);
 				else if (monthOption.equals("February")) report = vehicle.generateVehicleReport(2);
 				else if (monthOption.equals("March")) report = vehicle.generateVehicleReport(3);
@@ -1650,7 +1657,7 @@ public class TLinkFrame extends JFrame {
 				else if (monthOption.equals("October")) report = vehicle.generateVehicleReport(10);
 				else if (monthOption.equals("November")) report = vehicle.generateVehicleReport(11);
 				else if (monthOption.equals("December")) report = vehicle.generateVehicleReport(12);
-				
+
 				else {
 					try {
 						report = vehicle.generateVehicleReport(DATE.getCurrentDate().intValue());
@@ -1658,18 +1665,18 @@ public class TLinkFrame extends JFrame {
 						e.printStackTrace();
 					}
 				}
-				
+
 				if (report.empty) {
 					JOptionPane.showMessageDialog(null, "No report for vehicles this month");
 				}
-				
+
 				reportTable.setModel(report);
 			}
 		});
-		
+
 		return reportPanel;
 	}
-	
+
 	private JPanel createViewTabPanel() {
 		final JTable viewTable = new JTable();
 		JScrollPane viewScrollPane = new JScrollPane(viewTable);
@@ -1699,11 +1706,11 @@ public class TLinkFrame extends JFrame {
 		searchStopBtn.setVisible(false);
 		searchDriverVehicleBtn.setVisible(false);
 		searchDriverlessVehicleBtn.setVisible(false);
-		
+
 		String[] viewOptions = {"Select what to view...", "Customers", "Drivers", "Routes", "Stops", "Driver Vehicles", "Driverless Vehicles"};
 		JComboBox<String> viewList = new JComboBox<String>(viewOptions);
 		viewPanel.setLayout(new BorderLayout());
-		
+
 		viewPanel.add(viewList, BorderLayout.NORTH);
 		viewPanel.add(viewScrollPane);
 		viewPanel.add(viewPane, BorderLayout.SOUTH);
@@ -1721,8 +1728,8 @@ public class TLinkFrame extends JFrame {
 		viewPane.add(searchRouteBtn);
 		viewPane.add(searchDriverVehicleBtn);
 		viewPane.add(searchDriverlessVehicleBtn);
-		
-		
+
+
 		viewList.addActionListener(new ActionListener() {
 
 			@Override
@@ -1814,7 +1821,7 @@ public class TLinkFrame extends JFrame {
 					Stop stop = new Stop();
 					viewTable.setModel(stop.displayStops());
 				}
-				
+
 				else if (addOption.equals("Driver Vehicles")) {
 					viewDriversBtn.setVisible(false);
 					viewCustomersBtn.setVisible(false);
@@ -1831,7 +1838,7 @@ public class TLinkFrame extends JFrame {
 					Driveable driveable = new Driveable();
 					viewTable.setModel(driveable.displayVehicles());
 				}
-				
+
 				else if (addOption.equals("Driverless Vehicles")) {
 					viewDriversBtn.setVisible(false);
 					viewCustomersBtn.setVisible(false);
@@ -1850,7 +1857,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		viewCustomersBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1860,7 +1867,7 @@ public class TLinkFrame extends JFrame {
 				viewTable.setModel(ownsPass.displayOwnsPass());
 			}				
 		});
-		
+
 		searchCustomerBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -1880,7 +1887,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		viewDriversBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1889,7 +1896,7 @@ public class TLinkFrame extends JFrame {
 				viewTable.setModel(driver.displayDrivers());
 			}				
 		});
-		
+
 		searchDriverBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -1908,7 +1915,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		viewRoutesBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1917,7 +1924,7 @@ public class TLinkFrame extends JFrame {
 				viewTable.setModel(route.displayRoutes());
 			}				
 		});
-		
+
 		searchRouteBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -1936,7 +1943,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		viewStopsBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1945,7 +1952,7 @@ public class TLinkFrame extends JFrame {
 				viewTable.setModel(stop.displayStops());
 			}				
 		});
-		
+
 		searchStopBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -1964,7 +1971,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		viewDriverVehiclesBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1973,7 +1980,7 @@ public class TLinkFrame extends JFrame {
 				viewTable.setModel(driveable.displayVehicles());
 			}				
 		});
-		
+
 		searchDriverVehicleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -1992,7 +1999,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		viewDriverlessVehiclesBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -2001,7 +2008,7 @@ public class TLinkFrame extends JFrame {
 				viewTable.setModel(driverless.displayVehicles());
 			}				
 		});
-		
+
 		searchDriverlessVehicleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -2020,7 +2027,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		return viewPanel;
 	}
 }
