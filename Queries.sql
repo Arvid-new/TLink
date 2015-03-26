@@ -1,10 +1,14 @@
 --CUSTOMER----------------------------------------------------------------------------------------------------------------------------
 
-INSERT INTO customer VALUES (?, ?)
+INSERT INTO customer 
+VALUES (?, ?)
 
-DELETE FROM customer WHERE cid =  ?
+DELETE
+ FROM customer 
+ WHERE cid =  ?
 
-SELECT * FROM customer
+SELECT * 
+FROM customer
 
 SELECT cid
 FROM owns_pass O
@@ -18,27 +22,44 @@ WHERE cid =  ? AND
 					WHERE V.vehicleNumber = A.vehicleNumber
 					AND A.cid = O.cid))
 					
-SELECT * FROM customer WHERE cid = ?
+SELECT * 
+FROM customer 
+WHERE cid = ?
 
-SELECT name, C.cid, O.pid, balance FROM customer C, owns_pass O WHERE O.cid = C.cid and C.cid =?
+SELECT name, C.cid, O.pid, balance 
+FROM customer C, owns_pass O 
+WHERE O.cid = C.cid and C.cid =?
 
-UPDATE owns_pass SET balance = balance + ? WHERE cid = ?
+UPDATE owns_pass SET balance = balance + ? 
+WHERE cid = ?
 
-UPDATE customer SET name = ? WHERE cid = ?
+UPDATE customer SET name = ? 
+WHERE cid = ?
 
-SELECT balance FROM owns_pass WHERE cid = ?
+SELECT balance 
+FROM owns_pass 
+WHERE cid = ?
 
-SELECT pid FROM owns_pass WHERE cid = ?
+SELECT pid 
+FROM owns_pass 
+WHERE cid = ?
 
 --Driveable----------------------------------------------------------------------------------------------------------------------------
 
-INSERT INTO driveable VALUES (?, ?)
+INSERT INTO driveable 
+VALUES (?, ?)
 
-DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM driveable) AND vehicleNumber = ?
+DELETE FROM vehicle 
+WHERE vehicleNumber IN (
+	SELECT vehicleNumber FROM driveable) 
+	AND vehicleNumber = ?
 
-SELECT * FROM driveable WHERE vehicleNumber = ?
+SELECT * 
+FROM driveable 
+WHERE vehicleNumber = ?
 
-SELECT D.vehicleNumber, D.type, V.age, V.capacity FROM driveable D INNER JOIN vehicle V ON D.vehicleNumber = V.vehicleNumber
+SELECT D.vehicleNumber, D.type, V.age, V.capacity 
+FROM driveable D INNER JOIN vehicle V ON D.vehicleNumber = V.vehicleNumber
 
 --DrivenBy-----------------------------------------------------------------------------------------------------------------------------
 INSERT INTO driven_by VALUES (?, ?, ?, ?)
