@@ -909,12 +909,16 @@ public class TLinkFrame extends JFrame {
 							if (newName.equals("") || newPhone.equals("") || newAddress.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
-								driver.insertDriver(newDid, newName, newPhone, newAddress);
-								operatorTable.removeAll();							
-								ResultTableModel viewDriverInfo = driver.viewDriverInfo(newDid);
-								operatorTable.setModel(viewDriverInfo);
-								JOptionPane.showMessageDialog(null, "Driver added");
-								validInput = true;
+								boolean success = driver.insertDriver(newDid, newName, newPhone, newAddress);
+								if (success) {
+									operatorTable.removeAll();							
+									ResultTableModel viewDriverInfo = driver.viewDriverInfo(newDid);
+									operatorTable.setModel(viewDriverInfo);
+									JOptionPane.showMessageDialog(null, "Driver added");
+									validInput = true;
+								} else {
+									JOptionPane.showMessageDialog(null, insertError);
+								}
 							}							
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
@@ -967,12 +971,16 @@ public class TLinkFrame extends JFrame {
 							if (newName.equals("") || newStart.equals("") || newEnd.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
-								route.insertRoute(newRid, newName, newStart, newEnd);
-								operatorTable.removeAll();							
-								ResultTableModel viewRouteInfo = route.displayRoutes();
-								operatorTable.setModel(viewRouteInfo);
-								JOptionPane.showMessageDialog(null, "Route added");
-								validInput = true;
+								boolean success = route.insertRoute(newRid, newName, newStart, newEnd);
+								if (success) {
+									operatorTable.removeAll();							
+									ResultTableModel viewRouteInfo = route.displayRoutes();
+									operatorTable.setModel(viewRouteInfo);
+									JOptionPane.showMessageDialog(null, "Route added");
+									validInput = true;
+								} else {
+									JOptionPane.showMessageDialog(null, insertError);
+								}
 							}							
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
@@ -1019,12 +1027,16 @@ public class TLinkFrame extends JFrame {
 							if (newName.equals("") || newLocation.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
 							} else {							
-								stop.insertStop(newSid, newName, newLocation);
-								operatorTable.removeAll();							
-								ResultTableModel viewStopInfo = stop.displayStops();
-								operatorTable.setModel(viewStopInfo);
-								JOptionPane.showMessageDialog(null, "Stop added");
-								validInput = true;
+								boolean success = stop.insertStop(newSid, newName, newLocation);
+								if (success) {
+									operatorTable.removeAll();							
+									ResultTableModel viewStopInfo = stop.displayStops();
+									operatorTable.setModel(viewStopInfo);
+									JOptionPane.showMessageDialog(null, "Stop added");
+									validInput = true;
+								} else {
+									JOptionPane.showMessageDialog(null, insertError);
+								}
 							}							
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
@@ -1079,12 +1091,16 @@ public class TLinkFrame extends JFrame {
 								int newAge = Integer.parseInt(ageField.getText().trim());
 								int newCap = Integer.parseInt(capField.getText().trim());
 								Driveable driveable = new Driveable();			
-								driveable.insertVehicle(newVid, newAge, newCap, typeStr);
-								operatorTable.removeAll();							
-								ResultTableModel viewDriverlessInfo = driveable.displayVehicles();
-								operatorTable.setModel(viewDriverlessInfo);
-								JOptionPane.showMessageDialog(null, "Driveable vehicle added");
-								validInput = true;								
+								boolean success = driveable.insertVehicle(newVid, newAge, newCap, typeStr);
+								if (success) {
+									operatorTable.removeAll();							
+									ResultTableModel viewDriverlessInfo = driveable.displayVehicles();
+									operatorTable.setModel(viewDriverlessInfo);
+									JOptionPane.showMessageDialog(null, "Driveable vehicle added");
+									validInput = true;
+								} else {
+									JOptionPane.showMessageDialog(null, insertError);
+								}
 							} catch (NumberFormatException nfe) {
 								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
 							}
@@ -1134,12 +1150,16 @@ public class TLinkFrame extends JFrame {
 								int newAge = Integer.parseInt(ageField.getText().trim());
 								int newCap = Integer.parseInt(capField.getText().trim());								
 								Driverless driverless = new Driverless();			
-								driverless.insertVehicle(newVid, newAge, newCap);
-								operatorTable.removeAll();							
-								ResultTableModel viewDriverlessInfo = driverless.displayVehicles();
-								operatorTable.setModel(viewDriverlessInfo);
-								JOptionPane.showMessageDialog(null, "Driverless vehicle added");
-								validInput = true;								
+								boolean success = driverless.insertVehicle(newVid, newAge, newCap);
+								if (success) {
+									operatorTable.removeAll();							
+									ResultTableModel viewDriverlessInfo = driverless.displayVehicles();
+									operatorTable.setModel(viewDriverlessInfo);
+									JOptionPane.showMessageDialog(null, "Driverless vehicle added");
+									validInput = true;	
+								} else {
+									JOptionPane.showMessageDialog(null, insertError);
+								}
 							} catch (NumberFormatException nfe) {
 								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
 							}
@@ -1335,13 +1355,16 @@ public class TLinkFrame extends JFrame {
 						try {
 							int did = Integer.parseInt(didField.getText().trim());			
 							Driver driver = new Driver();
-
-							driver.deleteDriver(did);
-							operatorTable.removeAll();							
-							ResultTableModel viewDriverInfo = driver.displayDrivers();
-							operatorTable.setModel(viewDriverInfo);
-							JOptionPane.showMessageDialog(null, "Driver " + did + " removed");
-							validInput = true;							
+							boolean success = driver.deleteDriver(did);
+							if (success) {
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverInfo = driver.displayDrivers();
+								operatorTable.setModel(viewDriverInfo);
+								JOptionPane.showMessageDialog(null, "Driver " + did + " removed");
+								validInput = true;
+							} else {
+								JOptionPane.showMessageDialog(null, deleteError);
+							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
 						};
@@ -1373,12 +1396,16 @@ public class TLinkFrame extends JFrame {
 						try {
 							int rid = Integer.parseInt(ridField.getText().trim());			
 							Route route = new Route();							
-							route.deleteRoute(rid);
-							operatorTable.removeAll();							
-							ResultTableModel viewRouteInfo = route.displayRoutes();
-							operatorTable.setModel(viewRouteInfo);
-							JOptionPane.showMessageDialog(null, "Route removed");
-							validInput = true;						
+							boolean success = route.deleteRoute(rid);
+							if (success) {
+								operatorTable.removeAll();							
+								ResultTableModel viewRouteInfo = route.displayRoutes();
+								operatorTable.setModel(viewRouteInfo);
+								JOptionPane.showMessageDialog(null, "Route removed");
+								validInput = true;	
+							} else {
+								JOptionPane.showMessageDialog(null, deleteError);
+							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
 						};
@@ -1410,12 +1437,16 @@ public class TLinkFrame extends JFrame {
 						try {
 							int sid = Integer.parseInt(sidField.getText().trim());			
 							Stop stop = new Stop();						
-							stop.deleteStop(sid);
-							operatorTable.removeAll();							
-							ResultTableModel viewStopInfo = stop.displayStops();
-							operatorTable.setModel(viewStopInfo);
-							JOptionPane.showMessageDialog(null, "Stop removed");
-							validInput = true;					
+							boolean success = stop.deleteStop(sid);
+							if (success) {
+								operatorTable.removeAll();							
+								ResultTableModel viewStopInfo = stop.displayStops();
+								operatorTable.setModel(viewStopInfo);
+								JOptionPane.showMessageDialog(null, "Stop removed");
+								validInput = true;	
+							} else {
+								JOptionPane.showMessageDialog(null, deleteError);
+							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
 						};
@@ -1446,16 +1477,57 @@ public class TLinkFrame extends JFrame {
 					if(input == JOptionPane.OK_OPTION) {
 						try {
 							int vid = Integer.parseInt(vidField.getText().trim());			
-							Driveable driveable = new Driveable();
-							if (!driveable.searchVehicles(vid).empty) {
-								driveable.deleteVehicle(vid);
+							Driveable driveable = new Driveable();		
+							boolean success = driveable.deleteVehicle(vid);
+							if (success) {
 								operatorTable.removeAll();							
 								ResultTableModel viewDriverVehicleInfo = driveable.displayVehicles();
 								operatorTable.setModel(viewDriverVehicleInfo);
 								JOptionPane.showMessageDialog(null, "Vehicle removed");
-								validInput = true;	
+								validInput = true;
 							} else {
-								JOptionPane.showMessageDialog(null, "Driver ID not found - please try again");								
+								JOptionPane.showMessageDialog(null, deleteError);
+							}
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}	
+		});
+		
+		removeDriverlessVehicleBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel removePanel = new JPanel();
+				removePanel.setLayout(new GridLayout(0, 1));
+				JLabel vidLabel = new JLabel("Enter vehicle number:");
+				JTextField vidField = new JTextField();
+				removePanel.add(vidLabel);
+				removePanel.add(vidField);
+
+				String title = "Remove Vehicle";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, removePanel, title, option);
+					if(input == JOptionPane.OK_OPTION) {
+						try {
+							int vid = Integer.parseInt(vidField.getText().trim());			
+							Driverless driverless = new Driverless();		
+							boolean success = driverless.deleteVehicle(vid);
+							if (success) {
+								operatorTable.removeAll();							
+								ResultTableModel viewDriverVehicleInfo = driverless.displayVehicles();
+								operatorTable.setModel(viewDriverVehicleInfo);
+								JOptionPane.showMessageDialog(null, "Vehicle removed");
+								validInput = true;
+							} else {
+								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");

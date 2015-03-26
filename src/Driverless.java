@@ -30,7 +30,7 @@ public class Driverless extends Vehicle {
 	public boolean deleteVehicle(int vehicleNumber) {
 		try {
 			Statement stmt = con.createStatement();
-			int rows = stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM Driverless) AND vehicleNumber = " + vehicleNumber);
+			int rows = stmt.executeUpdate("DELETE FROM vehicle WHERE vehicleNumber IN (SELECT vehicleNumber FROM driverless) AND vehicleNumber = " + vehicleNumber);
 			stmt.close();
 			return (rows != 0) ? true : false;
 		}
