@@ -1618,7 +1618,6 @@ public class TLinkFrame extends JFrame {
 				Vehicle vehicle = new Vehicle();
 				ResultTableModel report = vehicle.searchVehicles(-1);
 				
-
 				if (monthOption.equals("January")) report = vehicle.generateVehicleReport(1);
 				else if (monthOption.equals("February")) report = vehicle.generateVehicleReport(2);
 				else if (monthOption.equals("March")) report = vehicle.generateVehicleReport(3);
@@ -1631,13 +1630,17 @@ public class TLinkFrame extends JFrame {
 				else if (monthOption.equals("October")) report = vehicle.generateVehicleReport(10);
 				else if (monthOption.equals("November")) report = vehicle.generateVehicleReport(11);
 				else if (monthOption.equals("December")) report = vehicle.generateVehicleReport(12);
-
+				
 				else {
 					try {
 						report = vehicle.generateVehicleReport(DATE.getCurrentDate().intValue());
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
+				}
+				
+				if (report.empty) {
+					JOptionPane.showMessageDialog(null, "No report for vehicles this month");
 				}
 				
 				reportTable.setModel(report);
