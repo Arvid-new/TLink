@@ -99,12 +99,17 @@ WHERE empId = ?
 
 SELECT * 
 FROM driven_by 
-WHERE empId = ? AND 
-fromDate LIKE ' ?%'
+WHERE empId = ? AND DATE_FORMAT(fromDate, '%Y-%m-%d') = ? 
+ORDER BY fromDate
 
 SELECT * 
 FROM driver 
 WHERE empID = ?
+
+SELECT * 
+FROM driven_by 
+WHERE empId = ? AND WEEK(fromDate, 1) = WEEK(CURRENT_DATE)
+ORDER BY fromDate
 
 --Driverless-----------------------------------------------------------------------------------------------------------------------------
 INSERT INTO driverless 
