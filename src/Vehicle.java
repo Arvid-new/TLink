@@ -77,7 +77,8 @@ public class Vehicle {
 		
 		try	{
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT vehicleNumber, COUNT(vehicleNumber) "
+			ResultSet rs = stmt.executeQuery("SELECT vehicleNumber AS 'Vehicle Number', "
+					+ "COUNT(vehicleNumber) AS 'Number of vehicles' "
 					+ "FROM driven_by WHERE MONTH(fromDate) = " + month + " GROUP BY vehicleNumber");
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
