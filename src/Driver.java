@@ -127,7 +127,7 @@ public class Driver {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM driven_by WHERE empId = " + empId + 
-					" AND fromDate LIKE '" + date + "%'");
+					" AND DATE_FORMAT(fromDate, '%Y-%m-%d') = '" + date + "'");
 			ResultTableModel rtm = new ResultTableModel(rs);
 			stmt.close();
 			return rtm;
