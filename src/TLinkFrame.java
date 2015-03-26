@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -52,6 +53,7 @@ public class TLinkFrame extends JFrame {
 	private JLabel welcome;
 
 	private int empId = -1;
+	private String password = "bossman";
 
 	public static void main(String[] args) {
 		try {
@@ -568,8 +570,6 @@ public class TLinkFrame extends JFrame {
 			}
 		});		
 
-
-
 		driverPanel = new JPanel();
 		driverPanel.setLayout(new BorderLayout());
 		driverPanel.add(driverScrollPane);
@@ -583,14 +583,71 @@ public class TLinkFrame extends JFrame {
 		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = createRemoveTabPanel();
 		JPanel updatePanel = createUpdateTabPanel();
-		JTabbedPane operatorTabs = new JTabbedPane();
+		final JTabbedPane operatorTabs = new JTabbedPane();
 		operatorTabs.add("Add", addPanel);
 		operatorTabs.add("Remove", removePanel);
 		operatorTabs.addTab("Update", updatePanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
+		operatorTabs.setVisible(false);
+		
+		final JButton operatorLogin = new JButton("Login");
+		final JButton operatorLogout = new JButton("Logout");
+		
+		operatorLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JPanel loginPanel = new JPanel();
+				loginPanel.setLayout(new GridLayout(0, 1));
+				JLabel loginLabel = new JLabel("Enter Operator Password:");
+				JPasswordField loginField = new JPasswordField();
+				loginPanel.add(loginLabel);
+				loginPanel.add(loginField);
+
+				String title = "Operator Login";
+				int option = JOptionPane.OK_CANCEL_OPTION;
+				boolean validInput = false;
+
+				do {
+					int input = JOptionPane.showConfirmDialog(null, loginPanel, title, option);
+					if (input == JOptionPane.OK_OPTION) {
+						try {
+							String pw = loginField.getText();;
+							if (!pw.equals(password)) {
+								JOptionPane.showMessageDialog(null, "Login failed");
+							}
+							else {
+								welcome.setText("Welcome, operator");
+								operatorPanel.remove(operatorLogin);
+								operatorPanel.add(operatorLogout, BorderLayout.NORTH);
+								operatorTabs.setVisible(true);
+								validInput = true;
+							}
+						} catch (NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Login failed");
+						};
+					} else {
+						validInput = true;
+					}
+				} while (!validInput);
+			}
+		});
+		
+		operatorLogout.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				welcome.setText("Welcome, Guest");
+				operatorPanel.remove(operatorLogout);
+				operatorPanel.add(operatorLogin, BorderLayout.NORTH);
+				operatorTabs.setVisible(false);
+			}
+		});
+		
 		operatorPanel = new JPanel();
 		operatorPanel.setLayout(new BorderLayout());
 		operatorPanel.add(operatorTabs, BorderLayout.CENTER);
+		operatorPanel.add(operatorLogin, BorderLayout.NORTH);
 		return operatorPanel;
 	}
 
