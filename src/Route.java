@@ -87,4 +87,18 @@ public class Route {
 			return null;
 		}
 	}
+	
+	public ResultTableModel searchRoutes(int rid) {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM route WHERE routeNumber = " + rid);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
 }

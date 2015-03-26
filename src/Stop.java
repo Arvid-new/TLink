@@ -74,6 +74,21 @@ public class Stop {
 		}
 	}
 	
+public ResultTableModel searchStops(int sid) {
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM stop WHERE stopNumber = " + sid);
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
+	
 	public ResultTableModel findAllRoutes(int stopNum) {
 		
 		try {

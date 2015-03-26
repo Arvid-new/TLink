@@ -55,4 +55,19 @@ public class OwnsPass {
 				return null;
 			}
 		}
+		
+		public ResultTableModel searchOwnsPass(int cid) {
+			
+			try {
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT C.cid, name, O.pid, balance FROM customer C NATURAL JOIN owns_pass O WHERE C.cid = " + cid);
+				ResultTableModel rtm = new ResultTableModel(rs);
+				stmt.close();
+				return rtm;
+			}
+			catch (SQLException ex) {
+				//TODO
+				return null;
+			}
+		}
 }

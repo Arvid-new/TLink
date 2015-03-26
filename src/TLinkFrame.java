@@ -583,16 +583,20 @@ public class TLinkFrame extends JFrame {
 		return driverPanel;
 	}
 
+	// OPERATOR SECTION
+	
 	private JPanel createOperatorPanel() {
 		JPanel addPanel = createAddTabPanel();
 		JPanel removePanel = createRemoveTabPanel();
 		JPanel updatePanel = createUpdateTabPanel();
 		JPanel reportPanel = createReportTabPanel();
+		JPanel viewPanel = createViewTabPanel();
 		final JTabbedPane operatorTabs = new JTabbedPane();
 		operatorTabs.add("Add", addPanel);
 		operatorTabs.add("Remove", removePanel);
 		operatorTabs.addTab("Update", updatePanel);
 		operatorTabs.addTab("Report", reportPanel);
+		operatorTabs.addTab("View", viewPanel);
 		operatorTabs.setTabPlacement(JTabbedPane.LEFT);
 		operatorTabs.setVisible(false);
 		
@@ -1641,5 +1645,359 @@ public class TLinkFrame extends JFrame {
 		});
 		
 		return reportPanel;
+	}
+	
+	private JPanel createViewTabPanel() {
+		final JTable viewTable = new JTable();
+		JScrollPane viewScrollPane = new JScrollPane(viewTable);
+		JPanel viewPanel = new JPanel();
+		JPanel viewPane = new JPanel();
+		final JButton viewCustomersBtn = new JButton("View Customers");
+		final JButton viewDriversBtn = new JButton("View Drivers");
+		final JButton viewRoutesBtn = new JButton("View Routes");
+		final JButton viewStopsBtn = new JButton("View Stops");
+		final JButton viewDriverVehiclesBtn = new JButton("View Driver Vehicles");
+		final JButton viewDriverlessVehiclesBtn = new JButton("View Driverless Vehicles");
+		final JButton searchCustomerBtn = new JButton("Search Customer");
+		final JButton searchDriverBtn = new JButton("Search Driver");
+		final JButton searchRouteBtn = new JButton("Search Route");
+		final JButton searchStopBtn = new JButton("Search Stop");
+		final JButton searchDriverVehicleBtn = new JButton("Search Driver Vehicle");
+		final JButton searchDriverlessVehicleBtn = new JButton("Search Driverless Vehicle");
+		viewCustomersBtn.setVisible(false);
+		viewDriversBtn.setVisible(false);
+		viewRoutesBtn.setVisible(false);
+		viewStopsBtn.setVisible(false);
+		viewDriverVehiclesBtn.setVisible(false);
+		viewDriverlessVehiclesBtn.setVisible(false);
+		searchCustomerBtn.setVisible(false);
+		searchDriverBtn.setVisible(false);
+		searchRouteBtn.setVisible(false);
+		searchStopBtn.setVisible(false);
+		searchDriverVehicleBtn.setVisible(false);
+		searchDriverlessVehicleBtn.setVisible(false);
+		
+		String[] viewOptions = {"Select what to view...", "Customers", "Drivers", "Routes", "Stops", "Driver Vehicles", "Driverless Vehicles"};
+		JComboBox<String> viewList = new JComboBox<String>(viewOptions);
+		viewPanel.setLayout(new BorderLayout());
+		
+		viewPanel.add(viewList, BorderLayout.NORTH);
+		viewPanel.add(viewScrollPane);
+		viewPanel.add(viewPane, BorderLayout.SOUTH);
+		OverlayLayout overlay = new OverlayLayout(viewPane);
+		viewPane.setLayout(overlay);
+		viewPane.add(viewCustomersBtn);
+		viewPane.add(viewDriversBtn);
+		viewPane.add(viewRoutesBtn);
+		viewPane.add(viewStopsBtn);
+		viewPane.add(viewDriverVehiclesBtn);
+		viewPane.add(viewDriverlessVehiclesBtn);
+		viewPane.add(searchCustomerBtn);
+		viewPane.add(searchDriverBtn);
+		viewPane.add(searchStopBtn);
+		viewPane.add(searchRouteBtn);
+		viewPane.add(searchDriverVehicleBtn);
+		viewPane.add(searchDriverlessVehicleBtn);
+		
+		
+		viewList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
+				String addOption = (String)cb.getSelectedItem();
+
+				if (addOption.equals("Select what to view...")) {
+					viewCustomersBtn.setVisible(false);
+					viewDriversBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(false);
+					Customer customer = new Customer();
+					viewTable.setModel(customer.displayBalance(-1));
+				}
+
+				else if (addOption.equals("Customers")) {
+					viewCustomersBtn.setVisible(true);
+					viewDriversBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(true);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(false);
+					OwnsPass ownsPass = new OwnsPass();
+					viewTable.setModel(ownsPass.displayOwnsPass());
+				}
+
+				else if (addOption.equals("Drivers")) {
+					viewDriversBtn.setVisible(true);
+					viewCustomersBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(true);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(false);
+					Driver driver = new Driver();
+					viewTable.setModel(driver.displayDrivers());
+				}
+
+				else if (addOption.equals("Routes")) {
+					viewDriversBtn.setVisible(false);
+					viewCustomersBtn.setVisible(false);
+					viewRoutesBtn.setVisible(true);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(true);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(false);
+					Route route = new Route();
+					viewTable.setModel(route.displayRoutes());
+				}
+
+				else if (addOption.equals("Stops")) {
+					viewDriversBtn.setVisible(false);
+					viewCustomersBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(true);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(true);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(false);
+					Stop stop = new Stop();
+					viewTable.setModel(stop.displayStops());
+				}
+				
+				else if (addOption.equals("Driver Vehicles")) {
+					viewDriversBtn.setVisible(false);
+					viewCustomersBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(true);
+					viewDriverlessVehiclesBtn.setVisible(false);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(true);
+					searchDriverlessVehicleBtn.setVisible(false);
+					Driveable driveable = new Driveable();
+					viewTable.setModel(driveable.displayVehicles());
+				}
+				
+				else if (addOption.equals("Driverless Vehicles")) {
+					viewDriversBtn.setVisible(false);
+					viewCustomersBtn.setVisible(false);
+					viewRoutesBtn.setVisible(false);
+					viewStopsBtn.setVisible(false);
+					viewDriverVehiclesBtn.setVisible(false);
+					viewDriverlessVehiclesBtn.setVisible(true);
+					searchCustomerBtn.setVisible(false);
+					searchDriverBtn.setVisible(false);
+					searchRouteBtn.setVisible(false);
+					searchStopBtn.setVisible(false);
+					searchDriverVehicleBtn.setVisible(false);
+					searchDriverlessVehicleBtn.setVisible(true);
+					Driverless driverless = new Driverless();
+					viewTable.setModel(driverless.displayVehicles());
+				}
+			}
+		});
+		
+		viewCustomersBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Customer customer = new Customer();
+				OwnsPass ownsPass = new OwnsPass();
+				viewTable.setModel(ownsPass.displayOwnsPass());
+			}				
+		});
+		
+		searchCustomerBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int cid = -1;
+				cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
+				if(cid != -1) {
+					Customer customer = new Customer();
+					OwnsPass ownsPass = new OwnsPass();
+					ResultTableModel search = ownsPass.searchOwnsPass(cid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No customer found");
+					}
+					else {
+						viewTable.removeAll();
+						viewTable.setModel(search);
+					}
+				}
+			}
+		});
+		
+		viewDriversBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Driver driver = new Driver();
+				viewTable.setModel(driver.displayDrivers());
+			}				
+		});
+		
+		searchDriverBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int did = -1;
+				did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID"));
+				if(did != -1) {
+					Driver driver = new Driver();
+					ResultTableModel search = driver.viewDriverInfo(did);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No driver found");
+					}
+					else {
+						viewTable.removeAll();
+						viewTable.setModel(search);
+					}
+				}
+			}
+		});
+		
+		viewRoutesBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Route route = new Route();
+				viewTable.setModel(route.displayRoutes());
+			}				
+		});
+		
+		searchRouteBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int rid = -1;
+				rid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Route ID"));
+				if(rid != -1) {
+					Route route = new Route();
+					ResultTableModel search = route.searchRoutes(rid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No route found");
+					}
+					else {
+						viewTable.removeAll();
+						viewTable.setModel(search);
+					}
+				}
+			}
+		});
+		
+		viewStopsBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Stop stop = new Stop();
+				viewTable.setModel(stop.displayStops());
+			}				
+		});
+		
+		searchStopBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int sid = -1;
+				sid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Stop ID"));
+				if(sid != -1) {
+					Stop stop = new Stop();
+					ResultTableModel search = stop.searchStops(sid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No stop found");
+					}
+					else {
+						viewTable.removeAll();
+						viewTable.setModel(search);
+					}
+				}
+			}
+		});
+		
+		viewDriverVehiclesBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Driveable driveable = new Driveable();
+				viewTable.setModel(driveable.displayVehicles());
+			}				
+		});
+		
+		searchDriverVehicleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int vid = -1;
+				vid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Vehicle ID"));
+				if(vid != -1) {
+					Driveable driveable = new Driveable();
+					ResultTableModel search = driveable.searchVehicles(vid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No driver vehicle found");
+					}
+					else {
+						viewTable.removeAll();
+						viewTable.setModel(search);
+					}
+				}
+			}
+		});
+		
+		viewDriverlessVehiclesBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Driverless driverless = new Driverless();
+				viewTable.setModel(driverless.displayVehicles());
+			}				
+		});
+		
+		searchDriverlessVehicleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int vid = -1;
+				vid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Vehicle ID"));
+				if(vid != -1) {
+					Driverless driverless = new Driverless();
+					ResultTableModel search = driverless.searchVehicles(vid);
+					if (search.empty) {
+						JOptionPane.showMessageDialog(null, "No driverless vehicle found");
+					}
+					else {
+						viewTable.removeAll();
+						viewTable.setModel(search);
+					}
+				}
+			}
+		});
+		
+		return viewPanel;
 	}
 }
