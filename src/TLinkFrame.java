@@ -60,6 +60,7 @@ public class TLinkFrame extends JFrame {
 	private String deleteError = "Removal failed.\n" +
 			  "The application cannot connect to the database or" + 
 			  " the identifier does not exist";
+	private String negativeError = "Please check entries that are negative or zero";
 	private int empId = -1;
 	private String password = "bossman";
 
@@ -1086,16 +1087,23 @@ public class TLinkFrame extends JFrame {
 								int newVid = Integer.parseInt(vidField.getText().trim());
 								int newAge = Integer.parseInt(ageField.getText().trim());
 								int newCap = Integer.parseInt(capField.getText().trim());
-								Driveable driveable = new Driveable();			
-								boolean success = driveable.insertVehicle(newVid, newAge, newCap, typeStr);
-								if (success) {
-									operatorTable.removeAll();							
-									ResultTableModel viewDriverlessInfo = driveable.displayVehicles();
-									operatorTable.setModel(viewDriverlessInfo);
-									JOptionPane.showMessageDialog(null, "Driveable vehicle added");
-									validInput = true;
+								
+								// Check constraint
+								
+								if (newVid > 0 && newAge >= 0 && newCap > 0) {
+									Driveable driveable = new Driveable();			
+									boolean success = driveable.insertVehicle(newVid, newAge, newCap, typeStr);
+									if (success) {
+										operatorTable.removeAll();							
+										ResultTableModel viewDriverlessInfo = driveable.displayVehicles();
+										operatorTable.setModel(viewDriverlessInfo);
+										JOptionPane.showMessageDialog(null, "Driveable vehicle added");
+										validInput = true;
+									} else {
+										JOptionPane.showMessageDialog(null, insertError);
+									}
 								} else {
-									JOptionPane.showMessageDialog(null, insertError);
+									JOptionPane.showMessageDialog(null, negativeError);
 								}
 							} catch (NumberFormatException nfe) {
 								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
@@ -1144,17 +1152,24 @@ public class TLinkFrame extends JFrame {
 							try {
 								int newVid = Integer.parseInt(vidField.getText().trim());
 								int newAge = Integer.parseInt(ageField.getText().trim());
-								int newCap = Integer.parseInt(capField.getText().trim());								
-								Driverless driverless = new Driverless();			
-								boolean success = driverless.insertVehicle(newVid, newAge, newCap);
-								if (success) {
-									operatorTable.removeAll();							
-									ResultTableModel viewDriverlessInfo = driverless.displayVehicles();
-									operatorTable.setModel(viewDriverlessInfo);
-									JOptionPane.showMessageDialog(null, "Driverless vehicle added");
-									validInput = true;	
+								int newCap = Integer.parseInt(capField.getText().trim());
+								
+								// Check constraint
+								
+								if(newVid > 0 && newAge >= 0 && newCap > 0) {
+									Driverless driverless = new Driverless();			
+									boolean success = driverless.insertVehicle(newVid, newAge, newCap);
+									if (success) {
+										operatorTable.removeAll();							
+										ResultTableModel viewDriverlessInfo = driverless.displayVehicles();
+										operatorTable.setModel(viewDriverlessInfo);
+										JOptionPane.showMessageDialog(null, "Driverless vehicle added");
+										validInput = true;	
+									} else {
+										JOptionPane.showMessageDialog(null, insertError);
+									}
 								} else {
-									JOptionPane.showMessageDialog(null, insertError);
+									JOptionPane.showMessageDialog(null, negativeError);
 								}
 							} catch (NumberFormatException nfe) {
 								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
@@ -1656,18 +1671,21 @@ public class TLinkFrame extends JFrame {
 					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
 					if(input == JOptionPane.OK_OPTION) {
 						try {
-							int newCid = Integer.parseInt(cidField.getText().trim());	
-							int newPid = Integer.parseInt(pidField.getText().trim());		
+							int newCid = Integer.parseInt(cidField.getText().trim());			
 							int newBalance = Integer.parseInt(balanceField.getText().trim());
-							Customer customer = new Customer();
-
-							customer.updateBalance(newCid, newBalance);
-							operatorTable.removeAll();							
-							ResultTableModel customerModel = customer.displayCustomers();
-							operatorTable.setModel(customerModel);
-							JOptionPane.showMessageDialog(null, "Balance updated");
-							validInput = true;
-
+							
+							if (newBalance > 0) {
+								Customer customer = new Customer();
+								customer.updateBalance(newCid, newBalance);
+								OwnsPass ownsPass = new OwnsPass();
+								operatorTable.removeAll();							
+								ResultTableModel viewOwnsPassInfo = ownsPass.displayOwnsPass();
+								operatorTable.setModel(viewOwnsPassInfo);
+								JOptionPane.showMessageDialog(null, "Balance updated");
+								validInput = true;
+							} else {
+								JOptionPane.showMessageDialog(null, negativeError);
+							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
 						};
