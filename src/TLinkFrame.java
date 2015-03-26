@@ -425,11 +425,10 @@ public class TLinkFrame extends JFrame {
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
 
-		final JPanel loginMenu = new JPanel();
-		loginMenu.setLayout(new GridLayout(1,2));
-		loginMenu.add(loginBtn);
-
-
+		final JPanel menuBase = new JPanel();		
+		menuBase.setLayout(new BorderLayout());
+		menuBase.add(loginBtn, BorderLayout.NORTH);
+		
 		// Add Buttons to driverMenu
 		driverMenu = new JPanel();
 		driverMenu.setLayout(new GridLayout(1, 3));
@@ -438,6 +437,7 @@ public class TLinkFrame extends JFrame {
 		driverMenu.add(driverViewWeekShiftsBtn);
 		driverMenu.add(driverUpdateInfoBtn);
 		driverMenu.setVisible(false);
+		menuBase.add(driverMenu, BorderLayout.SOUTH);
 
 		loginBtn.addActionListener(new ActionListener() {
 
@@ -469,10 +469,8 @@ public class TLinkFrame extends JFrame {
 								String name = passResults.getValueAt(0, 1).toString();
 								welcome.setText("Welcome, " + name);
 								driverMenu.setVisible(true);
-								loginMenu.add(logoutBtn);
-								loginMenu.remove(loginBtn);
-								/*driverPanel.revalidate();
-								driverPanel.repaint();*/
+								menuBase.add(logoutBtn, BorderLayout.NORTH);
+								menuBase.remove(loginBtn);
 								driverTable.removeAll();
 								driverTable.setModel(passResults);
 								validInput = true;
@@ -494,8 +492,8 @@ public class TLinkFrame extends JFrame {
 				Driver driver = new Driver();
 				welcome.setText("Welcome, Guest");
 				empId = -1;
-				loginMenu.add(loginBtn);
-				loginMenu.remove(logoutBtn);
+				menuBase.add(loginBtn, BorderLayout.NORTH);
+				menuBase.remove(logoutBtn);
 				driverTable.removeAll();
 				driverTable.setModel(driver.login(-1));
 				driverMenu.setVisible(false);
@@ -607,9 +605,7 @@ public class TLinkFrame extends JFrame {
 		driverPanel = new JPanel();
 		driverPanel.setLayout(new BorderLayout());
 		driverPanel.add(driverScrollPane);
-		driverPanel.add(loginMenu, BorderLayout.SOUTH);
-		//driverPanel.add(resetBtn, BorderLayout.SOUTH);
-		driverPanel.add(driverMenu, BorderLayout.NORTH);
+		driverPanel.add(menuBase, BorderLayout.NORTH);
 		return driverPanel;
 	}
 
