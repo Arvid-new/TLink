@@ -408,6 +408,7 @@ public class TLinkFrame extends JFrame {
 
 		JButton driverUpdateInfoBtn = new JButton("Update Information");
 		JButton driverViewAllShiftsBtn = new JButton("View All Shifts");
+		JButton driverViewWeekShiftsBtn = new JButton("View All Shifts This Week");
 		JButton driverGetShiftsBtn = new JButton("Get Shifts");
 		final JButton logoutBtn = new JButton("Logout");
 		final JButton loginBtn = new JButton("Login");
@@ -422,6 +423,7 @@ public class TLinkFrame extends JFrame {
 		driverMenu.setLayout(new GridLayout(1, 3));
 		driverMenu.add(driverGetShiftsBtn);
 		driverMenu.add(driverViewAllShiftsBtn);
+		driverMenu.add(driverViewWeekShiftsBtn);
 		driverMenu.add(driverUpdateInfoBtn);
 		driverMenu.setVisible(false);
 
@@ -514,6 +516,22 @@ public class TLinkFrame extends JFrame {
 				ResultTableModel viewAllShiftsResults = driver.viewAllShifts(empId);
 				if (viewAllShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
+				}
+				else {
+					driverTable.removeAll();
+					driverTable.setModel(viewAllShiftsResults);
+				}
+			}
+		});
+		
+		driverViewWeekShiftsBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Driver driver = new Driver();
+				ResultTableModel viewAllShiftsResults = driver.viewWeekShifts(empId);
+				if (viewAllShiftsResults.empty) {
+					JOptionPane.showMessageDialog(null, "No shifts this week.");
 				}
 				else {
 					driverTable.removeAll();
