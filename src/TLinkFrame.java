@@ -309,6 +309,9 @@ public class TLinkFrame extends JFrame {
 					customerMenu.add(updateBalanceBtn);
 					customerMenu.add(logoutBtn);
 					customerMenu.remove(loginBtn);
+					if(customer.accessedAllVehicles(cid)){
+						JOptionPane.showMessageDialog(customerMenu, "You have been on every vehicle.", "Congratulations!", JOptionPane.PLAIN_MESSAGE);
+					}
 					customerPanel.revalidate();
 					customerPanel.repaint();
 					customerTable.removeAll();
@@ -499,8 +502,7 @@ public class TLinkFrame extends JFrame {
 				if (getShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID and date. "
 							+ "Ensure date format is YYYY-MM-DD");
-				}
-				else {
+				} else {
 					driverTable.removeAll();
 					driverTable.setModel(getShiftsResults);
 				}
@@ -515,8 +517,7 @@ public class TLinkFrame extends JFrame {
 				ResultTableModel viewAllShiftsResults = driver.viewAllShifts(empId);
 				if (viewAllShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
-				}
-				else {
+				} else {
 					driverTable.removeAll();
 					driverTable.setModel(viewAllShiftsResults);
 				}
