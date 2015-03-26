@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -308,6 +309,9 @@ public class TLinkFrame extends JFrame {
 					customerMenu.add(updateBalanceBtn);
 					customerMenu.add(logoutBtn);
 					customerMenu.remove(loginBtn);
+					if(customer.accessedAllVehicles(cid)){
+						JOptionPane.showMessageDialog(customerMenu, "You have been on every vehicle.", "Congratulations!", JOptionPane.PLAIN_MESSAGE);
+					}
 					customerPanel.revalidate();
 					customerPanel.repaint();
 					customerTable.removeAll();
@@ -500,8 +504,7 @@ public class TLinkFrame extends JFrame {
 				if (getShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID and date. "
 							+ "Ensure date format is YYYY-MM-DD");
-				}
-				else {
+				} else {
 					driverTable.removeAll();
 					driverTable.setModel(getShiftsResults);
 				}
@@ -516,8 +519,7 @@ public class TLinkFrame extends JFrame {
 				ResultTableModel viewAllShiftsResults = driver.viewAllShifts(empId);
 				if (viewAllShiftsResults.empty) {
 					JOptionPane.showMessageDialog(null, "No shifts found for given DriverID");
-				}
-				else {
+				} else {
 					driverTable.removeAll();
 					driverTable.setModel(viewAllShiftsResults);
 				}
@@ -1673,12 +1675,12 @@ public class TLinkFrame extends JFrame {
 		JScrollPane viewScrollPane = new JScrollPane(viewTable);
 		JPanel viewPanel = new JPanel();
 		JPanel viewPane = new JPanel();
-		final JButton viewCustomersBtn = new JButton("View Customers");
-		final JButton viewDriversBtn = new JButton("View Drivers");
-		final JButton viewRoutesBtn = new JButton("View Routes");
-		final JButton viewStopsBtn = new JButton("View Stops");
-		final JButton viewDriverVehiclesBtn = new JButton("View Driver Vehicles");
-		final JButton viewDriverlessVehiclesBtn = new JButton("View Driverless Vehicles");
+		final JButton viewCustomersBtn = new JButton("View All Customers");
+		final JButton viewDriversBtn = new JButton("View All Drivers");
+		final JButton viewRoutesBtn = new JButton("View All Routes");
+		final JButton viewStopsBtn = new JButton("View All Stops");
+		final JButton viewDriverVehiclesBtn = new JButton("View All Driver Vehicles");
+		final JButton viewDriverlessVehiclesBtn = new JButton("View All Driverless Vehicles");
 		final JButton searchCustomerBtn = new JButton("Search Customer");
 		final JButton searchDriverBtn = new JButton("Search Driver");
 		final JButton searchRouteBtn = new JButton("Search Route");
@@ -1706,7 +1708,7 @@ public class TLinkFrame extends JFrame {
 		viewPanel.add(viewScrollPane);
 		viewPanel.add(viewPane, BorderLayout.SOUTH);
 		OverlayLayout overlay = new OverlayLayout(viewPane);
-		viewPane.setLayout(overlay);
+		viewPane.setLayout(new FlowLayout());    // TODO: Fix hidden search btns
 		viewPane.add(viewCustomersBtn);
 		viewPane.add(viewDriversBtn);
 		viewPane.add(viewRoutesBtn);
