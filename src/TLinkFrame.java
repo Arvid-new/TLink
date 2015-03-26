@@ -23,8 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import oracle.sql.DATE;
 
@@ -47,7 +45,6 @@ public class TLinkFrame extends JFrame {
 	private JTable driverTable;
 	private JPanel customerMenu;
 	private JPanel driverMenu;
-	private JPanel operatorMenu;
 	private JTable routeTable;
 	private JTable stopTable;
 
@@ -56,7 +53,13 @@ public class TLinkFrame extends JFrame {
 
 	private JLabel title;
 	private JLabel welcome;
-
+	
+	private String insertError = "Insertion failed.\n" +
+							  "The application cannot connect to the database or" + 
+							  " the identifier already exists";
+	private String deleteError = "Removal failed.\n" +
+			  "The application cannot connect to the database or" + 
+			  " the identifier does not exist";
 	private int empId = -1;
 	private String password = "bossman";
 
@@ -839,19 +842,22 @@ public class TLinkFrame extends JFrame {
 							int newCid = Integer.parseInt(cidField.getText().trim());			
 							String newName = nameField.getText().trim();
 							int newPid = Integer.parseInt(pidField.getText().trim());
-							Customer customer = new Customer();
-							OwnsPass ownsPass = new OwnsPass();
-
 							if (newName.equals("")) {
-								JOptionPane.showMessageDialog(null, "Please fill in every field");
-							} else {							
-								customer.insertCustomer(newCid, newName);
-								ownsPass.insertOwnsPass(newPid, 0, newCid);
-								operatorTable.removeAll();							
-								ResultTableModel viewCustomerInfo = ownsPass.displayOwnsPass();
-								operatorTable.setModel(viewCustomerInfo);
-								JOptionPane.showMessageDialog(null, "Customer added");
-								validInput = true;
+								JOptionPane.showMessageDialog(null, "Please fill in every field");							
+							} else {								
+								Customer customer = new Customer();
+								OwnsPass ownsPass = new OwnsPass();
+								boolean success = customer.insertCustomer(newCid, newName);
+								if (success) {
+									ownsPass.insertOwnsPass(newPid, 0, newCid);
+									operatorTable.removeAll();							
+									ResultTableModel viewCustomerInfo = ownsPass.displayOwnsPass();
+									operatorTable.setModel(viewCustomerInfo);
+									JOptionPane.showMessageDialog(null, "Customer added");
+									validInput = true;
+								} else {
+									JOptionPane.showMessageDialog(null, insertError);
+								}
 							}							
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
@@ -1288,12 +1294,16 @@ public class TLinkFrame extends JFrame {
 						try {
 							int cid = Integer.parseInt(cidField.getText().trim());			
 							Customer customer = new Customer();				
-							customer.deleteCustomer(cid);
-							operatorTable.removeAll();							
-							ResultTableModel viewCustomerInfo = customer.displayCustomers();
-							operatorTable.setModel(viewCustomerInfo);
-							JOptionPane.showMessageDialog(null, "Customer " + cid + " removed");
-							validInput = true;						
+							boolean success = customer.deleteCustomer(cid);
+							if (success) {
+								operatorTable.removeAll();							
+								ResultTableModel viewCustomerInfo = customer.displayCustomers();
+								operatorTable.setModel(viewCustomerInfo);
+								JOptionPane.showMessageDialog(null, "Customer " + cid + " removed");
+								validInput = true;	
+							} else {
+								JOptionPane.showMessageDialog(null, deleteError);
+							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
 						};

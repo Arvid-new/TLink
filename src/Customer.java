@@ -11,36 +11,29 @@ public class Customer {
 
 	public Customer () {}
 
-	public void insertCustomer(int cid, String name) {
+	public boolean insertCustomer(int cid, String name) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO customer VALUES (?, ?)");
 			stmt.setInt(1, cid);
 			stmt.setString(2, name);
 			stmt.executeUpdate();
 			stmt.close();
+			return true;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 
-	public void deleteCustomer(int cid) {
+	public boolean deleteCustomer(int cid) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM customer WHERE cid = " + cid);
-			con.commit();
+			int rows = stmt.executeUpdate("DELETE FROM customer WHERE cid = " + cid);
 			stmt.close();
+			return (rows != 0) ? true: false;
 		}
 		catch (SQLException ex) {
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				//TODO
-			}
+			return false;
 		}
 	}
 
