@@ -99,7 +99,7 @@ public class Route {
 	public ResultTableModel customersPerRoute() {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT routeNumber, COUNT(cid) "
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, COUNT(cid) AS 'Number of customers'"
 					+ "FROM follows f, access a "
 					+ "WHERE f.vehicleNumber = a.vehicleNumber "
 					+ "GROUP BY routeNumber "
@@ -117,7 +117,7 @@ public class Route {
 	public ResultTableModel busiestRoute() {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT routeNumber, counts.n "
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, counts.n AS 'Number of customers' "
 					+ "FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts "
 					+ "WHERE f.vehicleNumber = counts.vehicleNumber "
 					+ "AND counts.n = (SELECT MAX(counts2.n2) FROM "
@@ -138,7 +138,7 @@ public class Route {
 	public ResultTableModel quietestRoute() {
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT routeNumber, counts.n "
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, counts.n AS 'Number of customers' "
 					+ "FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts "
 					+ "WHERE f.vehicleNumber = counts.vehicleNumber "
 					+ "AND counts.n = (SELECT MIN(counts2.n2) FROM "
