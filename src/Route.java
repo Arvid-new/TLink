@@ -95,4 +95,64 @@ public class Route {
 			return null;
 		}
 	}
+	
+	public ResultTableModel customersPerRoute() {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, COUNT(cid) "
+					+ "FROM follows f, access a "
+					+ "WHERE f.vehicleNumber = a.vehicleNumber "
+					+ "GROUP BY routeNumber "
+					+ "ORDER BY routeNumber");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
+	
+	public ResultTableModel busiestRoute() {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, counts.n "
+					+ "FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts "
+					+ "WHERE f.vehicleNumber = counts.vehicleNumber "
+					+ "AND counts.n = (SELECT MAX(counts2.n2) FROM "
+					+ 					"(SELECT routeNumber, count(cid) AS 'n2' "
+					+ 					"FROM follows f2, access a2 "
+					+ 					"WHERE f2.vehicleNumber = a2.vehicleNumber GROUP BY routeNumber) counts2) "
+					+ "ORDER BY routeNumber");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
+	
+	public ResultTableModel quietestRoute() {
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT routeNumber, counts.n "
+					+ "FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts "
+					+ "WHERE f.vehicleNumber = counts.vehicleNumber "
+					+ "AND counts.n = (SELECT MIN(counts2.n2) FROM "
+					+ 					"(SELECT routeNumber, count(cid) AS 'n2' "
+					+ 					"FROM follows f2, access a2 "
+					+ 					"WHERE f2.vehicleNumber = a2.vehicleNumber GROUP BY routeNumber) counts2) "
+					+ "ORDER BY routeNumber");
+			ResultTableModel rtm = new ResultTableModel(rs);
+			stmt.close();
+			return rtm;
+		}
+		catch (SQLException ex) {
+			// TODO
+			return null;
+		}
+	}
 }
