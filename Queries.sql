@@ -176,6 +176,33 @@ FROM customer C NATURAL JOIN owns_pass O
  FROM route 
  WHERE routeName LIKE '%?%'
  
+SELECT routeNumber, COUNT(cid) AS 'Number of customers'
+FROM follows f, access a
+WHERE f.vehicleNumber = a.vehicleNumber 
+GROUP BY routeNumber 
+ORDER BY routeNumber
+
+
+SELECT routeNumber, counts.n AS 'Number of customers'
+FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts 
+WHERE f.vehicleNumber = counts.vehicleNumber AND 
+counts.n = (SELECT MAX(counts2.n2) 
+				FROM 
+					(SELECT routeNumber, count(cid) AS 'n2'
+					FROM follows f2, access a2
+					WHERE f2.vehicleNumber = a2.vehicleNumber GROUP BY routeNumber) counts2)
+ORDER BY routeNumber
+
+
+SELECT routeNumber, counts.n AS 'Number of customers' 
+FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts 
+WHERE f.vehicleNumber = counts.vehicleNumber AND 
+counts.n = (SELECT MIN(counts2.n2) FROM 
+	(SELECT routeNumber, count(cid) AS 'n2' 
+	FROM follows f2, access a2 
+	WHERE f2.vehicleNumber = a2.vehicleNumber GROUP BY routeNumber) counts2) 
+ORDER BY routeNumber
+
   --Stop-----------------------------------------------------------------------------------------------------------------------------
   
   INSERT INTO stop 
