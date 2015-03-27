@@ -1,0 +1,22 @@
+vehicleNumber → age, capacity
+	vehicleNumber implies all other attributes of Vehicle (age and capacity)
+
+vehicleNumber → type
+	The vehicle number will determine the type of vehicle it is
+
+empId → name, address, phoneNumber
+	The employee id will imply the employee name because there 
+	should not be two employees with different names with the same id. 
+	The id will also imply address, phoneNumber for the same reason.
+	
+routeNumber → rname, stopTime, startTime
+	The routeNumber implies all other attributes of the route (rname, stopTime, and startTime)
+
+stopNumber → location, stopName
+	A unique stop number determines the stop’s location and name.
+
+cid → name
+	cid is a identifier for a customer name
+
+pid, cid → balance
+	pid and cid identifies a pass, which has a balance.
