@@ -1552,6 +1552,8 @@ public class TLinkFrame extends JFrame {
 
 		return removePanel;
 	}
+	
+	// UPDATE SECTION
 
 	private JPanel createUpdateTabPanel() {
 		final JTable operatorTable = new JTable();
@@ -1699,6 +1701,8 @@ public class TLinkFrame extends JFrame {
 		return updatePanel;
 	}
 
+	// REPORT SECTION
+	
 	public JPanel createReportTabPanel() {
 		final JTable reportTable = new JTable();
 		JScrollPane reportTableScrollPane = new JScrollPane(reportTable);
@@ -1707,8 +1711,17 @@ public class TLinkFrame extends JFrame {
 		String[] options = {"This month", "January", "February", "March", "April", "May", "June", "July", 
 				"August", "September", "October", "November", "December"};
 		final JComboBox<String> monthList = new JComboBox<String>(options);
+		
+		JButton maximumBtn = new JButton("Busiest route(s)");
+		JButton minimumBtn = new JButton("Quietest route(s)");
+		JButton resetBtn = new JButton("All routes");
+		final JPanel routeReportPane = new JPanel();
+		routeReportPane.setLayout(new FlowLayout());
+		routeReportPane.add(maximumBtn);
+		routeReportPane.add(minimumBtn);
+		routeReportPane.add(resetBtn);
 
-		String[] reportOptions = {"Select report to view...", "Vehicle"};
+		String[] reportOptions = {"Select report to view...", "Vehicle", "Route"};
 		JComboBox<String> reportList = new JComboBox<String>(reportOptions);
 
 		reportPanel.setLayout(new BorderLayout());
@@ -1721,15 +1734,65 @@ public class TLinkFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				JComboBox<?> cb = (JComboBox<?>) arg0.getSource();
 				String reportOption = (String)cb.getSelectedItem();
+				Route route = new Route();
 
 				if (reportOption.equals("Select report to view...")) {
+					reportTable.setModel(route.searchRoutes(-1));
 					reportPanel.remove(monthList);
+					reportPanel.remove(routeReportPane);
 				}
 
 				else if (reportOption.equals("Vehicle")) {
+					reportTable.setModel(route.searchRoutes(-1));
+					reportPanel.remove(routeReportPane);
 					reportPanel.add(monthList, BorderLayout.SOUTH);
 				}
+				
+				else if (reportOption.equals("Route")) {
+					reportPanel.add(routeReportPane, BorderLayout.SOUTH);
+					reportPanel.remove(monthList);
+					ResultTableModel report = route.customersPerRoute();
+					if (report.empty)
+						JOptionPane.showMessageDialog(null, "No one is using our vehicles :(");
+					reportTable.setModel(report);
+				}
 			}
+		});
+		
+		maximumBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Route route = new Route();
+				ResultTableModel report = route.busiestRoute();
+				if (report.empty)
+					JOptionPane.showMessageDialog(null, "No one is using our vehicles :(");
+				reportTable.setModel(report);
+			}				
+		});
+		
+		minimumBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Route route = new Route();
+				ResultTableModel report = route.quietestRoute();
+				if (report.empty)
+					JOptionPane.showMessageDialog(null, "No one is using our vehicles :(");
+				reportTable.setModel(report);
+			}				
+		});
+		
+		resetBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				Route route = new Route();
+				ResultTableModel report = route.customersPerRoute();
+				if (report.empty)
+					JOptionPane.showMessageDialog(null, "No one is using our vehicles :(");
+				reportTable.setModel(report);
+			}				
 		});
 
 		monthList.addActionListener(new ActionListener() {
@@ -1772,6 +1835,8 @@ public class TLinkFrame extends JFrame {
 
 		return reportPanel;
 	}
+	
+	// VIEW SECTION
 
 	private JPanel createViewTabPanel() {
 		final JTable viewTable = new JTable();
@@ -1812,7 +1877,6 @@ public class TLinkFrame extends JFrame {
 		viewPanel.add(viewList, BorderLayout.NORTH);
 		viewPanel.add(viewScrollPane);
 		viewPanel.add(viewPane, BorderLayout.SOUTH);
-		OverlayLayout overlay = new OverlayLayout(viewPane);
 		viewPane.setLayout(new FlowLayout());    // TODO: Fix hidden search btns
 		viewPane.add(viewCustomersBtn);
 		viewPane.add(viewDriversBtn);
