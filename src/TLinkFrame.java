@@ -4,7 +4,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
 
@@ -57,10 +56,12 @@ public class TLinkFrame extends JFrame {
 	private String insertError = "Insertion failed.\n" +
 							  "The application cannot connect to the database or" + 
 							  " the identifier already exists";
+	private String dateError = "Invalid date format";
 	private String deleteError = "Removal failed.\n" +
 			  "The application cannot connect to the database or" + 
 			  " the identifier does not exist";
 	private String negativeError = "Please check entries that are negative or zero";
+	private String numberError = "One or more fields require a numeric value";
 	private int empId = -1;
 	private String password = "bossman";
 
@@ -380,7 +381,7 @@ public class TLinkFrame extends JFrame {
 							JOptionPane.showMessageDialog(null, "Update successful");
 						}						
 					} catch (NumberFormatException nfe) {
-						JOptionPane.showMessageDialog(null, "Invalid input - please try again");
+						JOptionPane.showMessageDialog(null, numberError);
 					}
 				}				
 			}
@@ -594,7 +595,7 @@ public class TLinkFrame extends JFrame {
 								validInput = true;
 							}							
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -857,7 +858,7 @@ public class TLinkFrame extends JFrame {
 								}
 							}							
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -918,7 +919,7 @@ public class TLinkFrame extends JFrame {
 								}
 							}							
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -957,17 +958,20 @@ public class TLinkFrame extends JFrame {
 				do {
 					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
 					if(input == JOptionPane.OK_OPTION) {
-						try {
-							int newRid = Integer.parseInt(ridField.getText().trim());			
-							String newName = nameField.getText().trim();
-
-							Time newStart = Time.valueOf(startField.getText().trim());
-							Time newEnd = Time.valueOf(endField.getText().trim());
-							Route route = new Route();
-
-							if (newName.equals("") || newStart.equals("") || newEnd.equals("")) {
-								JOptionPane.showMessageDialog(null, "Please fill in every field");
-							} else {							
+						String ridStr = ridField.getText().trim();	
+						String startStr = startField.getText().trim();
+						String endStr = endField.getText().trim();
+						String newName = nameField.getText().trim();							
+					
+						if (ridStr.equals("") || newName.equals("") || startStr.equals("") || endStr.equals("")) {
+							JOptionPane.showMessageDialog(null, "Please fill in every field");
+						} 
+						else {
+							try {
+								int newRid = Integer.parseInt(ridStr);									
+								Time newStart = Time.valueOf(startStr);
+								Time newEnd = Time.valueOf(endStr);	
+								Route route = new Route();
 								boolean success = route.insertRoute(newRid, newName, newStart, newEnd);
 								if (success) {
 									operatorTable.removeAll();							
@@ -978,10 +982,14 @@ public class TLinkFrame extends JFrame {
 								} else {
 									JOptionPane.showMessageDialog(null, insertError);
 								}
-							}							
-						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
-						};
+								}							
+							catch (NumberFormatException nfe) {
+								JOptionPane.showMessageDialog(null, numberError);
+							}
+							catch (IllegalArgumentException iae) {
+								JOptionPane.showMessageDialog(null, dateError);								
+							};							
+						}
 					} else {
 						validInput = true;
 					}
@@ -1015,15 +1023,16 @@ public class TLinkFrame extends JFrame {
 				do {
 					int input = JOptionPane.showConfirmDialog(null, addPanel, title, option);
 					if(input == JOptionPane.OK_OPTION) {
-						try {
-							int newSid = Integer.parseInt(sidField.getText().trim());			
-							String newName = nameField.getText().trim();
-							String newLocation = locationField.getText().trim();
-							Stop stop = new Stop();
-
-							if (newName.equals("") || newLocation.equals("")) {
+						String sidStr = sidField.getText().trim();
+						String newName = nameField.getText().trim();
+						String newLocation = locationField.getText().trim();						
+						if (sidStr.equals("") || newName.equals("") || newLocation.equals("")) {
 								JOptionPane.showMessageDialog(null, "Please fill in every field");
-							} else {							
+						} else {							
+							try {
+								int newSid = Integer.parseInt(sidStr);							
+								Stop stop = new Stop();
+						
 								boolean success = stop.insertStop(newSid, newName, newLocation);
 								if (success) {
 									operatorTable.removeAll();							
@@ -1034,9 +1043,10 @@ public class TLinkFrame extends JFrame {
 								} else {
 									JOptionPane.showMessageDialog(null, insertError);
 								}
-							}							
-						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							}
+							catch (NumberFormatException nfe) {
+								JOptionPane.showMessageDialog(null, numberError);
+							}
 						};
 					} else {
 						validInput = true;
@@ -1106,7 +1116,7 @@ public class TLinkFrame extends JFrame {
 									JOptionPane.showMessageDialog(null, negativeError);
 								}
 							} catch (NumberFormatException nfe) {
-								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
+								JOptionPane.showMessageDialog(null, numberError);								
 							}
 						}
 					} else {
@@ -1172,7 +1182,7 @@ public class TLinkFrame extends JFrame {
 									JOptionPane.showMessageDialog(null, negativeError);
 								}
 							} catch (NumberFormatException nfe) {
-								JOptionPane.showMessageDialog(null, "Invalid format - please try again");								
+								JOptionPane.showMessageDialog(null, numberError);								
 							}
 						}
 					} else {
@@ -1336,7 +1346,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -1377,7 +1387,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -1418,7 +1428,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -1459,7 +1469,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -1500,7 +1510,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -1541,7 +1551,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, deleteError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -1689,7 +1699,7 @@ public class TLinkFrame extends JFrame {
 								JOptionPane.showMessageDialog(null, negativeError);
 							}
 						} catch (NumberFormatException nfe) {
-							JOptionPane.showMessageDialog(null, "Invalid format - please try again");
+							JOptionPane.showMessageDialog(null, numberError);
 						};
 					} else {
 						validInput = true;
@@ -2041,7 +2051,6 @@ public class TLinkFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				Customer customer = new Customer();
 				OwnsPass ownsPass = new OwnsPass();
 				viewTable.setModel(ownsPass.displayOwnsPass());
 			}				
@@ -2050,18 +2059,22 @@ public class TLinkFrame extends JFrame {
 		searchCustomerBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int cid = -1;
-				cid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Customer ID"));
-				if(cid != -1) {
-					Customer customer = new Customer();
-					OwnsPass ownsPass = new OwnsPass();
-					ResultTableModel search = ownsPass.searchOwnsPass(cid);
-					if (search.empty) {
-						JOptionPane.showMessageDialog(null, "No customer found");
+				String cidStr = JOptionPane.showInputDialog(null, "Enter Customer ID");
+				if (cidStr != null) {
+					try {
+						int cid = Integer.parseInt(cidStr);
+						OwnsPass ownsPass = new OwnsPass();
+						ResultTableModel search = ownsPass.searchOwnsPass(cid);
+						if (search.empty) {
+							JOptionPane.showMessageDialog(null, "No customer found");
+						}
+						else {
+							viewTable.removeAll();
+							viewTable.setModel(search);
+						}
 					}
-					else {
-						viewTable.removeAll();
-						viewTable.setModel(search);
+					catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, numberError);
 					}
 				}
 			}
@@ -2079,17 +2092,21 @@ public class TLinkFrame extends JFrame {
 		searchDriverBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int did = -1;
-				did = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Driver ID"));
-				if(did != -1) {
-					Driver driver = new Driver();
-					ResultTableModel search = driver.viewDriverInfo(did);
-					if (search.empty) {
-						JOptionPane.showMessageDialog(null, "No driver found");
-					}
-					else {
-						viewTable.removeAll();
-						viewTable.setModel(search);
+				String didStr = JOptionPane.showInputDialog(null, "Enter Driver ID");
+				if (didStr != null) {
+					try {
+						int did = Integer.parseInt(didStr);
+						Driver driver = new Driver();
+						ResultTableModel search = driver.viewDriverInfo(did);
+						if (search.empty) {
+							JOptionPane.showMessageDialog(null, "No driver found");
+						}
+						else {
+							viewTable.removeAll();
+							viewTable.setModel(search);
+						}						
+					} catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, numberError);
 					}
 				}
 			}
@@ -2107,17 +2124,22 @@ public class TLinkFrame extends JFrame {
 		searchRouteBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int rid = -1;
-				rid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Route ID"));
-				if(rid != -1) {
-					Route route = new Route();
-					ResultTableModel search = route.searchRoutes(rid);
-					if (search.empty) {
-						JOptionPane.showMessageDialog(null, "No route found");
-					}
-					else {
-						viewTable.removeAll();
-						viewTable.setModel(search);
+				String ridStr = JOptionPane.showInputDialog(null, "Enter Route ID");
+				if (ridStr != null) {
+					try {
+						int rid = Integer.parseInt(ridStr);
+						Route route = new Route();
+						ResultTableModel search = route.searchRoutes(rid);
+						if (search.empty) {
+							JOptionPane.showMessageDialog(null, "No route found");
+						}
+						else {
+							viewTable.removeAll();
+							viewTable.setModel(search);
+						}
+					} 
+					catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, numberError);
 					}
 				}
 			}
@@ -2135,17 +2157,22 @@ public class TLinkFrame extends JFrame {
 		searchStopBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int sid = -1;
-				sid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Stop ID"));
-				if(sid != -1) {
-					Stop stop = new Stop();
-					ResultTableModel search = stop.searchStops(sid);
-					if (search.empty) {
-						JOptionPane.showMessageDialog(null, "No stop found");
+				String sidStr = JOptionPane.showInputDialog(null, "Enter Stop ID");
+				if (sidStr != null) {
+					try {
+						int sid = Integer.parseInt(sidStr);
+						Stop stop = new Stop();
+						ResultTableModel search = stop.searchStops(sid);
+						if (search.empty) {
+							JOptionPane.showMessageDialog(null, "No stop found");
+						}
+						else {
+							viewTable.removeAll();
+							viewTable.setModel(search);
+						}						
 					}
-					else {
-						viewTable.removeAll();
-						viewTable.setModel(search);
+					catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, numberError);
 					}
 				}
 			}
@@ -2163,17 +2190,22 @@ public class TLinkFrame extends JFrame {
 		searchDriverVehicleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int vid = -1;
-				vid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Vehicle ID"));
-				if(vid != -1) {
-					Driveable driveable = new Driveable();
-					ResultTableModel search = driveable.searchVehicles(vid);
-					if (search.empty) {
-						JOptionPane.showMessageDialog(null, "No driver vehicle found");
+				String vidStr = JOptionPane.showInputDialog(null, "Enter Vehicle ID");
+				if(vidStr != null) {
+					try {
+						int vid = Integer.parseInt(vidStr);
+						Driveable driveable = new Driveable();
+						ResultTableModel search = driveable.searchVehicles(vid);
+						if (search.empty) {
+							JOptionPane.showMessageDialog(null, "No driver vehicle found");
+						}
+						else {
+							viewTable.removeAll();
+							viewTable.setModel(search);
+						}						
 					}
-					else {
-						viewTable.removeAll();
-						viewTable.setModel(search);
+					catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, numberError);
 					}
 				}
 			}
@@ -2191,18 +2223,23 @@ public class TLinkFrame extends JFrame {
 		searchDriverlessVehicleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				int vid = -1;
-				vid = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Vehicle ID"));
-				if(vid != -1) {
-					Driverless driverless = new Driverless();
-					ResultTableModel search = driverless.searchVehicles(vid);
-					if (search.empty) {
-						JOptionPane.showMessageDialog(null, "No driverless vehicle found");
+				String vidStr = JOptionPane.showInputDialog(null, "Enter Vehicle ID");
+				if (vidStr != null) {
+					try {
+						int vid = Integer.parseInt(vidStr);
+						Driverless driverless = new Driverless();
+						ResultTableModel search = driverless.searchVehicles(vid);
+						if (search.empty) {
+							JOptionPane.showMessageDialog(null, "No driverless vehicle found");
+						}
+						else {
+							viewTable.removeAll();
+							viewTable.setModel(search);
+						}						
 					}
-					else {
-						viewTable.removeAll();
-						viewTable.setModel(search);
-					}
+					catch (NumberFormatException nfe) {
+						JOptionPane.showMessageDialog(null, numberError);
+					}		
 				}
 			}
 		});
