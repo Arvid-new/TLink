@@ -142,18 +142,4 @@ public class Customer {
 			}
 		}
 	}
-
-	public ResultTableModel displayPassId(int cid) {
-
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT pid FROM owns_pass WHERE cid =" + cid);
-			ResultTableModel rtm = new ResultTableModel(rs);
-			return rtm;
-		}
-		catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
-			return null;
-		}
-	}
 }
