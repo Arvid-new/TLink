@@ -350,6 +350,9 @@ CREATE TABLE `vehicle` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='		';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+/* Check Constraint */
+/* CONSTRAINT checkVehicle CHECK (vehicleNumber > 0 AND age >= 0 AND capacity > 0) */
+
 --
 -- Dumping data for table `vehicle`
 --
