@@ -36,14 +36,6 @@ WHERE cid = ?
 UPDATE customer SET name = ? 
 WHERE cid = ?
 
-SELECT balance 
-FROM owns_pass 
-WHERE cid = ?
-
-SELECT pid 
-FROM owns_pass 
-WHERE cid = ?
-
 --Driveable----------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO driveable 
@@ -151,11 +143,14 @@ INSERT INTO has
  VALUES (?, ?, ?)
  
  DELETE FROM owns_pass 
- WHERE pid = ? AND 
-	cid = ?
+ WHERE pid = ? AND cid = ?
 	
 SELECT C.cid, name, O.pid, balance 
 FROM customer C NATURAL JOIN owns_pass O
+
+SELECT C.cid, name, O.pid, balance 
+FROM customer C NATURAL JOIN owns_pass O 
+WHERE C.cid = ?
 
  --Route-----------------------------------------------------------------------------------------------------------------------------
  
@@ -176,17 +171,21 @@ FROM customer C NATURAL JOIN owns_pass O
  FROM route 
  WHERE routeName LIKE '%?%'
  
-SELECT routeNumber, COUNT(cid) AS 'Number of customers'
+ SELECT * 
+ FROM route 
+ WHERE routeNumber = ?
+ 
+SELECT routeNumber, COUNT(cid) AS 'Number_of_customers'
 FROM follows f, access a
 WHERE f.vehicleNumber = a.vehicleNumber 
 GROUP BY routeNumber 
 ORDER BY routeNumber
 
 
-SELECT routeNumber, counts.n AS 'Number of customers'
-FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts 
+SELECT routeNumber, Number_of_customers
+FROM follows f, (SELECT vehicleNumber, count(cid) AS 'Number_of_customers' FROM access GROUP BY vehicleNumber) counts 
 WHERE f.vehicleNumber = counts.vehicleNumber AND 
-counts.n = (SELECT MAX(counts2.n2) 
+counts.Number_of_customers = (SELECT MAX(counts2.n2) 
 				FROM 
 					(SELECT routeNumber, count(cid) AS 'n2'
 					FROM follows f2, access a2
@@ -194,10 +193,10 @@ counts.n = (SELECT MAX(counts2.n2)
 ORDER BY routeNumber
 
 
-SELECT routeNumber, counts.n AS 'Number of customers' 
-FROM follows f, (SELECT vehicleNumber, count(cid) AS 'n' FROM access GROUP BY vehicleNumber) counts 
+SELECT routeNumber, counts.Number_of_customers
+FROM follows f, (SELECT vehicleNumber, count(cid) AS 'Number_of_customers' FROM access GROUP BY vehicleNumber) counts 
 WHERE f.vehicleNumber = counts.vehicleNumber AND 
-counts.n = (SELECT MIN(counts2.n2) FROM 
+counts.Number_of_customers = (SELECT MIN(counts2.n2) FROM 
 	(SELECT routeNumber, count(cid) AS 'n2' 
 	FROM follows f2, access a2 
 	WHERE f2.vehicleNumber = a2.vehicleNumber GROUP BY routeNumber) counts2) 
@@ -218,6 +217,10 @@ ORDER BY routeNumber
   FROM stop 
   WHERE stopName LIKE '%?%'
   
+  SELECT * 
+  FROM stop 
+  WHERE stopNumber = ?
+  
   SELECT r.routeNumber, routeName 
   FROM has h NATURAL JOIN route r
   WHERE h.stopNumber = ?
@@ -237,7 +240,7 @@ SELECT *
 FROM vehicle 
 WHERE vehicleNumber = ?
 
-SELECT vehicleNumber AS 'Vehicle Number',  COUNT(vehicleNumber) AS 'Number of vehicles' 
+SELECT vehicleNumber,  COUNT(vehicleNumber) AS 'Number of vehicles' 
 FROM driven_by 
 WHERE MONTH(fromDate) = ? 
 GROUP BY vehicleNumber
