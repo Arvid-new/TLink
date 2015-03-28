@@ -21,6 +21,7 @@ public class Customer {
 			return true;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -33,6 +34,7 @@ public class Customer {
 			return (rows != 0) ? true: false;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -46,11 +48,12 @@ public class Customer {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 
+	// Returns true if the given customer ID has accessed every vehicle; false otherwise.
 	public boolean accessedAllVehicles(int cid){
 		try {
 			Statement stmt = con.createStatement();
@@ -69,11 +72,12 @@ public class Customer {
 			return !rtm.empty;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
 
+	// Search for a customer with the given customer ID
 	public ResultTableModel searchCustomers(int cid) {
 		try {
 			Statement stmt = con.createStatement();
@@ -83,12 +87,12 @@ public class Customer {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 
-	// Customer "login"
+	// Checks if the given customer ID is in the customer table
 	public ResultTableModel login(int cid) {
 		try {
 			Statement stmt = con.createStatement();
@@ -98,12 +102,12 @@ public class Customer {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 
-	// adds to current balance
+	// adds the given amount to the current balance
 	public void updateBalance(int cid, int add) {
 
 		try {
@@ -121,6 +125,7 @@ public class Customer {
 		}
 	}
 
+	// For operator to update the name of the customer
 	public void updateName(int cid, String name) {
 
 		try {
@@ -138,21 +143,6 @@ public class Customer {
 		}
 	}
 
-	public ResultTableModel displayBalance(int cid) {
-
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT balance FROM owns_pass WHERE cid =" + cid);
-			ResultTableModel rtm = new ResultTableModel(rs);
-			stmt.close();
-			return rtm;
-		}
-		catch (SQLException ex) {
-			//TODO
-			return null;
-		}
-	}
-
 	public ResultTableModel displayPassId(int cid) {
 
 		try {
@@ -162,7 +152,7 @@ public class Customer {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
