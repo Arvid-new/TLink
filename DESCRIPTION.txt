@@ -1,0 +1,2 @@
+With our project, we were successfully able to model a public transit company. The database stores all data relevant to the company such as: routes, stops, vehicles, customers, etc.
+The app that we created is able to provide different classes of users different capabilities of manipulating the database from selection queries to nested aggregation. 
