@@ -739,7 +739,7 @@ public class TLinkFrame extends JFrame {
 					addDriverVehicleBtn.setVisible(false);
 					addDriverlessVehicleBtn.setVisible(false);
 					Customer customer = new Customer();
-					operatorTable.setModel(customer.displayBalance(-1));
+					operatorTable.setModel(customer.login(-1));
 				}
 
 				else if (addOption.equals("Customer")) {
@@ -1243,7 +1243,7 @@ public class TLinkFrame extends JFrame {
 					removeDriverVehicleBtn.setVisible(false);
 					removeDriverlessVehicleBtn.setVisible(false);
 					Customer customer = new Customer();
-					operatorTable.setModel(customer.displayBalance(-1));
+					operatorTable.setModel(customer.login(-1));
 				}
 
 				else if (removeOption.equals("Customer")) {
@@ -1597,7 +1597,7 @@ public class TLinkFrame extends JFrame {
 					Customer customer = new Customer();
 					updateCustomerNameBtn.setVisible(false);
 					updateCustomerBalanceBtn.setVisible(false);
-					operatorTable.setModel(customer.displayBalance(-1));
+					operatorTable.setModel(customer.login(-1));
 				}
 
 				else if (addOption.equals("Customer")) {
@@ -1923,7 +1923,7 @@ public class TLinkFrame extends JFrame {
 					searchDriverVehicleBtn.setVisible(false);
 					searchDriverlessVehicleBtn.setVisible(false);
 					Customer customer = new Customer();
-					viewTable.setModel(customer.displayBalance(-1));
+					viewTable.setModel(customer.login(-1));
 				}
 
 				else if (addOption.equals("Customers")) {

@@ -22,6 +22,7 @@ public class Driverless extends Vehicle {
 			return true;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -35,6 +36,7 @@ public class Driverless extends Vehicle {
 			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -49,7 +51,7 @@ public class Driverless extends Vehicle {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
@@ -64,7 +66,7 @@ public class Driverless extends Vehicle {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}

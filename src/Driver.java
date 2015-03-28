@@ -24,6 +24,7 @@ public class Driver {
 			return true;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -36,6 +37,7 @@ public class Driver {
 			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -49,7 +51,7 @@ public class Driver {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
@@ -63,11 +65,13 @@ public class Driver {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 
+	// Updates the driver's address
+	// no constraints on the address format....
 	public void updateAddress(int empId, String address) {
 		try {
 			PreparedStatement ps = con.prepareStatement("UPDATE driver SET address = ? WHERE empId =" + empId);
@@ -84,6 +88,7 @@ public class Driver {
 		}
 	}
 
+	// Updates the driver's phone number
 	// phoneNum must be 6041234567 (no spaces or - )
 	public void updatePhoneNum(int empId, String phoneNum) {
 		try {
@@ -101,6 +106,7 @@ public class Driver {
 		}
 	}
 
+	// Returns all the tuples from driven_by with the given employee ID
 	// date parameter is in YYYY-MM-DD format
 	public ResultTableModel viewAllShifts(int empId) {
 		try {
@@ -112,12 +118,13 @@ public class Driver {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}		
 	}
 
-	// date parameter is in YYYY-MM-DD format
+	// Returns the tuple from driven_by, the shift of the given employee ID and given date
+	// pre-condition: date parameter is in YYYY-MM-DD format
 	public ResultTableModel viewShifts(int empId, String date) {
 		try {
 			Statement stmt = con.createStatement();
@@ -133,6 +140,7 @@ public class Driver {
 		}		
 	}
 
+	// Used to check if the given employee ID (did) exists in the driver table
 	public ResultTableModel login(int did) {
 		try {
 			Statement stmt = con.createStatement();
@@ -147,6 +155,7 @@ public class Driver {
 		}
 	}
 
+	// Returns all tuples from driven_by that has the given employee ID, and has a fromDate in the current week
 	public ResultTableModel viewWeekShifts(int empId) {
 		try {
 			Statement stmt = con.createStatement();

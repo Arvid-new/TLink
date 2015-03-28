@@ -21,7 +21,7 @@ public class OwnsPass {
 				try {
 					con.rollback();
 				} catch (SQLException e) {
-					//TODO
+					System.out.println("Message: " + ex.getMessage());
 				}
 			}
 		}
@@ -36,11 +36,12 @@ public class OwnsPass {
 				try {
 					con.rollback();
 				} catch (SQLException e) {
-					//TODO
+					System.out.println("Message: " + ex.getMessage());
 				}
 			}
 		}
 		
+		// Displays all the tuples from the owns_pass table
 		public ResultTableModel displayOwnsPass() {
 			
 			try {
@@ -51,11 +52,12 @@ public class OwnsPass {
 				return rtm;
 			}
 			catch (SQLException ex) {
-				//TODO
+				System.out.println("Message: " + ex.getMessage());
 				return null;
 			}
 		}
 		
+		// Queries the own_pass table for the given customer ID and returns the customer ID, along with their name
 		public ResultTableModel searchOwnsPass(int cid) {
 			
 			try {
@@ -66,7 +68,7 @@ public class OwnsPass {
 				return rtm;
 			}
 			catch (SQLException ex) {
-				//TODO
+				System.out.println("Message: " + ex.getMessage());
 				return null;
 			}
 		}

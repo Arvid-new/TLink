@@ -6,11 +6,11 @@ import java.sql.Statement;
 
 
 public class Stop {
-	
+
 	Connection con = MySQLConnection.getInstance().getConnection();
-	
+
 	public Stop() {}
-	
+
 	public boolean insertStop(int stopNum, String stopName, String location) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO stop VALUES (?, ?, ?)");
@@ -22,10 +22,11 @@ public class Stop {
 			return true;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
-	
+
 	public boolean deleteStop(int stopNum) {
 		try {
 			Statement stmt = con.createStatement();
@@ -34,12 +35,14 @@ public class Stop {
 			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
-	
+
+	// Displays all the tupes from the stop table
 	public ResultTableModel displayStops() {
-		
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM stop");
@@ -48,13 +51,14 @@ public class Stop {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Returns the stop(s) with the given stop name
 	public ResultTableModel searchStops(String stopName) {
-		
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM stop WHERE stopName LIKE '%" + stopName + "%'");
@@ -63,13 +67,14 @@ public class Stop {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
-	
-public ResultTableModel searchStops(int sid) {
-		
+
+	// Returns the stop with the given stop number
+	public ResultTableModel searchStops(int sid) {
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM stop WHERE stopNumber = " + sid);
@@ -78,13 +83,14 @@ public ResultTableModel searchStops(int sid) {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
-	
+
+	// Queries all the routes that contain the given stop number
 	public ResultTableModel findAllRoutes(int stopNum) {
-		
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT r.routeNumber, routeName FROM has h NATURAL JOIN route r WHERE h.stopNumber = " + stopNum);
@@ -93,7 +99,7 @@ public ResultTableModel searchStops(int sid) {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO 
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}

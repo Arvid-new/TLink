@@ -24,6 +24,7 @@ public class Route {
 			return true;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -36,6 +37,7 @@ public class Route {
 			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}
@@ -49,11 +51,12 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Returns all the stops of a given route number 
 	public ResultTableModel getAllStops(int routeNum) {
 		try {
 			Statement stmt = con.createStatement();
@@ -63,11 +66,12 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Returns all the stops of a given route name
 	public ResultTableModel searchRoutes(String routeName) {
 		try {
 			Statement stmt = con.createStatement();
@@ -77,11 +81,12 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Returns the stop of a given route number
 	public ResultTableModel searchRoutes(int rid) {
 		try {
 			Statement stmt = con.createStatement();
@@ -91,11 +96,12 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Queries the amount of customers for each route
 	public ResultTableModel customersPerRoute() {
 		try {
 			Statement stmt = con.createStatement();
@@ -109,11 +115,12 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Queries the route(s) that have the highest count of customers
 	public ResultTableModel busiestRoute() {
 		try {
 			Statement stmt = con.createStatement();
@@ -130,11 +137,12 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
 	
+	// Queries the route(s) that have the lowest count of customers
 	public ResultTableModel quietestRoute() {
 		try {
 			Statement stmt = con.createStatement();
@@ -151,7 +159,7 @@ public class Route {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			// TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}

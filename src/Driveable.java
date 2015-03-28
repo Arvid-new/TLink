@@ -6,11 +6,11 @@ import java.sql.Statement;
 
 
 public class Driveable extends Vehicle {
-	
+
 	Connection con = MySQLConnection.getInstance().getConnection();
-	
+
 	public Driveable() {};
-	
+
 	public boolean insertVehicle(int vehicleNumber, int age, int capacity, String type) {
 		super.insertVehicle(vehicleNumber, age, capacity);
 		try {			
@@ -35,6 +35,7 @@ public class Driveable extends Vehicle {
 			return (rows != 0) ? true : false;
 		}
 		catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
 			return false;
 		}
 	}	
@@ -49,11 +50,11 @@ public class Driveable extends Vehicle {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
-	
+
 	@Override
 	public ResultTableModel displayVehicles() {
 		try {
@@ -64,9 +65,9 @@ public class Driveable extends Vehicle {
 			return rtm;
 		}
 		catch (SQLException ex) {
-			//TODO
+			System.out.println("Message: " + ex.getMessage());
 			return null;
 		}
 	}
-	
+
 }
