@@ -52,14 +52,14 @@ public class TLinkFrame extends JFrame {
 
 	private JLabel title;
 	private JLabel welcome;
-	
+
 	private String insertError = "Insertion failed.\n" +
-							  "The application cannot connect to the database or" + 
-							  " the identifier already exists";
+			"The application cannot connect to the database or" + 
+			" the identifier already exists";
 	private String dateError = "Invalid date format";
 	private String deleteError = "Removal failed.\n" +
-			  "The application cannot connect to the database or" + 
-			  " the identifier does not exist";
+			"The application cannot connect to the database or" + 
+			" the identifier does not exist";
 	private String negativeError = "Please check entries that are negative or zero";
 	private String numberError = "One or more fields require a numeric value";
 	private int empId = -1;
@@ -368,18 +368,21 @@ public class TLinkFrame extends JFrame {
 					try {
 						cid = custID[0];
 						amtToAdd = Integer.parseInt(amtField.getText());
-
-						Customer customer = new Customer();
-						customer.updateBalance(cid, amtToAdd);
-						ResultTableModel updateBalanceResults = customer.login(cid);
-						if (updateBalanceResults.empty) {
-							JOptionPane.showMessageDialog(null, "CustomerID not found - please try again");
+						if (amtToAdd > 0) {
+							Customer customer = new Customer();
+							customer.updateBalance(cid, amtToAdd);
+							ResultTableModel updateBalanceResults = customer.login(cid);
+							if (updateBalanceResults.empty) {
+								JOptionPane.showMessageDialog(null, "CustomerID not found - please try again");
+							}
+							else {
+								customerTable.removeAll();
+								customerTable.setModel(updateBalanceResults);
+								JOptionPane.showMessageDialog(null, "Update successful");
+							}	
+						} else {
+							JOptionPane.showMessageDialog(null, negativeError);
 						}
-						else {
-							customerTable.removeAll();
-							customerTable.setModel(updateBalanceResults);
-							JOptionPane.showMessageDialog(null, "Update successful");
-						}						
 					} catch (NumberFormatException nfe) {
 						JOptionPane.showMessageDialog(null, numberError);
 					}
@@ -430,7 +433,7 @@ public class TLinkFrame extends JFrame {
 		final JPanel menuBase = new JPanel();		
 		menuBase.setLayout(new BorderLayout());
 		menuBase.add(loginBtn, BorderLayout.NORTH);
-		
+
 		// Add Buttons to driverMenu
 		driverMenu = new JPanel();
 		driverMenu.setLayout(new GridLayout(1, 3));
@@ -962,7 +965,7 @@ public class TLinkFrame extends JFrame {
 						String startStr = startField.getText().trim();
 						String endStr = endField.getText().trim();
 						String newName = nameField.getText().trim();							
-					
+
 						if (ridStr.equals("") || newName.equals("") || startStr.equals("") || endStr.equals("")) {
 							JOptionPane.showMessageDialog(null, "Please fill in every field");
 						} 
@@ -982,7 +985,7 @@ public class TLinkFrame extends JFrame {
 								} else {
 									JOptionPane.showMessageDialog(null, insertError);
 								}
-								}							
+							}							
 							catch (NumberFormatException nfe) {
 								JOptionPane.showMessageDialog(null, numberError);
 							}
@@ -1027,12 +1030,12 @@ public class TLinkFrame extends JFrame {
 						String newName = nameField.getText().trim();
 						String newLocation = locationField.getText().trim();						
 						if (sidStr.equals("") || newName.equals("") || newLocation.equals("")) {
-								JOptionPane.showMessageDialog(null, "Please fill in every field");
+							JOptionPane.showMessageDialog(null, "Please fill in every field");
 						} else {							
 							try {
 								int newSid = Integer.parseInt(sidStr);							
 								Stop stop = new Stop();
-						
+
 								boolean success = stop.insertStop(newSid, newName, newLocation);
 								if (success) {
 									operatorTable.removeAll();							
@@ -1097,9 +1100,9 @@ public class TLinkFrame extends JFrame {
 								int newVid = Integer.parseInt(vidField.getText().trim());
 								int newAge = Integer.parseInt(ageField.getText().trim());
 								int newCap = Integer.parseInt(capField.getText().trim());
-								
+
 								// Check constraint
-								
+
 								if (newVid > 0 && newAge >= 0 && newCap > 0) {
 									Driveable driveable = new Driveable();			
 									boolean success = driveable.insertVehicle(newVid, newAge, newCap, typeStr);
@@ -1163,9 +1166,9 @@ public class TLinkFrame extends JFrame {
 								int newVid = Integer.parseInt(vidField.getText().trim());
 								int newAge = Integer.parseInt(ageField.getText().trim());
 								int newCap = Integer.parseInt(capField.getText().trim());
-								
+
 								// Check constraint
-								
+
 								if(newVid > 0 && newAge >= 0 && newCap > 0) {
 									Driverless driverless = new Driverless();			
 									boolean success = driverless.insertVehicle(newVid, newAge, newCap);
@@ -1518,7 +1521,7 @@ public class TLinkFrame extends JFrame {
 				} while (!validInput);
 			}	
 		});
-		
+
 		removeDriverlessVehicleBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1562,7 +1565,7 @@ public class TLinkFrame extends JFrame {
 
 		return removePanel;
 	}
-	
+
 	// UPDATE SECTION
 
 	private JPanel createUpdateTabPanel() {
@@ -1663,17 +1666,13 @@ public class TLinkFrame extends JFrame {
 				JPanel addPanel = new JPanel();
 				addPanel.setLayout(new GridLayout(0, 1));
 				JLabel cidLabel = new JLabel("Enter Customer ID:");
-				JLabel pidLabel = new JLabel("Enter Pass ID:");
 				JLabel balanceLabel = new JLabel("Enter amount to add to balance:");
 				JTextField cidField = new JTextField();
-				JTextField pidField = new JTextField();
 				JTextField balanceField = new JTextField();
 				addPanel.add(cidLabel);
 				addPanel.add(cidField);
 				addPanel.add(balanceLabel);
 				addPanel.add(balanceField);
-				addPanel.add(pidLabel);
-				addPanel.add(pidField);
 
 				String title = "Update Customer balance";
 				int option = JOptionPane.OK_CANCEL_OPTION;
@@ -1685,7 +1684,7 @@ public class TLinkFrame extends JFrame {
 						try {
 							int newCid = Integer.parseInt(cidField.getText().trim());			
 							int newBalance = Integer.parseInt(balanceField.getText().trim());
-							
+
 							if (newBalance > 0) {
 								Customer customer = new Customer();
 								customer.updateBalance(newCid, newBalance);
@@ -1700,7 +1699,7 @@ public class TLinkFrame extends JFrame {
 							}
 						} catch (NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, numberError);
-						};
+						}
 					} else {
 						validInput = true;
 					}
@@ -1712,7 +1711,7 @@ public class TLinkFrame extends JFrame {
 	}
 
 	// REPORT SECTION
-	
+
 	public JPanel createReportTabPanel() {
 		final JTable reportTable = new JTable();
 		JScrollPane reportTableScrollPane = new JScrollPane(reportTable);
@@ -1721,7 +1720,7 @@ public class TLinkFrame extends JFrame {
 		String[] options = {"This month", "January", "February", "March", "April", "May", "June", "July", 
 				"August", "September", "October", "November", "December"};
 		final JComboBox<String> monthList = new JComboBox<String>(options);
-		
+
 		JButton maximumBtn = new JButton("Busiest route(s)");
 		JButton minimumBtn = new JButton("Quietest route(s)");
 		JButton resetBtn = new JButton("All routes");
@@ -1757,7 +1756,7 @@ public class TLinkFrame extends JFrame {
 					reportPanel.remove(routeReportPane);
 					reportPanel.add(monthList, BorderLayout.SOUTH);
 				}
-				
+
 				else if (reportOption.equals("Route")) {
 					reportPanel.add(routeReportPane, BorderLayout.SOUTH);
 					reportPanel.remove(monthList);
@@ -1768,7 +1767,7 @@ public class TLinkFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		maximumBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1780,7 +1779,7 @@ public class TLinkFrame extends JFrame {
 				reportTable.setModel(report);
 			}				
 		});
-		
+
 		minimumBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1792,7 +1791,7 @@ public class TLinkFrame extends JFrame {
 				reportTable.setModel(report);
 			}				
 		});
-		
+
 		resetBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -1845,7 +1844,7 @@ public class TLinkFrame extends JFrame {
 
 		return reportPanel;
 	}
-	
+
 	// VIEW SECTION
 
 	private JPanel createViewTabPanel() {
@@ -1879,8 +1878,8 @@ public class TLinkFrame extends JFrame {
 		searchDriverlessVehicleBtn.setVisible(false);
 
 		String[] viewOptions = {"Select what to view...", "Customers", "Drivers", 
-								"Routes", "Stops", "Driver Vehicles",
-								"Driverless Vehicles", "Vehicle Drivers"};
+				"Routes", "Stops", "Driver Vehicles",
+				"Driverless Vehicles", "Vehicle Drivers"};
 		JComboBox<String> viewList = new JComboBox<String>(viewOptions);
 		viewPanel.setLayout(new BorderLayout());
 
@@ -2027,7 +2026,7 @@ public class TLinkFrame extends JFrame {
 					Driverless driverless = new Driverless();
 					viewTable.setModel(driverless.displayVehicles());
 				}
-				
+
 				else if (addOption.equals("Vehicle Drivers")) {
 					viewDriversBtn.setVisible(false);
 					viewCustomersBtn.setVisible(false);
