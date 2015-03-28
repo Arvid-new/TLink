@@ -1,0 +1,1 @@
+Our final schema differed from the original because we merged the pass and owns table into owns_pass. We also did not include participation constraints.
