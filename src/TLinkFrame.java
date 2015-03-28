@@ -1720,6 +1720,7 @@ public class TLinkFrame extends JFrame {
 		String[] options = {"This month", "January", "February", "March", "April", "May", "June", "July", 
 				"August", "September", "October", "November", "December"};
 		final JComboBox<String> monthList = new JComboBox<String>(options);
+		monthList.setVisible(false);
 
 		JButton maximumBtn = new JButton("Busiest route(s)");
 		JButton minimumBtn = new JButton("Quietest route(s)");
@@ -1729,6 +1730,11 @@ public class TLinkFrame extends JFrame {
 		routeReportPane.add(maximumBtn);
 		routeReportPane.add(minimumBtn);
 		routeReportPane.add(resetBtn);
+		routeReportPane.setVisible(false);
+		
+		JPanel optionPanel = new JPanel();
+		optionPanel.add(routeReportPane);
+		optionPanel.add(monthList);
 
 		String[] reportOptions = {"Select report to view...", "Vehicle", "Route"};
 		JComboBox<String> reportList = new JComboBox<String>(reportOptions);
@@ -1736,6 +1742,7 @@ public class TLinkFrame extends JFrame {
 		reportPanel.setLayout(new BorderLayout());
 		reportPanel.add(reportList, BorderLayout.NORTH);
 		reportPanel.add(reportTableScrollPane);
+		reportPanel.add(optionPanel, BorderLayout.SOUTH);
 
 		reportList.addActionListener(new ActionListener() {
 
@@ -1747,19 +1754,20 @@ public class TLinkFrame extends JFrame {
 
 				if (reportOption.equals("Select report to view...")) {
 					reportTable.setModel(route.searchRoutes(-1));
-					reportPanel.remove(monthList);
-					reportPanel.remove(routeReportPane);
+					monthList.setVisible(false);
+					routeReportPane.setVisible(false);
 				}
 
 				else if (reportOption.equals("Vehicle")) {
 					reportTable.setModel(route.searchRoutes(-1));
 					reportPanel.remove(routeReportPane);
-					reportPanel.add(monthList, BorderLayout.SOUTH);
+					monthList.setVisible(true);
+					routeReportPane.setVisible(false);
 				}
 
 				else if (reportOption.equals("Route")) {
-					reportPanel.add(routeReportPane, BorderLayout.SOUTH);
-					reportPanel.remove(monthList);
+					routeReportPane.setVisible(true);
+					monthList.setVisible(false);
 					ResultTableModel report = route.customersPerRoute();
 					if (report.empty)
 						JOptionPane.showMessageDialog(null, "No one is using our vehicles :(");
